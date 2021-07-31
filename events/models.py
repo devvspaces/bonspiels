@@ -39,8 +39,8 @@ class Event(models.Model):
     featured_image = models.ImageField(upload_to='events')
     seats = models.IntegerField()
     uid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    start_time = models.DateTimeField()
-    end_time = models.DateTimeField()
+    start_time = models.DateTimeField(auto_now_add=True)
+    end_time = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.title
