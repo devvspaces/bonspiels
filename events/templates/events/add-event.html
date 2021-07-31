@@ -1,0 +1,514 @@
+{% extends "mainapp/base.html" %}
+{% load static %}
+
+{% block contents %}
+
+	<!-- Page Header -->
+	<section id="et-pagehead" class="container-fluid text-center text-white img-overlay no-hover position-relative pt-5 pb-5">
+		<div class="container position-relative pt-5 pb-5 mt-5 mb-5">
+			<h1 class="box-heading mb-5 position-relative mb-0 text-white">Add Event</h1>
+		</div>
+		<div class="breadcrumb position-absolute text-center m-0 justify-content-center bg-transparent text-white">
+			<a href="#" class="text-white d-inline-block p-2">Home</a>
+			<a href="#" class="text-white d-inline-block p-2">Add event</a>
+		</div>
+	</section>
+
+
+	<section id="et-add-event" class="container-fluid">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-9">
+					<form autocomplete="off" method='POST' enctype="multipart/form-data">
+						{% csrf_token %}
+						<div class="row">
+							<div class="form-group getcontent col-sm-12">
+								<label>Event title*</label>
+								<input type="text" class="form-control bg-light" title="Please enter general information about this event. All fields are necessary" placeholder="Event title" name="title">
+							</div>
+							<div class="form-group getcontent col-sm-12">
+								<label>Category*</label>
+								<select style="height:55px;" class="form-control bg-light w-100 pb-0 pt-0 pl-4 wide mb-0" name="category">
+									<option value="1">Concerts</option>
+									<option value="2">Food fest</option>
+									<option value="3">Autoshow</option>
+								</select>
+							</div>
+							<div class="form-group getcontent col-sm-12">
+								<label>City*</label>
+								<input type="text" class="form-control bg-light" placeholder="Enter city name" title="Please enter city" name="city">
+								<div id="loadmaps" class="w-100 add-event-map mb-3"></div>
+							</div>
+							<div class="form-group getcontent col-sm-12">
+								<label>Google Address*</label>
+								<input type="text" class="form-control bg-light" placeholder="Enter full address" title="Please enter location and verify on the maps" name="location">
+							</div>
+							<div class="form-group getcontent col-sm-12">
+								<label>Website URL</label>
+								<input type="text" class="form-control bg-light" placeholder="Enter comma separated URL" title="Please enter website URL" name="website">
+							</div>
+							<div class="form-group getcontent col-sm-12">
+								<label>Description*</label>
+								<textarea rows="6" class="form-control resize-none bg-light" placeholder="Add description about this event" title="Please enter full description about this event" name="description"></textarea>
+							</div>
+							<div class="form-group getcontent col-sm-12">
+								<label>Phone*</label>
+								<input type="text" class="form-control bg-light" placeholder="Add contact number" title="Please enter your contact number" name="phone">
+							</div>
+							<div class="form-group getcontent col-sm-12">
+								<label>Email address*</label>
+								<input type="text" class="form-control bg-light" placeholder="Your email address" title="Please enter your email address for the customers to reach you" name="email">
+							</div>
+							<div class="form-group addsocial getcontent col-sm-12">
+								<label>Social Media</label>
+								<div class="row">
+									<div class="col-sm-6">
+										<div class="input-group form-group">
+											<input name='facebook' placeholder="Enter URL" class="form-control bg-light" type="text">
+											<div class="input-group-append">
+												<span class="input-group-text border-0">
+													<i class="fab fa-facebook fb-icon"></i>
+												</span>
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<div class="input-group form-group">
+											<input name='youtube' placeholder="Enter URL" class="form-control bg-light" type="text">
+											<div class="input-group-append">
+												<span class="input-group-text border-0">
+													<i class="fab fa-youtube yt-icon"></i>
+												</span>
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<div class="input-group form-group">
+											<input name='twitter' placeholder="Enter URL" class="form-control bg-light" type="text">
+											<div class="input-group-append">
+												<span class="input-group-text border-0">
+													<i class="fab fa-twitter tw-icon"></i>
+												</span>
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<div class="input-group form-group">
+											<input name='instagram' placeholder="Enter URL" class="form-control bg-light" type="text">
+											<div class="input-group-append">
+												<span class="input-group-text border-0">
+													<i class="fab fa-instagram ig-icon"></i>
+												</span>
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<div class="input-group form-group">
+											<input name='google_plus' placeholder="Enter URL" class="form-control bg-light" type="text">
+											<div class="input-group-append">
+												<span class="input-group-text border-0">
+													<i class="fab fa-google-plus-g gp-icon"></i>
+												</span>
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<div class="input-group form-group">
+											<input name='digg' placeholder="Enter URL" class="form-control bg-light" type="text">
+											<div class="input-group-append">
+												<span class="input-group-text border-0">
+													<i class="fab fa-digg dg-icon"></i>
+												</span>
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<div class="input-group m-0 form-group">
+											<input name='dribble' placeholder="Enter URL" class="form-control bg-light" type="text">
+											<div class="input-group-append">
+												<span class="input-group-text border-0">
+													<i class="fab fa-dribbble db-icon"></i>
+												</span>
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<div name='linkedin' class="input-group m-0 form-group">
+											<input placeholder="Enter URL" class="form-control bg-light" type="text">
+											<div class="input-group-append">
+												<span class="input-group-text border-0">
+													<i class="fab fa-linkedin-in li-icon"></i>
+												</span>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="cleardiv"></div>
+							<div class="form-group amenities m-0 getcontent col-sm-12" data-title="Event Information" data-content="Please enter general information
+							about this event. All fields are necessary">
+							<label>Amenities</label>
+							<ul class="p-0 m-0 nostyle">
+								{% for i in amenities  %}
+									<li class="mb-4 mt-2"><i class="fas fa-wheelchair text-primary"></i>&nbsp;&nbsp; {{ i.name }}
+										<div class="float-right">
+											<div class="text-center check-types">
+												<label for="cbk{{ i.id }}">
+													<input type="checkbox" id="cbk{{ i.id }}" name='amenities-{{ i.id }}'>
+													<span class="cbx rounded-pill float-none d-inline-block align-middle">
+														<svg width="12px" height="11px" viewBox="0 0 12 11">
+															<polyline points="1 6.29411765 4.5 10 11 1"></polyline>
+														</svg>
+													</span>
+												</label>
+											</div>
+										</div>
+									</li>
+								{% endfor %}
+							</ul>
+						</div>
+						<div class="cleardiv"></div>
+						<div class="form-group getcontent col-sm-12">
+							<label>Featured image</label>
+							<div class="fake-file-upload rounded-pill transition-1 d-flex align-items-center justify-content-center p-3 text-center text-muted position-relative">
+								<input type="file" name="featured_image" class="position-absolute pointer" multiple>
+								<i class="fas fa-cloud-upload-alt h3 m-0"></i>&nbsp; Choose images
+							</div>
+						</div>
+						<div class="cleardiv"></div>
+						<div class="form-group col-sm-12">
+							<label>Promo video(s)</label>
+							<div class="fake-file-upload rounded-pill transition-1 d-flex align-items-center justify-content-center p-3 text-center text-muted position-relative">
+								<input type="file" name="file_upload" class="position-absolute pointer" multiple>
+								<i class="fas fa-cloud-upload-alt h3 m-0"></i>&nbsp; Choose videos
+							</div>
+							<small class="d-block text-right text-primary pt-2">Note: Allowed formats are, FLV, MP4 and 3GP</small>
+							<div class="embeds row mt-5">
+								<div class="col-md-4 position-relative">
+									<span class="badge badge-primary ml-3 mt-3 pointer border-0 font-weight-normal position-absolute"><i class="fas fa-trash"></i></span>
+									<iframe class="border-0 w-100" height="200" src="https://www.youtube.com/embed/_3o2s94wNXk" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+								</div>
+								<div class="col-md-4 position-relative">
+									<span class="badge badge-primary ml-3 mt-3 pointer border-0 font-weight-normal position-absolute"><i class="fas fa-trash"></i></span>
+									<iframe class="border-0 w-100" height="200" src="https://www.youtube.com/embed/_3o2s94wNXk" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+								</div>
+								<div class="col-md-4 position-relative">
+									<span class="badge badge-primary ml-3 mt-3 pointer border-0 font-weight-normal position-absolute"><i class="fas fa-trash"></i></span>
+									<iframe class="border-0 w-100" height="200" src="https://www.youtube.com/embed/_3o2s94wNXk" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+								</div>
+							</div>
+						</div>
+						<div class="cleardiv"></div>
+						<div class="form-group add-gallery col-sm-12">
+							<label>Image Gallery</label>
+							<div id="gallery_img_upload" class="fake-file-upload rounded-pill transition-1 d-flex align-items-center justify-content-center p-3 text-center text-muted position-relative">
+								<input type="file" name="gallery" class="position-absolute pointer" multiple>
+								<i class="fas fa-cloud-upload-alt h3 m-0"></i>&nbsp; Choose images to create gallery
+							</div>
+
+							<!-- Gallery -->
+							<div class="gallery-mason content-box mt-5">
+								<i class="icon-download prev pointer"></i>
+								<i class="icon-download next pointer"></i>
+								<div class="mason-container create-gallery">
+									<div class="image-box no-hover position-relative">
+										<img src="https://picsum.photos/id/21/800" alt="img">
+										<span class="badge badge-primary ml-auto mt-3 pointer border-0 font-weight-normal remove-image position-absolute"><i class="fas fa-trash"></i></span>
+									</div>
+									<div class="vertical image-box">
+										<img src="https://picsum.photos/id/22/800/1000" alt="img">
+										<span class="badge badge-primary ml-auto mt-3 pointer border-0 font-weight-normal remove-image position-absolute"><i class="fas fa-trash"></i></span>
+									</div>
+									<div class="horizontal image-box">
+										<img src="https://picsum.photos/id/23/1400/800" alt="img">
+										<span class="badge badge-primary ml-auto mt-3 pointer border-0 font-weight-normal remove-image position-absolute"><i class="fas fa-trash"></i></span>
+									</div>
+									<div class="big image-box">
+										<img src="https://picsum.photos/id/26/800" alt="img">
+										<span class="badge badge-primary ml-auto mt-3 pointer border-0 font-weight-normal remove-image position-absolute"><i class="fas fa-trash"></i></span>
+									</div>
+									<div class="image-box">
+										<img src="https://picsum.photos/id/25/800" alt="img">
+										<span class="badge badge-primary ml-auto mt-3 pointer border-0 font-weight-normal remove-image position-absolute"><i class="fas fa-trash"></i></span>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="cleardiv"></div>
+						<div class="form-group col-sm-12">
+							<label>Ticket Types</label>
+							<div class="row">
+								<!-- <div class="col-md-4">
+									<div class="ticket-table p-3 m-2 rounded">
+										<input type="text" name="ticket_title" placeholder="Enter title e.g. Silver" class="border-bottom ticket-title rounded-0 form-control w-100 mb-2">
+										<ul class="nostyle p-0">
+											<li>
+												<span>Price:</span>
+												<select class="ml-auto default" name="price">
+													<option value="10">$10</option>
+													<option value="20">$20</option>
+													<option value="30">$30</option>
+												</select>
+											</li>
+											<li>
+												<span>Row:</span>
+												<select class="ml-auto default" name="row">
+													<option value="1">1</option>
+													<option value="2">2</option>
+													<option value="3">3</option>
+												</select>
+											</li>
+											{% for i in features %}
+											<li>
+												<span>{{ i.name }}:</span>
+												<div class="form-group ml-auto m-0 text-center check-types">
+													<label for="ref-{{ i.id }}">
+														<input type="checkbox" id="ref-{{ i.id }}">
+														<span class="cbx rounded-pill float-none d-inline-block align-middle">
+															<svg width="12px" height="11px" viewBox="0 0 12 11">
+																<polyline points="1 6.29411765 4.5 10 11 1"></polyline>
+															</svg>
+														</span>
+													</label>
+												</div>
+											</li>
+											{% endfor %}
+										</ul>
+									</div>
+								</div>
+
+								<div class="col-md-4">
+									<div class="ticket-table p-3 m-2 rounded">
+										<input type="text" name="ticket_title" placeholder="Enter title e.g. Silver" class="border-bottom ticket-title rounded-0 form-control w-100 mb-2">
+										<ul class="nostyle p-0">
+											<li>
+												<span>Price:</span>
+												<select class="ml-auto default" name="price">
+													<option value="10">$10</option>
+													<option value="20">$20</option>
+													<option value="30">$30</option>
+												</select>
+											</li>
+											<li>
+												<span>Row:</span>
+												<select class="ml-auto default" name="row">
+													<option value="1">1</option>
+													<option value="2">2</option>
+													<option value="3">3</option>
+												</select>
+											</li>
+											{% for i in features %}
+											<li>
+												<span>{{ i.name }}:</span>
+												<div class="form-group ml-auto m-0 text-center check-types">
+													<label for="ref-{{ i.id }}">
+														<input type="checkbox" id="ref-{{ i.id }}">
+														<span class="cbx rounded-pill float-none d-inline-block align-middle">
+															<svg width="12px" height="11px" viewBox="0 0 12 11">
+																<polyline points="1 6.29411765 4.5 10 11 1"></polyline>
+															</svg>
+														</span>
+													</label>
+												</div>
+											</li>
+											{% endfor %}
+										</ul>
+									</div>
+								</div> -->
+
+								{% for x in tickets %}
+								<div class="col-md-4">
+									<div class="ticket-table p-3 rounded">
+										<input type="text" name="ticket_title" placeholder="Enter title e.g. Silver" class="border-bottom ticket-title rounded-0 form-control w-100 mb-2">
+										<ul class="nostyle p-0">
+											<li>
+												<span>Price:</span>
+												<select class="ml-auto default" name="price">
+													<option value="10">$10</option>
+													<option value="20">$20</option>
+													<option value="30">$30</option>
+												</select>
+											</li>
+											<li>
+												<span>Row:</span>
+												<select class="ml-auto default" name="row">
+													<option value="1">1</option>
+													<option value="2">2</option>
+													<option value="3">3</option>
+												</select>
+											</li>
+											{% for i in features %}
+											<li>
+												<span>{{ i.name }}:</span>
+												<div class="form-group ml-auto m-0 text-center check-types">
+													<label for="ref-{{ x }}-{{ i.id }}">
+														<input type="checkbox" id="ref-{{ x }}-{{ i.id }}" name='feature-{{ x }}-{{ i.id }}'>
+														<span class="cbx rounded-pill float-none d-inline-block align-middle">
+															<svg width="12px" height="11px" viewBox="0 0 12 11">
+																<polyline points="1 6.29411765 4.5 10 11 1"></polyline>
+															</svg>
+														</span>
+													</label>
+												</div>
+											</li>
+											{% endfor %}
+										</ul>
+									</div>
+								</div>
+								{% endfor %}
+							</div>
+						</div>
+						<div class="cleardiv"></div>
+						<div class="form-group col-sm-12">
+							<label>Available Seats*</label>
+							<input type="number" class="form-control bg-light" placeholder="Enter number of seats available" name="seats">
+						</div>
+						<div class="cleardiv"></div>
+						<div class="form-group col-sm-12">
+							<label>Event Schedule *</label>
+							<table class="table table-bordered">
+								<thead>
+									<tr>
+										<th>Day</th>
+										<th>Start time</th>
+										<th>End time</th>
+										<th>Closed</th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for day in days %}
+									<tr>
+										<td>{{ day }}</td>
+										<td>
+											<div class="form-group">
+												<div class="form-group position-relative">
+													<input name='start_time' size="16" type="text" value="2012-06-15 14:45" readonly class="form-control bg-light form_datetime">
+													<i class="icon-clock input-icon"></i>
+												</div>
+											</div>
+										</td>
+										<td>
+											<div class="form-group">
+												<div class="form-group position-relative">
+													<input name='end_time' size="16" type="text" value="2012-06-15 14:45" readonly class="form-control bg-light form_datetime">
+													<i class="icon-clock input-icon"></i>
+												</div>
+											</div>
+										</td>
+										<td>
+											<div class="form-group text-center mb-3 mt-4 check-types">
+												<label for="closed_mon-{{forloop.counter}}">
+													<input type="checkbox" id="closed_mon-{{forloop.counter}}" name='closed_mon-{{forloop.counter}}'>
+													<span class="cbx rounded-pill float-none d-inline-block align-middle">
+														<svg width="12px" height="11px" viewBox="0 0 12 11">
+															<polyline points="1 6.29411765 4.5 10 11 1"></polyline>
+														</svg>
+													</span>
+												</label>
+											</div>
+										</td>
+									</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+						</div>
+						<div class="cleardiv"></div>
+						<div class="form-group speakers-list col-sm-12">
+							<label>Event Speakers *</label>
+							<table class="table table-bordered">
+								<thead>
+									<tr>
+										<th>Name</th>
+										<th>Designation</th>
+										<th>Picture</th>
+										<th>Action</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td contenteditable="true">Stephen</td>
+										<td>
+											<input class="form-control border" type="text" name="designation" placeholder="e.g Show Stopper">
+										</td>
+										<td>
+											<div class="position-relative text-center change-speaker-avatar">
+												<input type="file" name="change_image">
+												<img src="{% static 'img/author-1.jpg' %}" class="img-fluid" alt="img">
+											</div>
+										</td>
+										<td>
+											<span class="badge badge-primary remove-speaker ml-3 mt-3 pointer border-0 font-weight-normal position-absolute"><i class="fas fa-trash"></i></span>
+										</td>
+									</tr>
+									<tr>
+										<td contenteditable="true">Erric</td>
+										<td>
+											<input class="form-control border" type="text" name="designation" placeholder="e.g Show Stopper">
+										</td>
+										<td>
+											<div class="position-relative text-center change-speaker-avatar">
+												<input type="file" name="change_image">
+												<img src="{% static 'img/author-2.jpg' %}" class="img-fluid" alt="img">
+											</div>
+										</td>
+										<td>
+											<span class="badge badge-primary remove-speaker ml-3 mt-3 pointer border-0 font-weight-normal position-absolute"><i class="fas fa-trash"></i></span>
+										</td>
+									</tr>
+									<tr>
+										<td contenteditable="true">Heiden</td>
+										<td>
+											<input class="form-control border" type="text" name="designation" placeholder="e.g Show Stopper">
+										</td>
+										<td>
+											<div class="position-relative text-center change-speaker-avatar">
+												<input type="file" name="change_image">
+												<img src="{% static 'img/author-3.jpg' %}" class="img-fluid" alt="img">
+											</div>
+										</td>
+										<td>
+											<span class="badge badge-primary remove-speaker ml-3 mt-3 pointer border-0 font-weight-normal position-absolute"><i class="fas fa-trash"></i></span>
+										</td>
+									</tr>
+								</tbody>
+								<tfoot>
+									<tr>
+										<td colspan="4">
+											<a href="#" id="add_speaker" class="float-right text-primary">+ Add more</a>
+										</td>
+									</tr>
+								</tfoot>
+							</table>
+						</div>
+						<div class="cleardiv"></div>
+						<div class="form-group col-sm-12 check-types">
+							<label for="agreement">
+								<input type="checkbox" id="agreement" name='agreement'>
+								<span class="cbx rounded-pill float-none d-inline-block align-middle">
+									<svg width="12px" height="11px" viewBox="0 0 12 11">
+										<polyline points="1 6.29411765 4.5 10 11 1"></polyline>
+									</svg>
+								</span>
+								<span class="float-none text-black-50">I agree to the <a href="#" class="text-primary">terms and conditions</a> and <a href="#" class="text-primary">usage policy</a> before i submit my business</span>
+							</label>
+						</div>
+						<div class="col-sm-12">
+							<div class="position-relative border-0 mt-md-0 mt-3 btn btn-primary submit-btn">
+								<i class="icon-tick btn-icon input-icon"></i> Submit Event
+								<input type="submit" class="h-100 w-100 position-absolute" value="Submit Review">
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="col-lg-3">
+				<div class="info-box shadow p-4 position-relative text-center rounded">
+					<h4>Sample Title</h4>
+					<p class="description m-0">Sample description goes here...</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+{% endblock contents %}

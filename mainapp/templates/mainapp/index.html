@@ -1,0 +1,1555 @@
+{% extends "mainapp/base.html" %}
+{% load static %}
+
+{% block contents %}
+	<!-- Home Masterhead -->
+	<section id="et-masthead-3" class="container-fluid">
+		<div class="container position-relative h-100 pt-5">
+			<div class="masthead-caption text-center">
+				<style>
+					.driv{
+						display: flex;
+						align-items: center;
+						justify-content: center;
+						flex-wrap: wrap;
+						margin-bottom: 3rem;
+						padding-top: 2rem;
+						/* position: absolute; */
+						top: -200px;
+						width: 100%;
+						left: 50%;
+						/* transform: translateX(-50%); */
+						z-index: 1;
+					}
+					.driv a{
+						width: 80px;
+						margin: 0 1rem;
+					}
+					.driv a img{
+						width: 100%;
+					}
+				</style>
+				<div class="driv">
+					<a href="#"><img src="{% static 'img/regions/alberta.png' %}" alt=""></a>
+					<a href="#"><img src="{% static 'img/regions/british-columbia.png' %}" alt=""></a>
+					<a href="#"><img src="{% static 'img/regions/Manitoba.png' %}" alt=""></a>
+					<a href="#"><img src="{% static 'img/regions/New-Brunswick.png' %}" alt=""></a>
+					<a href="#"><img src="{% static 'img/regions/fff.png' %}" alt=""></a>
+					<a href="#"><img src="{% static 'img/regions/ggg.png' %}" alt=""></a>
+				</div>
+				<h2 class="text-white d-lg-block d-none position-relative z-index-2">Explore on-going and upcoming</h2>
+				<h1 class="mb-3 text-white"><span class="text-primary text-white">Events</span> Around you...</h1>
+				<div class="grid-categories mb-3 mb-md-0">
+					<a href="#"><i class="icon-cheer"></i></a>
+					<a href="#"><i class="icon-children"></i></a>
+					<a href="#"><i class="icon-car"></i></a>
+					<a href="#"><i class="icon-graphic-design"></i></a>
+					<a href="#"><i class="icon-music"></i></a>
+					<a href="#"><i class="icon-testing"></i></a>
+				</div>
+				<form autocomplete="off" class="d-md-flex align-items-center justify-content-center mt-4">
+					<div class="form-group m-1 position-relative">
+						<input type="text" class="form-control" placeholder="I'm looking for...">
+						<i class="icon-search-2 input-icon"></i>
+					</div>
+					<div class="form-group m-1 position-relative">
+						<input size="16" type="text" value="2012-06-15 14:45" readonly class="form-control form_datetime">
+						<i class="icon-clock input-icon"></i>
+					</div>
+					<div class="form-group m-1 position-relative">
+						<input type="text" class="form-control" placeholder="Near">
+						<i class="icon-maps-and-location input-icon"></i>
+					</div>
+					<div class="position-relative border-0 btn btn-primary submit-btn">
+						<i class="icon-search-2 btn-icon input-icon"></i> Discover Now
+						<input type="submit" class="h-100 w-100 position-absolute" value="Discover Now">
+					</div>
+				</form>
+			</div>
+		</div>
+	</section>
+
+
+	<!-- Lising Events -->
+	<section id="et-related-events" class="container-fluid position-relative">
+		<div class="section-heading">
+			<p>Lorem ipsum dolor emet</p>
+			<br>
+			<h2 class="mb-0">Listing Events</h2>
+		</div>
+		<div class="owl-carousel owl-theme">
+			{% for event in events %}
+			<div class="item pt-25 pb-25">
+				<div class="event-grid shadow">
+					<div class="image-wrap img-overlay">
+						<span class="badge badge-primary like pointer position-absolute"><i class="icon-heart"></i></span>
+						<span class="badge badge-secondary photocount position-absolute"><i class="icon-photo"></i> 26</span>
+						<img src="{{ event.featured_image.url }}" alt="img" class="img-fluid">
+					</div>
+					<div class="content p-4">
+						<h4 class="mb-3"><a href="{% url 'events:event-detail' event.uid %}" class="text-decoration-none text-reset">Free seminar</a></h4>
+						<p><i class="icon-clock align-middle text-primary"></i>&nbsp; {{ event.start_time|date:"d M"}} - {{ event.end_time|date:"d M"}}</p>
+						<div class="d-flex event-actions">
+							<span class="event-action pointer" data-toggle="tooltip" data-placement="bottom" title="Info@event.com"><i class="icon-contact"></i></span>
+							<span class="event-action pointer" data-toggle="tooltip" data-placement="bottom" title="001-234-5678"><i class="icon-phone"></i></span>
+							<span class="event-action pointer" data-toggle="tooltip" data-placement="bottom" title="43C, BlockChain ST, California, US"><i class="fas fa-map-marker-alt"></i></span>
+							<span class="event-action pointer" data-toggle="tooltip" data-placement="bottom" title="Prices are high">$$</span>
+						</div>
+					</div>
+				</div>
+			</div>
+			{% endfor %}
+		</div>
+	</section>
+
+	<!-- Events by Location -->
+	<section id="et-location-events" class="container-fluid bg-light">
+		<div class="container">
+			<div class="section-heading">
+				<p>Events happening Different Cities</p>
+				<br>
+				<h2 class="mb-0">Events by Location</h2>
+			</div>
+
+			<!-- Events by Location -->
+			<div class="event-results pl-4 pr-md-4">
+				<div class="row grid-view">
+					<div class="col-md-6 mt-3 mb-3">
+						<div class="blog-grid w-100 mt-4 rounded shadow">
+							<div class="image-wrap img-overlay position-relative">
+								<span class="badge badge-primary listings photocount position-absolute">110 Listings</span>
+								<img src="{% static 'img/location-1.jpg' %}" alt="img" class="img-fluid rounded-top">
+								<h3 class="mb-4 fixed-bottom pl-4 title text-white font-weight-bold position-absolute">California</h3>
+							</div>
+							<div class="content-slides bg-white">
+								<div class="owl-carousel owl-theme">
+									<div class="content w-100 item p-4">
+										<span class="text-muted"><i class="icon-clock text-primary"></i> &nbsp;Posted 2 days ago</span>
+										<span class="text-primary float-right" data-toggle="tooltip" data-placement="bottom" title="Prices are high">$$$</span>
+										<hr>
+										<h4 class="mb-3"><a href="#" class="text-decoration-none text-reset">Payment Check Launch</a></h4>
+										<p class="description">
+											Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt...
+										</p>
+										<div class="info">
+											<div class="mb-2"><i class="icon-clock"></i>&nbsp; 29 Feb, 2020</div>
+											<div class="mb-2"><i class="icon-contact"></i>&nbsp; Admin@event.com</div>
+											<div class="text-secondary"><i class="icon-phone"></i>&nbsp; 001 234 567 8</div>
+										</div>
+										<hr>
+										<div class="time-left mt-4 d-inline-block pt-2 pt-md-0">
+											<div class="timer search">
+												<div class="days d-none"></div>
+												<div class="hours text-primary-flat"></div>
+												<div class="minutes text-secondary-flat"></div>
+												<div class="seconds"></div>
+											</div>
+										</div>
+										<div class="position-relative float-right border-0 mt-3 btn btn-primary btn-small submit-btn">
+											<i class="icon-calendar btn-icon input-icon"></i> Schedule
+											<input type="submit" class="h-100 w-100 position-absolute" value="Discover Now">
+										</div>
+									</div>
+
+									<div class="content w-100 item p-4">
+										<span class="text-muted"><i class="icon-clock text-primary"></i> &nbsp;Posted 2 days ago</span>
+										<span class="text-primary float-right" data-toggle="tooltip" data-placement="bottom" title="Prices are high">$$$</span>
+										<hr>
+										<h4 class="mb-3"><a href="#" class="text-decoration-none text-reset">Food Festival</a></h4>
+										<p class="description">
+											Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt...
+										</p>
+										<div class="info">
+											<div class="mb-2"><i class="icon-clock"></i>&nbsp; 29 Feb, 2020</div>
+											<div class="mb-2"><i class="icon-contact"></i>&nbsp; Admin@event.com</div>
+											<div class="text-secondary"><i class="icon-phone"></i>&nbsp; 001 234 567 8</div>
+										</div>
+										<hr>
+										<div class="time-left mt-4 d-inline-block pt-2 pt-md-0">
+											<div class="timer search">
+												<div class="days d-none"></div>
+												<div class="hours text-primary-flat"></div>
+												<div class="minutes text-secondary-flat"></div>
+												<div class="seconds"></div>
+											</div>
+										</div>
+										<div class="position-relative float-right border-0 mt-3 btn btn-primary btn-small submit-btn">
+											<i class="icon-calendar btn-icon input-icon"></i> Schedule
+											<input type="submit" class="h-100 w-100 position-absolute" value="Discover Now">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-md-6 mt-3 mb-3">
+						<div class="blog-grid w-100 mt-4 rounded shadow">
+							<div class="image-wrap img-overlay position-relative">
+								<span class="badge badge-primary listings photocount position-absolute">56 Listings</span>
+								<img src="{% static 'img/location-2.jpg' %}" alt="img" class="img-fluid rounded-top">
+								<h3 class="mb-4 fixed-bottom pl-4 title text-white font-weight-bold position-absolute">Dubai</h3>
+							</div>
+							<div class="content-slides bg-white">
+								<div class="owl-carousel owl-theme">
+									<div class="content w-100 item p-4">
+										<span class="text-muted"><i class="icon-clock text-primary"></i> &nbsp;Posted 2 days ago</span>
+										<span class="text-primary float-right" data-toggle="tooltip" data-placement="bottom" title="Prices are high">$$</span>
+										<hr>
+										<h4 class="mb-3"><a href="#" class="text-decoration-none text-reset">Auto Car Show</a></h4>
+										<p class="description">
+											Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt...
+										</p>
+										<div class="info">
+											<div class="mb-2"><i class="icon-clock"></i>&nbsp; 29 Feb, 2020</div>
+											<div class="mb-2"><i class="icon-contact"></i>&nbsp; Admin@event.com</div>
+											<div class="text-secondary"><i class="icon-phone"></i>&nbsp; 001 234 567 8</div>
+										</div>
+										<hr>
+										<div class="time-left mt-4 d-inline-block pt-2 pt-md-0">
+											<div class="timer search">
+												<div class="days d-none"></div>
+												<div class="hours text-primary-flat"></div>
+												<div class="minutes text-secondary-flat"></div>
+												<div class="seconds"></div>
+											</div>
+										</div>
+										<div class="position-relative float-right border-0 mt-3 btn btn-primary btn-small submit-btn">
+											<i class="icon-calendar btn-icon input-icon"></i> Schedule
+											<input type="submit" class="h-100 w-100 position-absolute" value="Discover Now">
+										</div>
+									</div>
+
+									<div class="content w-100 item p-4">
+										<span class="text-muted"><i class="icon-clock text-primary"></i> &nbsp;Posted 2 days ago</span>
+										<span class="text-primary float-right" data-toggle="tooltip" data-placement="bottom" title="Prices are high">$$$</span>
+										<hr>
+										<h4 class="mb-3"><a href="#" class="text-decoration-none text-reset">WP Event Global</a></h4>
+										<p class="description">
+											Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt...
+										</p>
+										<div class="info">
+											<div class="mb-2"><i class="icon-clock"></i>&nbsp; 29 Feb, 2020</div>
+											<div class="mb-2"><i class="icon-contact"></i>&nbsp; Admin@event.com</div>
+											<div class="text-secondary"><i class="icon-phone"></i>&nbsp; 001 234 567 8</div>
+										</div>
+										<hr>
+										<div class="time-left mt-4 d-inline-block pt-2 pt-md-0">
+											<div class="timer search">
+												<div class="days d-none"></div>
+												<div class="hours text-primary-flat"></div>
+												<div class="minutes text-secondary-flat"></div>
+												<div class="seconds"></div>
+											</div>
+										</div>
+										<div class="position-relative float-right border-0 mt-3 btn btn-primary btn-small submit-btn">
+											<i class="icon-calendar btn-icon input-icon"></i> Schedule
+											<input type="submit" class="h-100 w-100 position-absolute" value="Discover Now">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-md-6 mt-3 mb-3">
+						<div class="blog-grid w-100 mt-4 rounded shadow">
+							<div class="image-wrap img-overlay position-relative">
+								<span class="badge badge-primary listings photocount position-absolute">33 Listings</span>
+								<img src="{% static 'img/location-3.jpg' %}" alt="img" class="img-fluid rounded-top">
+								<h3 class="mb-4 fixed-bottom pl-4 title text-white font-weight-bold position-absolute">New York</h3>
+							</div>
+							<div class="content-slides bg-white">
+								<div class="owl-carousel owl-theme">
+									<div class="content w-100 item p-4">
+										<span class="text-muted"><i class="icon-clock text-primary"></i> &nbsp;Posted 2 days ago</span>
+										<span class="text-primary float-right" data-toggle="tooltip" data-placement="bottom" title="Prices are high">$$$</span>
+										<hr>
+										<h4 class="mb-3"><a href="#" class="text-decoration-none text-reset">Software Launch Meetup</a></h4>
+										<p class="description">
+											Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt...
+										</p>
+										<div class="info">
+											<div class="mb-2"><i class="icon-clock"></i>&nbsp; 29 Feb, 2020</div>
+											<div class="mb-2"><i class="icon-contact"></i>&nbsp; Admin@event.com</div>
+											<div class="text-secondary"><i class="icon-phone"></i>&nbsp; 001 234 567 8</div>
+										</div>
+										<hr>
+										<div class="time-left mt-4 d-inline-block pt-2 pt-md-0">
+											<div class="timer search">
+												<div class="days d-none"></div>
+												<div class="hours text-primary-flat"></div>
+												<div class="minutes text-secondary-flat"></div>
+												<div class="seconds"></div>
+											</div>
+										</div>
+										<div class="position-relative float-right border-0 mt-3 btn btn-primary btn-small submit-btn">
+											<i class="icon-calendar btn-icon input-icon"></i> Schedule
+											<input type="submit" class="h-100 w-100 position-absolute" value="Discover Now">
+										</div>
+									</div>
+
+									<div class="content w-100 item p-4">
+										<span class="text-muted"><i class="icon-clock text-primary"></i> &nbsp;Posted 2 days ago</span>
+										<span class="text-primary float-right" data-toggle="tooltip" data-placement="bottom" title="Prices are high">$$$</span>
+										<hr>
+										<h4 class="mb-3"><a href="#" class="text-decoration-none text-reset">Musical Concert</a></h4>
+										<p class="description">
+											Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt...
+										</p>
+										<div class="info">
+											<div class="mb-2"><i class="icon-clock"></i>&nbsp; 29 Feb, 2020</div>
+											<div class="mb-2"><i class="icon-contact"></i>&nbsp; Admin@event.com</div>
+											<div class="text-secondary"><i class="icon-phone"></i>&nbsp; 001 234 567 8</div>
+										</div>
+										<hr>
+										<div class="time-left mt-4 d-inline-block pt-2 pt-md-0">
+											<div class="timer search">
+												<div class="days d-none"></div>
+												<div class="hours text-primary-flat"></div>
+												<div class="minutes text-secondary-flat"></div>
+												<div class="seconds"></div>
+											</div>
+										</div>
+										<div class="position-relative float-right border-0 mt-3 btn btn-primary btn-small submit-btn">
+											<i class="icon-calendar btn-icon input-icon"></i> Schedule
+											<input type="submit" class="h-100 w-100 position-absolute" value="Discover Now">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-md-6 mt-3 mb-3">
+						<div class="blog-grid w-100 mt-4 rounded shadow">
+							<div class="image-wrap img-overlay position-relative">
+								<span class="badge badge-primary listings photocount position-absolute">44 Listings</span>
+								<img src="{% static 'img/location-4.jpg' %}" alt="img" class="img-fluid rounded-top">
+								<h3 class="mb-4 fixed-bottom pl-4 title text-white font-weight-bold position-absolute">London</h3>
+							</div>
+							<div class="content-slides bg-white">
+								<div class="owl-carousel owl-theme">
+									<div class="content w-100 item p-4">
+										<span class="text-muted"><i class="icon-clock text-primary"></i> &nbsp;Posted 2 days ago</span>
+										<span class="text-primary float-right" data-toggle="tooltip" data-placement="bottom" title="Prices are high">$$$</span>
+										<hr>
+										<h4 class="mb-3"><a href="#" class="text-decoration-none text-reset">Birthday Celebration</a></h4>
+										<p class="description">
+											Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt...
+										</p>
+										<div class="info">
+											<div class="mb-2"><i class="icon-clock"></i>&nbsp; 29 Feb, 2020</div>
+											<div class="mb-2"><i class="icon-contact"></i>&nbsp; Admin@event.com</div>
+											<div class="text-secondary"><i class="icon-phone"></i>&nbsp; 001 234 567 8</div>
+										</div>
+										<hr>
+										<div class="time-left mt-4 d-inline-block pt-2 pt-md-0">
+											<div class="timer search">
+												<div class="days d-none"></div>
+												<div class="hours text-primary-flat"></div>
+												<div class="minutes text-secondary-flat"></div>
+												<div class="seconds"></div>
+											</div>
+										</div>
+										<div class="position-relative float-right border-0 mt-3 btn btn-primary btn-small submit-btn">
+											<i class="icon-calendar btn-icon input-icon"></i> Schedule
+											<input type="submit" class="h-100 w-100 position-absolute" value="Discover Now">
+										</div>
+									</div>
+
+									<div class="content w-100 item p-4">
+										<span class="text-muted"><i class="icon-clock text-primary"></i> &nbsp;Posted 2 days ago</span>
+										<span class="text-primary float-right" data-toggle="tooltip" data-placement="bottom" title="Prices are high">$$$</span>
+										<hr>
+										<h4 class="mb-3"><a href="#" class="text-decoration-none text-reset">Art Gallery</a></h4>
+										<p class="description">
+											Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt...
+										</p>
+										<div class="info">
+											<div class="mb-2"><i class="icon-clock"></i>&nbsp; 29 Feb, 2020</div>
+											<div class="mb-2"><i class="icon-contact"></i>&nbsp; Admin@event.com</div>
+											<div class="text-secondary"><i class="icon-phone"></i>&nbsp; 001 234 567 8</div>
+										</div>
+										<hr>
+										<div class="time-left mt-4 d-inline-block pt-2 pt-md-0">
+											<div class="timer search">
+												<div class="days d-none"></div>
+												<div class="hours text-primary-flat"></div>
+												<div class="minutes text-secondary-flat"></div>
+												<div class="seconds"></div>
+											</div>
+										</div>
+										<div class="position-relative float-right border-0 mt-3 btn btn-primary btn-small submit-btn">
+											<i class="icon-calendar btn-icon input-icon"></i> Schedule
+											<input type="submit" class="h-100 w-100 position-absolute" value="Discover Now">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- List view -->
+				<div class="row list-view">
+					<div class="d-flex mt-3 align-items-center">
+						<a href="#" class="position-relative thumb d-block text-decoration-none">
+							<img src="{% static 'img/event-grid-1.jpg' %}" class="img-fluid" alt="event">
+						</a>
+						<a href="#" class="event p-3 d-block text-decoration-none text-reset">
+							<h6 class="d-inline-block">Food Festival</h6>
+							<span class="pl-3"><i class="icon-clock text-primary"></i> 29 Feb, 2020</span>
+							<span class="badge badge-primary pointer float-right"><i class="icon-heart"></i></span>
+							<p class="mt-2 mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor...</p>
+						</a>
+					</div>
+					<div class="d-flex mt-3 align-items-center">
+						<a href="#" class="position-relative thumb d-block text-decoration-none">
+							<img src="{% static 'img/event-grid-1.jpg' %}" class="img-fluid" alt="event">
+						</a>
+						<a href="#" class="event p-3 d-block text-decoration-none text-reset">
+							<h6 class="d-inline-block">Food Festival</h6>
+							<span class="pl-3"><i class="icon-clock text-primary"></i> 29 Feb, 2020</span>
+							<span class="badge badge-primary pointer float-right"><i class="icon-heart"></i></span>
+							<p class="mt-2 mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor...</p>
+						</a>
+					</div>
+					<div class="d-flex mt-3 align-items-center">
+						<a href="#" class="position-relative thumb d-block text-decoration-none">
+							<img src="{% static 'img/event-grid-1.jpg' %}" class="img-fluid" alt="event">
+						</a>
+						<a href="#" class="event p-3 d-block text-decoration-none text-reset">
+							<h6 class="d-inline-block">Food Festival</h6>
+							<span class="pl-3"><i class="icon-clock text-primary"></i> 29 Feb, 2020</span>
+							<span class="badge badge-primary pointer float-right"><i class="icon-heart"></i></span>
+							<p class="mt-2 mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor...</p>
+						</a>
+					</div>
+					<hr>
+					<div class="d-flex mt-3 align-items-center">
+						<a href="#" class="position-relative thumb d-block text-decoration-none">
+							<img src="{% static 'img/event-grid-1.jpg' %}" class="img-fluid" alt="event">
+						</a>
+						<a href="#" class="event p-3 d-block text-decoration-none text-reset">
+							<h6 class="d-inline-block">Food Festival</h6>
+							<span class="pl-3"><i class="icon-clock text-primary"></i> 29 Feb, 2020</span>
+							<span class="badge badge-primary pointer float-right"><i class="icon-heart"></i></span>
+							<p class="mt-2 mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor...</p>
+						</a>
+					</div>
+					<div class="d-flex mt-3 align-items-center">
+						<a href="#" class="position-relative thumb d-block text-decoration-none">
+							<img src="{% static 'img/event-grid-1.jpg' %}" class="img-fluid" alt="event">
+						</a>
+						<a href="#" class="event p-3 d-block text-decoration-none text-reset">
+							<h6 class="d-inline-block">Food Festival</h6>
+							<span class="pl-3"><i class="icon-clock text-primary"></i> 29 Feb, 2020</span>
+							<span class="badge badge-primary pointer float-right"><i class="icon-heart"></i></span>
+							<p class="mt-2 mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor...</p>
+						</a>
+					</div>
+					<div class="d-flex mt-3 align-items-center">
+						<a href="#" class="position-relative thumb d-block text-decoration-none">
+							<img src="{% static 'img/event-grid-1.jpg' %}" class="img-fluid" alt="event">
+						</a>
+						<a href="#" class="event p-3 d-block text-decoration-none text-reset">
+							<h6 class="d-inline-block">Food Festival</h6>
+							<span class="pl-3"><i class="icon-clock text-primary"></i> 29 Feb, 2020</span>
+							<span class="badge badge-primary pointer float-right"><i class="icon-heart"></i></span>
+							<p class="mt-2 mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor...</p>
+						</a>
+					</div>
+					<div class="d-flex mt-3 align-items-center">
+						<a href="#" class="position-relative thumb d-block text-decoration-none">
+							<img src="{% static 'img/event-grid-1.jpg' %}" class="img-fluid" alt="event">
+						</a>
+						<a href="#" class="event p-3 d-block text-decoration-none text-reset">
+							<h6 class="d-inline-block">Food Festival</h6>
+							<span class="pl-3"><i class="icon-clock text-primary"></i> 29 Feb, 2020</span>
+							<span class="badge badge-primary pointer float-right"><i class="icon-heart"></i></span>
+							<p class="mt-2 mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor...</p>
+						</a>
+					</div>
+					<div class="d-flex mt-3 align-items-center">
+						<a href="#" class="position-relative thumb d-block text-decoration-none">
+							<img src="{% static 'img/event-grid-1.jpg' %}" class="img-fluid" alt="event">
+						</a>
+						<a href="#" class="event p-3 d-block text-decoration-none text-reset">
+							<h6 class="d-inline-block">Food Festival</h6>
+							<span class="pl-3"><i class="icon-clock text-primary"></i> 29 Feb, 2020</span>
+							<span class="badge badge-primary pointer float-right"><i class="icon-heart"></i></span>
+							<p class="mt-2 mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor...</p>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Call to action -->
+
+	<section id="et-cta-1" class="container-fluid position-relative bg-primary">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-7 mt-5 mt-md-0">
+					<h3 class="box-heading mb-5 position-relative mb-0 text-white">Why us?</h3>
+					<div class="info-row pt-5 d-flex text-white">
+						<i class="icon-calendar bg-white rounded shadow p-3 text-primary h2 mr-3 align-self-baseline"></i>
+						<div>
+							<span class="h5 d-inline-block">Find events around you</span>
+							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+						</div>
+					</div>
+					<div class="info-row pt-5 d-flex text-white">
+						<i class="icon-testing bg-white rounded shadow p-3 text-primary h2 mr-3 align-self-baseline"></i>
+						<div>
+							<span class="h5 d-inline-block">Contact the organizers</span>
+							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+						</div>
+					</div>
+					<div class="info-row pt-5 d-flex text-white">
+						<i class="icon-hotel bg-white rounded shadow p-3 text-primary h2 mr-3 align-self-baseline"></i>
+						<div>
+							<span class="h5 d-inline-block">Reserve a seat</span>
+							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+						</div>
+					</div>
+					<a href="#" class="btn bg-white mt-5 shadow border-0"><i class="fas fa-angle-double-right btn-icon"></i> Read More</a>
+				</div>
+				<div class="col-md-5">
+					<div class="image-cluster position-relative">
+						<div class="img img-overlay position-absolute bg-white overflow-hidden rounded shadow"><img src="{% static 'img/clust-1.jpg' %}" alt="img"></div>
+						<div class="img img-overlay position-absolute bg-white overflow-hidden rounded shadow"><img src="{% static 'img/clust-2.jpg' %}" alt="img"></div>
+						<div class="img img-overlay position-absolute bg-white overflow-hidden rounded shadow"><img src="{% static 'img/clust-3.jpg' %}" alt="img"></div>
+						<div class="img img-overlay position-absolute bg-white overflow-hidden rounded shadow"><img src="{% static 'img/clust-4.jpg' %}" alt="img"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Pricing Area -->
+
+
+	<!-- Testimonial -->
+
+	<section id="et-testimonial" class="container-fluid bg-light">
+		<div class="container">
+			<div class="section-heading">
+				<p>Here is Feedback From Customers</p>
+				<br>
+				<h2 class="mb-0">Words from Users</h2>
+			</div>
+			<div class="owl-carousel owl-theme">
+				<div class="item bg-white shadow p-5 m-4">
+					<i class="icon-quote-2 text-secondary h1"></i>
+					<p class="mb-0 font-italic description">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
+					<div class="d-flex align-items-center mt-4">
+						<div class="thumb-wrap shadow mr-4 d-inline-block">
+							<img src="{% static 'img/author-1.jpg' %}" class="img-fluid" alt="user">
+						</div>
+						<div>
+							<h4>Steve Guzlemian</h4>
+							<small>Manager at UXF</small>
+						</div>
+					</div>
+				</div>
+				<div class="item bg-white shadow p-5 m-4">
+					<i class="icon-quote-2 text-secondary h1"></i>
+					<p class="mb-0 font-italic description">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+					<div class="d-flex align-items-center mt-4">
+						<div class="thumb-wrap shadow mr-4 d-inline-block">
+							<img src="{% static 'img/author-2.jpg' %}" class="img-fluid" alt="user">
+						</div>
+						<div>
+							<h4>Steve Guzlemian</h4>
+							<small>Manager at UXF</small>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Categories Of Events -->
+	<section id="et-popular-events" class="container-fluid">
+		<div class="container">
+			<div class="section-heading">
+				<p>Discover best Events around the world by categories.</p>
+				<br>
+				<h2 class="mb-0">Categories Events</h2>
+			</div>
+			<div class="row">
+				<div class="grid">
+					<img src="{% static 'img/popular-event-1.jpg' %}" alt="Popular event">
+					<a href="#" class="overlay transition text-decoration-none">
+						<span class="badge-green category badge-secondary">20 Listings</span>
+						<span class="badge badge-secondary float-right"><i class="icon-heart"></i></span>
+						<div class="hidden-data transition">
+							<h3 class="title text-white">Food</h3>
+							<p class="transition mb-2">Lorem ipsum dolor sit amet, consectetur...</p>
+							<p class="transition"><i class="fas fa-map-marker-alt"></i> Fremont St, Las Vegas, NV 89101, United States</p>
+						</div>
+						<div class="timing bg-primary position-absolute w-100 transition"><i class="icon-clock"></i> Starts 12AM | Feb, 20 - Ends 06PM | Feb, 24</div>
+					</a>
+				</div>
+				<div class="grid">
+					<img src="{% static 'img/popular-event-2.jpg' %}" alt="Popular event">
+					<a href="#" class="overlay transition text-decoration-none">
+						<span class="badge-green category badge-secondary">15 Listings</span>
+						<span class="badge badge-primary float-right"><i class="icon-heart"></i></span>
+						<div class="hidden-data transition">
+							<h3 class="title text-white">Music Clubs</h3>
+							<p class="transition mb-2">Lorem ipsum dolor sit amet, consectetur...</p>
+							<p class="transition"><i class="fas fa-map-marker-alt"></i> Fremont St, Las Vegas, NV 89101, United States</p>
+						</div>
+						<div class="timing bg-primary position-absolute w-100 transition"><i class="icon-clock"></i> Starts 12AM | Feb, 20 - Ends 06PM | Feb, 24</div>
+					</a>
+				</div>
+				<div class="grid">
+					<img src="{% static 'img/popular-event-3.jpg' %}" alt="Popular event">
+					<a href="#" class="overlay transition text-decoration-none">
+						<span class="badge-green category badge-secondary">55 Listings</span>
+						<span class="badge badge-secondary float-right"><i class="icon-heart"></i></span>
+						<div class="hidden-data transition">
+							<h3 class="title text-white">Auto Shows</h3>
+							<p class="transition mb-2">Lorem ipsum dolor sit amet, consectetur adipiscing...</p>
+							<p class="transition"><i class="fas fa-map-marker-alt"></i> Fremont St, Las Vegas, NV 89101, United States</p>
+						</div>
+						<div class="timing bg-primary position-absolute w-100 transition"><i class="icon-clock"></i> Starts 12AM | Feb, 20 - Ends 06PM | Feb, 24</div>
+					</a>
+				</div>
+				<div class="grid">
+					<img src="{% static 'img/popular-event-4.jpg' %}" alt="Popular event">
+					<a href="#" class="overlay transition text-decoration-none">
+						<span class="badge-green category badge-secondary">23 Listings</span>
+						<span class="badge badge-secondary float-right"><i class="icon-heart"></i></span>
+						<div class="hidden-data transition">
+							<h3 class="title text-white">Sports</h3>
+							<p class="transition mb-2">Lorem ipsum dolor sit amet, consectetur...</p>
+							<p class="transition"><i class="fas fa-map-marker-alt"></i> Fremont St, Las Vegas, NV 89101, United States</p>
+						</div>
+						<div class="timing bg-primary position-absolute w-100 transition"><i class="icon-clock"></i> Starts 12AM | Feb, 20 - Ends 06PM | Feb, 24</div>
+					</a>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Featured and Upcoming Events -->
+
+	<section class="container-fluid bg-light">
+		<div class="row m-0">
+			<!-- Featured Events -->
+			<div class="featured-events col-lg-6">
+				<h4 class="box-heading mb-5 ml-3 position-relative mb-0">Featured Events</h4>
+				<div class="owl-carousel owl-theme">
+					<!-- Item -->
+					<div class="item p-3">
+						<div class="shadow mb-3 bg-white">
+							<div class="row align-items-center">
+								<div class="col-sm-4 pr-md-0">
+									<div class="img-wrapper position-relative">
+										<img src="{% static 'img/food-clust.jpg' %}" alt="img">
+										<span class="badge badge-primary photocount pointer position-absolute"><i class="icon-heart"></i></span>
+									</div>
+								</div>
+								<div class="col-sm-8 pl-md-0">
+									<div class="content-box p-3">
+										<h5 class="d-inline-block"><a href="#" class="text-decoration-none text-reset"> Food Festival</a></h5>
+										<small class="float-right"><i class="icon-clock text-primary"></i>&nbsp; 29 Feb, 2020</small>
+										<p class="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt et...</p>
+										<small class="tm">Time left</small>
+										<hr>
+										<div class="time-left mt-2 d-inline-block pt-2 pt-md-0">
+											<div class="timer search">
+												<div class="days d-none"></div>
+												<div class="hours text-primary-flat"></div>
+												<div class="minutes text-secondary-flat"></div>
+												<div class="seconds"></div>
+											</div>
+										</div>
+										<div class="position-relative border-0 btn btn-primary btn-small transform-origin-right float-right submit-btn">
+											<i class="icon-calendar btn-icon input-icon"></i> Schedule
+											<input type="submit" class="h-100 w-100 position-absolute" value="Discover Now">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="shadow mb-3 bg-white">
+							<div class="row align-items-center mtb">
+								<div class="col-sm-8 pr-md-0">
+									<div class="content-box p-3">
+										<h5 class="d-inline-block"><a href="#" class="text-decoration-none text-reset"> Air Craft Show</a></h5>
+										<small class="float-right"><i class="icon-clock text-primary"></i>&nbsp; 29 Feb, 2020</small>
+										<p class="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt et...</p>
+										<small class="tm">Time left</small>
+										<hr>
+										<div class="time-left mt-2 d-inline-block pt-2 pt-md-0">
+											<div class="timer search">
+												<div class="days d-none"></div>
+												<div class="hours text-primary-flat"></div>
+												<div class="minutes text-secondary-flat"></div>
+												<div class="seconds"></div>
+											</div>
+										</div>
+										<div class="position-relative border-0 btn btn-primary btn-small transform-origin-right float-right submit-btn">
+											<i class="icon-calendar btn-icon input-icon"></i> Schedule
+											<input type="submit" class="h-100 w-100 position-absolute" value="Discover Now">
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-4 pl-md-0">
+									<div class="img-wrapper position-relative">
+										<img src="{% static 'img/art-clust.jpg' %}" alt="img">
+										<span class="badge badge-secondary photocount pointer position-absolute"><i class="icon-heart"></i></span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!-- Item -->
+					<div class="item p-3">
+						<div class="shadow mb-3 bg-white">
+							<div class="row align-items-center">
+								<div class="col-sm-4 pr-md-0">
+									<div class="img-wrapper position-relative">
+										<img src="{% static 'img/clust-4.jpg' %}" alt="img">
+										<span class="badge badge-secondary photocount pointer position-absolute"><i class="icon-heart"></i></span>
+									</div>
+								</div>
+								<div class="col-sm-8 pl-md-0">
+									<div class="content-box p-3">
+										<h5 class="d-inline-block"><a href="#" class="text-decoration-none text-reset"> Art Gallery</a></h5>
+										<small class="float-right"><i class="icon-clock text-primary"></i>&nbsp; 29 Feb, 2020</small>
+										<p class="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt et...</p>
+										<small class="tm">Time left</small>
+										<hr>
+										<div class="time-left mt-2 d-inline-block pt-2 pt-md-0">
+											<div class="timer search">
+												<div class="days d-none"></div>
+												<div class="hours text-primary-flat"></div>
+												<div class="minutes text-secondary-flat"></div>
+												<div class="seconds"></div>
+											</div>
+										</div>
+										<div class="position-relative border-0 btn btn-primary btn-small transform-origin-right float-right submit-btn">
+											<i class="icon-calendar btn-icon input-icon"></i> Schedule
+											<input type="submit" class="h-100 w-100 position-absolute" value="Discover Now">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="shadow mb-3 bg-white">
+							<div class="row align-items-center mtb">
+								<div class="col-sm-8 pr-md-0">
+									<div class="content-box p-3">
+										<h5 class="d-inline-block"><a href="#" class="text-decoration-none text-reset"> Music Concert</a></h5>
+										<small class="float-right"><i class="icon-clock text-primary"></i>&nbsp; 29 Feb, 2020</small>
+										<p class="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt et...</p>
+										<small class="tm">Time left</small>
+										<hr>
+										<div class="time-left mt-2 d-inline-block pt-2 pt-md-0">
+											<div class="timer search">
+												<div class="days d-none"></div>
+												<div class="hours text-primary-flat"></div>
+												<div class="minutes text-secondary-flat"></div>
+												<div class="seconds"></div>
+											</div>
+										</div>
+										<div class="position-relative border-0 btn btn-primary btn-small transform-origin-right float-right submit-btn">
+											<i class="icon-calendar btn-icon input-icon"></i> Schedule
+											<input type="submit" class="h-100 w-100 position-absolute" value="Discover Now">
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-4 pl-md-0">
+									<div class="img-wrapper position-relative">
+										<img src="{% static 'img/dance-clust.jpg' %}" alt="img">
+										<span class="badge badge-primary photocount pointer position-absolute"><i class="icon-heart"></i></span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Upcoming Events -->
+			<div class="featured-events col-lg-6">
+				<h4 class="box-heading mb-5 ml-3 position-relative mb-0">Upcoming Events</h4>
+				<div class="owl-carousel owl-theme">
+					<!-- Item -->
+					<div class="item p-3">
+						<div class="shadow mb-3 bg-white">
+							<div class="row align-items-center">
+								<div class="col-sm-4 pr-md-0">
+									<div class="img-wrapper position-relative">
+										<img src="{% static 'img/inno-clust.jpg' %}" alt="img">
+										<span class="badge badge-secondary photocount pointer position-absolute"><i class="icon-heart"></i></span>
+									</div>
+								</div>
+								<div class="col-sm-8 pl-md-0">
+									<div class="content-box p-3">
+										<h5 class="d-inline-block"><a href="#" class="text-decoration-none text-reset"> Food Innovation</a></h5>
+										<small class="float-right"><i class="icon-clock text-primary"></i>&nbsp; 29 Feb, 2020</small>
+										<p class="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt et...</p>
+										<small class="tm">Time left</small>
+										<hr>
+										<div class="time-left mt-2 d-inline-block pt-2 pt-md-0">
+											<div class="timer search">
+												<div class="days d-none"></div>
+												<div class="hours text-primary-flat"></div>
+												<div class="minutes text-secondary-flat"></div>
+												<div class="seconds"></div>
+											</div>
+										</div>
+										<div class="position-relative border-0 btn btn-primary btn-small transform-origin-right float-right submit-btn">
+											<i class="icon-calendar btn-icon input-icon"></i> Schedule
+											<input type="submit" class="h-100 w-100 position-absolute" value="Discover Now">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="shadow mb-3 bg-white">
+							<div class="row align-items-center mtb">
+								<div class="col-sm-8 pr-md-0">
+									<div class="content-box p-3">
+										<h5 class="d-inline-block"><a href="#" class="text-decoration-none text-reset"> Payment Gatway</a></h5>
+										<small class="float-right"><i class="icon-clock text-primary"></i>&nbsp; 29 Feb, 2020</small>
+										<p class="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt et...</p>
+										<small class="tm">Time left</small>
+										<hr>
+										<div class="time-left mt-2 d-inline-block pt-2 pt-md-0">
+											<div class="timer search">
+												<div class="days d-none"></div>
+												<div class="hours text-primary-flat"></div>
+												<div class="minutes text-secondary-flat"></div>
+												<div class="seconds"></div>
+											</div>
+										</div>
+										<div class="position-relative border-0 btn btn-primary btn-small transform-origin-right float-right submit-btn">
+											<i class="icon-calendar btn-icon input-icon"></i> Schedule
+											<input type="submit" class="h-100 w-100 position-absolute" value="Discover Now">
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-4 pl-md-0">
+									<div class="img-wrapper position-relative">
+										<img src="{% static 'img/clust-4.jpg' %}" alt="img">
+										<span class="badge badge-primary photocount pointer position-absolute"><i class="icon-heart"></i></span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!-- Item -->
+					<div class="item p-3">
+						<div class="shadow mb-3 bg-white">
+							<div class="row align-items-center">
+								<div class="col-sm-4 pr-md-0">
+									<div class="img-wrapper position-relative">
+										<img src="{% static 'img/dance-clust.jpg' %}" alt="img">
+										<span class="badge badge-primary photocount pointer position-absolute"><i class="icon-heart"></i></span>
+									</div>
+								</div>
+								<div class="col-sm-8 pl-md-0">
+									<div class="content-box p-3">
+										<h5 class="d-inline-block"><a href="#" class="text-decoration-none text-reset"> Dance Concert</a></h5>
+										<small class="float-right"><i class="icon-clock text-primary"></i>&nbsp; 29 Feb, 2020</small>
+										<p class="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt et...</p>
+										<small class="tm">Time left</small>
+										<hr>
+										<div class="time-left mt-2 d-inline-block pt-2 pt-md-0">
+											<div class="timer search">
+												<div class="days d-none"></div>
+												<div class="hours text-primary-flat"></div>
+												<div class="minutes text-secondary-flat"></div>
+												<div class="seconds"></div>
+											</div>
+										</div>
+										<div class="position-relative border-0 btn btn-primary btn-small transform-origin-right float-right submit-btn">
+											<i class="icon-calendar btn-icon input-icon"></i> Schedule
+											<input type="submit" class="h-100 w-100 position-absolute" value="Discover Now">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="shadow mb-3 bg-white">
+							<div class="row align-items-center mtb">
+								<div class="col-sm-8 pr-md-0">
+									<div class="content-box p-3">
+										<h5 class="d-inline-block"><a href="#" class="text-decoration-none text-reset"> Food Festival</a></h5>
+										<small class="float-right"><i class="icon-clock text-primary"></i>&nbsp; 29 Feb, 2020</small>
+										<p class="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt et...</p>
+										<small class="tm">Time left</small>
+										<hr>
+										<div class="time-left mt-2 d-inline-block pt-2 pt-md-0">
+											<div class="timer search">
+												<div class="days d-none"></div>
+												<div class="hours text-primary-flat"></div>
+												<div class="minutes text-secondary-flat"></div>
+												<div class="seconds"></div>
+											</div>
+										</div>
+										<div class="position-relative border-0 btn btn-primary btn-small transform-origin-right float-right submit-btn">
+											<i class="icon-calendar btn-icon input-icon"></i> Schedule
+											<input type="submit" class="h-100 w-100 position-absolute" value="Discover Now">
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-4 pl-md-0">
+									<div class="img-wrapper position-relative">
+										<img src="{% static 'img/clust-4.jpg' %}" alt="img">
+										<span class="badge badge-primary photocount pointer position-absolute"><i class="icon-heart"></i></span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+
+
+
+
+	<!-- Gallery -->
+	<section id="et-big-gallery" class="container-fluid mt-5">
+		<div class="container">
+			<div class="section-heading text-white">
+				<p>Photos of the Events</p>
+				<br>
+				<h2 class="mb-0 text-white">Gallery</h2>
+			</div>
+			<div class="row">
+				<div class="col-md-7 pt-25">
+					<div class="big-gallery text-center">
+						<!-- Gallery 1-->
+						<div class="gallery-1">
+							<div class="owl-carousel owl-theme">
+								<!-- Item -->
+								<div class="item">
+									<a data-fancybox="gallery" href="{% static 'img/gallery-1.jpg' %}">
+									<div class="img img-overlay position-relative">
+										<img src="{% static 'img/gallery-1.jpg' %}" class="img-fluid" alt="img">
+										<div class="caption text-white p-4">
+											<h4 class="text-white">Lorem ipsum dolor sit amet</h4>
+											<small><i class="icon-photo"></i> 20 Photos</small>
+										</div>
+									</div>
+									</a>
+								</div>
+								<div class="item">
+									<a data-fancybox="gallery" href="{% static 'img/gallery-2.jpg' %}">
+									<div class="img img-overlay position-relative">
+										<img src="{% static 'img/gallery-2.jpg' %}" class="img-fluid" alt="img">
+										<div class="caption text-white p-4">
+											<h4 class="text-white">Lorem ipsum dolor sit amet</h4>
+											<small><i class="icon-photo"></i> 20 Photos</small>
+										</div>
+									</div>
+									</a>
+								</div>
+								<div class="item">
+									<a data-fancybox="gallery" href="{% static 'img/gallery-3.jpg' %}">
+									<div class="img img-overlay position-relative">
+										<img src="{% static 'img/gallery-3.jpg' %}" class="img-fluid" alt="img">
+										<div class="caption text-white p-4">
+											<h4 class="text-white">Lorem ipsum dolor sit amet</h4>
+											<small><i class="icon-photo"></i> 20 Photos</small>
+										</div>
+									</div>
+									</a>
+								</div>
+							</div>
+						</div>
+						<!-- Gallery 2-->
+						<div class="gallery-2">
+							<div class="owl-carousel owl-theme">
+								<!-- Item -->
+								<div class="item">
+									<a data-fancybox="gallery" href="{% static 'img/gallery-1.jpg' %}">
+									<div class="img img-overlay position-relative">
+										<img src="{% static 'img/gallery-1.jpg' %}" class="img-fluid" alt="img">
+										<div class="caption text-white p-4">
+											<h4 class="text-white">Lorem ipsum dolor sit amet</h4>
+											<small><i class="icon-photo"></i> 20 Photos</small>
+										</div>
+									</div>
+									</a>
+								</div>
+								<div class="item">
+									<a data-fancybox="gallery" href="{% static 'img/gallery-2.jpg' %}">
+									<div class="img img-overlay position-relative">
+										<img src="{% static 'img/gallery-2.jpg' %}" class="img-fluid" alt="img">
+										<div class="caption text-white p-4">
+											<h4 class="text-white">Lorem ipsum dolor sit amet</h4>
+											<small><i class="icon-photo"></i> 20 Photos</small>
+										</div>
+									</div>
+									</a>
+								</div>
+								<div class="item">
+									<a data-fancybox="gallery" href="{% static 'img/gallery-3.jpg' %}">
+									<div class="img img-overlay position-relative">
+										<img src="{% static 'img/gallery-3.jpg' %}" class="img-fluid" alt="img">
+										<div class="caption text-white p-4">
+											<h4 class="text-white">Lorem ipsum dolor sit amet</h4>
+											<small><i class="icon-photo"></i> 20 Photos</small>
+										</div>
+									</div>
+									</a>
+								</div>
+							</div>
+						</div>
+						<!-- Gallery 3-->
+						<div class="gallery-3">
+							<div class="owl-carousel owl-theme">
+								<!-- Item -->
+								<div class="item">
+									<a data-fancybox="gallery" href="{% static 'img/gallery-1.jpg' %}">
+									<div class="img img-overlay position-relative">
+										<img src="{% static 'img/gallery-1.jpg' %}" class="img-fluid" alt="img">
+										<div class="caption text-white p-4">
+											<h4 class="text-white">Lorem ipsum dolor sit amet</h4>
+											<small><i class="icon-photo"></i> 20 Photos</small>
+										</div>
+									</div>
+									</a>
+								</div>
+								<div class="item">
+									<a data-fancybox="gallery" href="{% static 'img/gallery-2.jpg' %}">
+									<div class="img img-overlay position-relative">
+										<img src="{% static 'img/gallery-2.jpg' %}" class="img-fluid" alt="img">
+										<div class="caption text-white p-4">
+											<h4 class="text-white">Lorem ipsum dolor sit amet</h4>
+											<small><i class="icon-photo"></i> 20 Photos</small>
+										</div>
+									</div>
+									</a>
+								</div>
+								<div class="item">
+									<a data-fancybox="gallery" href="{% static 'img/gallery-3.jpg' %}">
+									<div class="img img-overlay position-relative">
+										<img src="{% static 'img/gallery-3.jpg' %}" class="img-fluid" alt="img">
+										<div class="caption text-white p-4">
+											<h4 class="text-white">Lorem ipsum dolor sit amet</h4>
+											<small><i class="icon-photo"></i> 20 Photos</small>
+										</div>
+									</div>
+									</a>
+								</div>
+							</div>
+						</div>
+						<!-- Gallery 4-->
+						<div class="gallery-4">
+							<div class="owl-carousel owl-theme">
+								<!-- Item -->
+								<div class="item">
+									<a data-fancybox="gallery" href="{% static 'img/gallery-1.jpg' %}">
+									<div class="img img-overlay position-relative">
+										<img src="{% static 'img/gallery-1.jpg' %}" class="img-fluid" alt="img">
+										<div class="caption text-white p-4">
+											<h4 class="text-white">Lorem ipsum dolor sit amet</h4>
+											<small><i class="icon-photo"></i> 20 Photos</small>
+										</div>
+									</div>
+									</a>
+								</div>
+								<div class="item">
+									<a data-fancybox="gallery" href="{% static 'img/gallery-2.jpg' %}">
+									<div class="img img-overlay position-relative">
+										<img src="{% static 'img/gallery-2.jpg' %}" class="img-fluid" alt="img">
+										<div class="caption text-white p-4">
+											<h4 class="text-white">Lorem ipsum dolor sit amet</h4>
+											<small><i class="icon-photo"></i> 20 Photos</small>
+										</div>
+									</div>
+									</a>
+								</div>
+								<div class="item">
+									<a data-fancybox="gallery" href="{% static 'img/gallery-3.jpg' %}">
+									<div class="img img-overlay position-relative">
+										<img src="{% static 'img/gallery-3.jpg' %}" class="img-fluid" alt="img">
+										<div class="caption text-white p-4">
+											<h4 class="text-white">Lorem ipsum dolor sit amet</h4>
+											<small><i class="icon-photo"></i> 20 Photos</small>
+										</div>
+									</div>
+									</a>
+								</div>
+							</div>
+						</div>
+						<!-- Gallery 5-->
+						<div class="gallery-5">
+							<div class="owl-carousel owl-theme">
+								<!-- Item -->
+								<div class="item">
+									<a data-fancybox="gallery" href="{% static 'img/gallery-1.jpg' %}">
+									<div class="img img-overlay position-relative">
+										<img src="{% static 'img/gallery-1.jpg' %}" class="img-fluid" alt="img">
+										<div class="caption text-white p-4">
+											<h4 class="text-white">Lorem ipsum dolor sit amet</h4>
+											<small><i class="icon-photo"></i> 20 Photos</small>
+										</div>
+									</div>
+									</a>
+								</div>
+								<div class="item">
+									<a data-fancybox="gallery" href="{% static 'img/gallery-2.jpg' %}">
+									<div class="img img-overlay position-relative">
+										<img src="{% static 'img/gallery-2.jpg' %}" class="img-fluid" alt="img">
+										<div class="caption text-white p-4">
+											<h4 class="text-white">Lorem ipsum dolor sit amet</h4>
+											<small><i class="icon-photo"></i> 20 Photos</small>
+										</div>
+									</div>
+									</a>
+								</div>
+								<div class="item">
+									<a data-fancybox="gallery" href="{% static 'img/gallery-3.jpg' %}">
+									<div class="img img-overlay position-relative">
+										<img src="{% static 'img/gallery-3.jpg' %}" class="img-fluid" alt="img">
+										<div class="caption text-white p-4">
+											<h4 class="text-white">Lorem ipsum dolor sit amet</h4>
+											<small><i class="icon-photo"></i> 20 Photos</small>
+										</div>
+									</div>
+									</a>
+								</div>
+							</div>
+						</div>
+						<!-- Gallery 6-->
+						<div class="gallery-6">
+							<div class="owl-carousel owl-theme">
+								<!-- Item -->
+								<div class="item">
+									<a data-fancybox="gallery" href="{% static 'img/gallery-1.jpg' %}">
+									<div class="img img-overlay position-relative">
+										<img src="{% static 'img/gallery-1.jpg' %}" class="img-fluid" alt="img">
+										<div class="caption text-white p-4">
+											<h4 class="text-white">Lorem ipsum dolor sit amet</h4>
+											<small><i class="icon-photo"></i> 20 Photos</small>
+										</div>
+									</div>
+									</a>
+								</div>
+								<div class="item">
+									<a data-fancybox="gallery" href="{% static 'img/gallery-2.jpg' %}">
+									<div class="img img-overlay position-relative">
+										<img src="{% static 'img/gallery-2.jpg' %}" class="img-fluid" alt="img">
+										<div class="caption text-white p-4">
+											<h4 class="text-white">Lorem ipsum dolor sit amet</h4>
+											<small><i class="icon-photo"></i> 20 Photos</small>
+										</div>
+									</div>
+									</a>
+								</div>
+								<div class="item">
+									<a data-fancybox="gallery" href="{% static 'img/gallery-3.jpg' %}">
+									<div class="img img-overlay position-relative">
+										<img src="{% static 'img/gallery-3.jpg' %}" class="img-fluid" alt="img">
+										<div class="caption text-white p-4">
+											<h4 class="text-white">Lorem ipsum dolor sit amet</h4>
+											<small><i class="icon-photo"></i> 20 Photos</small>
+										</div>
+									</div>
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-5 pt-25">
+					<div class="gallery-thumbnails row">
+						<div class="col-sm-6">
+							<div class="img-box pointer p-2 bg-white shadow" id="gallery-1">
+								<img src="{% static 'img/gallery-1.jpg' %}" class="img-fluid" alt="">
+							</div>
+						</div>
+						<div class="col-sm-6">
+							<div class="img-box pointer p-2 bg-white shadow" id="gallery-2">
+								<img src="{% static 'img/gallery-2.jpg' %}" class="img-fluid" alt="">
+							</div>
+						</div>
+						<br>
+						<div class="col-sm-6 mt-4">
+							<div class="img-box pointer p-2 bg-white shadow" id="gallery-3">
+								<img src="{% static 'img/gallery-3.jpg' %}" class="img-fluid" alt="">
+							</div>
+						</div>
+						<div class="col-sm-6 mt-4">
+							<div class="img-box pointer p-2 bg-white shadow" id="gallery-4">
+								<img src="{% static 'img/gallery-1.jpg' %}" class="img-fluid" alt="">
+							</div>
+						</div>
+						<br>
+						<div class="col-sm-6 mt-4">
+							<div class="img-box pointer p-2 bg-white shadow" id="gallery-5">
+								<img src="{% static 'img/gallery-2.jpg' %}" class="img-fluid" alt="">
+							</div>
+						</div>
+						<div class="col-sm-6 mt-4">
+							<div class="img-box pointer p-2 bg-white shadow" id="gallery-6">
+								<img src="{% static 'img/gallery-3.jpg' %}" class="img-fluid" alt="">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Latest News -->
+	<section id="et-latest-news" class="container-fluid mt-5">
+		<div class="section-heading">
+			<p>Blog posts listed here with all types</p>
+			<br>
+			<h2 class="mb-0">Latest News</h2>
+		</div>
+		<div class="owl-carousel owl-theme">
+			<!-- Item -->
+			<div class="item">
+				<div class="blog-grid boxhover transition w-100 mt-4 rounded shadow">
+					<div class="image-wrap img-overlay position-relative">
+						<span class="badge badge-primary photocount pointer position-absolute"><i class="icon-eye"></i> 25</span>
+						<span class="author-avatar overflow-hidden position-absolute shadow"><img src="{% static 'img/author-1.jpg' %}" alt="Author"></span>
+						<img src="{% static 'img/event-grid-1.jpg' %}" alt="img" class="img-fluid rounded-top">
+					</div>
+					<div class="content p-4">
+						<p class="text-muted">Posted 2 days ago</p>
+						<h4 class="mb-3"><a href="#" class="text-decoration-none text-reset">Whats in Meeting ?</a></h4>
+						<p class="description">
+							Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt...
+						</p>
+						<hr>
+						<div class="d-flex align-items-center">
+							<a href="#" class="text-decoration-none text-primary">Tips and Lifestyle</a>
+							<a href="#" class="bg-primary text-white readmore rounded text-decoration-none d-inline-flex align-items-center justify-content-center border-0 ml-auto"><i class="icon-download"></i></a>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- Item -->
+			<div class="item">
+				<div class="blog-grid boxhover transition w-100 mt-4 rounded shadow">
+					<div class="image-wrap img-overlay position-relative">
+						<span class="badge badge-primary photocount pointer position-absolute"><i class="icon-eye"></i> 25</span>
+						<span class="author-avatar overflow-hidden position-absolute shadow"><img src="{% static 'img/author-2.jpg' %}" alt="Author"></span>
+						<img src="{% static 'img/event-grid-2.jpg' %}" alt="img" class="img-fluid rounded-top">
+					</div>
+					<div class="content p-4">
+						<p class="text-muted">Posted 2 days ago</p>
+						<h4 class="mb-3"><a href="#" class="text-decoration-none text-reset">Love the Ride</a></h4>
+						<p class="description">
+							Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt...
+						</p>
+						<hr>
+						<div class="d-flex align-items-center">
+							<a href="#" class="text-decoration-none text-primary">Tips and Lifestyle</a>
+							<a href="#" class="bg-primary text-white readmore rounded text-decoration-none d-inline-flex align-items-center justify-content-center border-0 ml-auto"><i class="icon-download"></i></a>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- Item -->
+			<div class="item">
+				<div class="blog-grid boxhover transition w-100 mt-4 rounded shadow">
+					<div class="image-wrap img-overlay position-relative">
+						<span class="badge badge-primary photocount pointer position-absolute"><i class="icon-eye"></i> 25</span>
+						<span class="author-avatar overflow-hidden position-absolute shadow"><img src="{% static 'img/author-3.jpg' %}" alt="Author"></span>
+						<img src="{% static 'img/event-grid-3.jpg' %}" alt="img" class="img-fluid rounded-top">
+					</div>
+					<div class="content p-4">
+						<p class="text-muted">Posted 2 days ago</p>
+						<h4 class="mb-3"><a href="#" class="text-decoration-none text-reset">Help African</a></h4>
+						<p class="description">
+							Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt...
+						</p>
+						<hr>
+						<div class="d-flex align-items-center">
+							<a href="#" class="text-decoration-none text-primary">Tips and Lifestyle</a>
+							<a href="#" class="bg-primary text-white readmore rounded text-decoration-none d-inline-flex align-items-center justify-content-center border-0 ml-auto"><i class="icon-download"></i></a>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- Item -->
+			<div class="item">
+				<div class="blog-grid boxhover transition w-100 mt-4 rounded shadow">
+					<div class="image-wrap img-overlay position-relative">
+						<span class="badge badge-primary photocount pointer position-absolute"><i class="icon-eye"></i> 25</span>
+						<span class="author-avatar overflow-hidden position-absolute shadow"><img src="{% static 'img/author-1.jpg' %}" alt="Author"></span>
+						<img src="{% static 'img/event-grid-4.jpg' %}" alt="img" class="img-fluid rounded-top">
+					</div>
+					<div class="content p-4">
+						<p class="text-muted">Posted 2 days ago</p>
+						<h4 class="mb-3"><a href="#" class="text-decoration-none text-reset">New Resturant</a></h4>
+						<p class="description">
+							Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt...
+						</p>
+						<hr>
+						<div class="d-flex align-items-center">
+							<a href="#" class="text-decoration-none text-primary">Tips and Lifestyle</a>
+							<a href="#" class="bg-primary text-white readmore rounded text-decoration-none d-inline-flex align-items-center justify-content-center border-0 ml-auto"><i class="icon-download"></i></a>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- Item -->
+			<div class="item">
+				<div class="blog-grid boxhover transition w-100 mt-4 rounded shadow">
+					<div class="image-wrap img-overlay position-relative">
+						<span class="badge badge-primary photocount pointer position-absolute"><i class="icon-eye"></i> 25</span>
+						<span class="author-avatar overflow-hidden position-absolute shadow"><img src="{% static 'img/author-2.jpg' %}" alt="Author"></span>
+						<img src="{% static 'img/event-grid-5.jpg' %}" alt="img" class="img-fluid rounded-top">
+					</div>
+					<div class="content p-4">
+						<p class="text-muted">Posted 2 days ago</p>
+						<h4 class="mb-3"><a href="#" class="text-decoration-none text-reset">News Plans 2020</a></h4>
+						<p class="description">
+							Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt...
+						</p>
+						<hr>
+						<div class="d-flex align-items-center">
+							<a href="#" class="text-decoration-none text-primary">Tips and Lifestyle</a>
+							<a href="#" class="bg-primary text-white readmore rounded text-decoration-none d-inline-flex align-items-center justify-content-center border-0 ml-auto"><i class="icon-download"></i></a>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- Item -->
+			<div class="item">
+				<div class="blog-grid boxhover transition w-100 mt-4 rounded shadow">
+					<div class="image-wrap img-overlay position-relative">
+						<span class="badge badge-primary photocount pointer position-absolute"><i class="icon-eye"></i> 25</span>
+						<span class="author-avatar overflow-hidden position-absolute shadow"><img src="{% static 'img/author-3.jpg' %}" alt="Author"></span>
+						<img src="{% static 'img/event-grid-3.jpg' %}" alt="img" class="img-fluid rounded-top">
+					</div>
+					<div class="content p-4">
+						<p class="text-muted">Posted 2 days ago</p>
+						<h4 class="mb-3"><a href="#" class="text-decoration-none text-reset">Lorem ipsum dolor</a></h4>
+						<p class="description">
+							Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt...
+						</p>
+						<hr>
+						<div class="d-flex align-items-center">
+							<a href="#" class="text-decoration-none text-primary">Tips and Lifestyle</a>
+							<a href="#" class="bg-primary text-white readmore rounded text-decoration-none d-inline-flex align-items-center justify-content-center border-0 ml-auto"><i class="icon-download"></i></a>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- Item -->
+			<div class="item">
+				<div class="blog-grid boxhover transition w-100 mt-4 rounded shadow">
+					<div class="image-wrap img-overlay position-relative">
+						<span class="badge badge-primary photocount pointer position-absolute"><i class="icon-eye"></i> 25</span>
+						<span class="author-avatar overflow-hidden position-absolute shadow"><img src="{% static 'img/author-1.jpg' %}" alt="Author"></span>
+						<img src="{% static 'img/event-grid-1.jpg' %}" alt="img" class="img-fluid rounded-top">
+					</div>
+					<div class="content p-4">
+						<p class="text-muted">Posted 2 days ago</p>
+						<h4 class="mb-3"><a href="#" class="text-decoration-none text-reset">Lorem ipsum dolor</a></h4>
+						<p class="description">
+							Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt...
+						</p>
+						<hr>
+						<div class="d-flex align-items-center">
+							<a href="#" class="text-decoration-none text-primary">Tips and Lifestyle</a>
+							<a href="#" class="bg-primary text-white readmore rounded text-decoration-none d-inline-flex align-items-center justify-content-center border-0 ml-auto"><i class="icon-download"></i></a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Clients -->
+	<section id="et-clients-home">
+		<div class="container">
+			<div class="d-flex flex-wrap justify-content-center client-icons">
+				<span class="m-3 rounded transition"><img src="{% static 'img/client-1.png' %}" class="img-fluid" alt="client"></span>
+				<span class="m-3 rounded transition"><img src="{% static 'img/client-2.png' %}" class="img-fluid" alt="client"></span>
+				<span class="m-3 rounded transition"><img src="{% static 'img/client-3.png' %}" class="img-fluid" alt="client"></span>
+				<span class="m-3 rounded transition"><img src="{% static 'img/client-4.png' %}" class="img-fluid" alt="client"></span>
+				<span class="m-3 rounded transition"><img src="{% static 'img/client-5.png' %}" class="img-fluid" alt="client"></span>
+				<span class="m-3 rounded transition"><img src="{% static 'img/client-6.png' %}" class="img-fluid" alt="client"></span>
+			</div>
+		</div>
+	</section>
+
+	<!-- Login Modal -->
+	<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-lg" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title w-100 text-center" id="exampleModalLabel">Login</h4>
+					<button type="button" class="close position-absolute rounded-pill bg-primary text-white" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body p-5">
+					<div class="social-signup text-center pb-25 pt-25">
+						<a class="text-body p-2 text-decoration-none" href="#"><i class="fab fa-google rounded-pill shadow text-white"></i> Sign in with Google</a>
+						<a class="text-body p-2 text-decoration-none" href="#"><i class="fab fa-facebook rounded-pill shadow text-white"></i> Sign in with Facebook</a>
+						<a class="text-body p-2 text-decoration-none" href="#"><i class="fab fa-twitter rounded-pill shadow text-white"></i> Sign in with Twitter</a>
+					</div>
+					<p class="or-sep">OR</p>
+					<form autocomplete="off" method="POST">
+						{% csrf_token %}
+						{% for i in form.non_field_errors %}
+							<small class="text-danger d-block mt-2 mb-3 text-right">{{ i }}</small>
+						{% endfor %}
+						<div class="form-group">
+							<input type="email" class="form-control bg-light" placeholder="Email" name="email">
+							{% for i in form.email.errors %}
+								<small class="text-danger d-block mt-2 mb-3 text-right">{{ i }}</small>
+							{% endfor %}
+						</div>
+						<div class="form-group">
+							<input type="password" class="form-control bg-light" placeholder="Password" name="password">
+							{% for i in form.password.errors %}
+								<small class="text-danger d-block mt-2 mb-3 text-right">{{ i }}</small>
+							{% endfor %}
+						</div>
+						<div class="text-center">
+							<div class="position-relative border-0 mt-md-0 mt-3 btn btn-primary submit-btn">
+								<i class="icon-login btn-icon input-icon"></i> Login
+								<input type="submit" name="submit" class="h-100 w-100 position-absolute" value="login">
+							</div>
+						</div>
+						<div class="text-center pt-25">
+							<p>Forgot password? <a href="#" data-dismiss="modal" data-toggle="modal" data-target="#resetPassword" class="text-primary">Reset now</a></p>
+							<p>Don't have an account? <a href="#" data-dismiss="modal" data-toggle="modal" data-target="#signUpModal" class="text-primary">Sign up here</a></p>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Reset Password Modal -->
+	<div class="modal fade" id="resetPassword" tabindex="-1" role="dialog" aria-labelledby="resetPasswordModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-lg" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title w-100 text-center" id="resetPasswordModalLabel">Reset Password</h4>
+					<button type="button" class="close position-absolute rounded-pill bg-primary text-white" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body p-5">
+					<form autocomplete="off" method="POST">
+						{% csrf_token %}
+						{% for i in reset_form.non_field_errors %}
+							<small class="text-danger d-block mt-2 mb-3 text-right">{{ i }}</small>
+						{% endfor %}
+						<div class="form-group">
+							<input type="email" class="form-control bg-light" placeholder="Enter your email address" name="email">
+							{% for i in reset_form.email.errors %}
+								<small class="text-danger d-block mt-2 mb-3 text-right">{{ i }}</small>
+							{% endfor %}
+						</div>
+						<div class="text-center">
+							<div class="position-relative border-0 mt-md-0 mt-3 btn btn-primary submit-btn">
+								<i class="icon-login btn-icon input-icon"></i> Proceed
+								<input type="submit" class="h-100 w-100 position-absolute" value="reset" name="submit">
+							</div>
+						</div>
+						<div class="text-center pt-25">
+							<p>Don't have an account? <a href="#" data-dismiss="modal" data-toggle="modal" data-target="#signUpModal" class="text-primary">Create account now</a></p>
+							<p>Already have an account? <a href="#" data-dismiss="modal" data-toggle="modal" data-target="#exampleModal" class="text-primary">Sign in here</a></p>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Signup Modal -->
+	<div class="modal fade" id="signUpModal" tabindex="-1" role="dialog" aria-labelledby="signUpModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-lg" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title w-100 text-center" id="signUpModalLabel">Create an account</h4>
+					<button type="button" class="close position-absolute rounded-pill bg-primary text-white" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body p-5">
+					<div class="social-signup text-center pb-25">
+						<a class="text-body p-2 text-decoration-none" href="#"><i class="fab fa-google rounded-pill shadow text-white"></i> Sign Up with Google</a>
+						<a class="text-body p-2 text-decoration-none" href="#"><i class="fab fa-facebook rounded-pill shadow text-white"></i> Sign Up with Facebook</a>
+						<a class="text-body p-2 text-decoration-none" href="#"><i class="fab fa-twitter rounded-pill shadow text-white"></i> Sign Up with Twitter</a>
+					</div>
+					<p class="or-sep">OR</p>
+					<form autocomplete="off" method="POST">
+						{% csrf_token %}
+						{% for i in reg_form.non_field_errors %}
+							<small class="text-danger d-block mt-2 mb-3 text-right">{{ i }}</small>
+						{% endfor %}
+						<div class="form-group">
+							<input type="email" class="form-control bg-light" placeholder="Your email address" name="email" value="{% if reg_form.email.value %}{{ reg_form.email.value }}{% endif %}">
+							{% for i in reg_form.email.errors %}
+								<small class="text-danger d-block mt-2 mb-3 text-right">{{ i }}</small>
+							{% endfor %}
+						</div>
+						<div class="form-group">
+							<input type="text" class="form-control bg-light" placeholder="Your username" name="username" value="{% if reg_form.username.value %}{{ reg_form.username.value }}{% endif %}">
+							{% for i in reg_form.username.errors %}
+								<small class="text-danger d-block mt-2 mb-3 text-right">{{ i }}</small>
+							{% endfor %}
+						</div>
+						<div class="form-group">
+							<input type="password" class="form-control bg-light" placeholder="Your password" name="password">
+							{% for i in reg_form.password.errors %}
+								<small class="text-danger d-block mt-2 mb-3 text-right">{{ i }}</small>
+							{% endfor %}
+						</div>
+						<div class="form-group">
+							<input type="password" class="form-control bg-light" placeholder="Your confirm password" name="confirm_password">
+							{% for i in reg_form.confirm_password.errors %}
+								<small class="text-danger d-block mt-2 mb-3 text-right">{{ i }}</small>
+							{% endfor %}
+						</div>
+						<div class="form-group text-center mb-3 mt-4 check-types">
+							<label for="signupcheck">
+								<input type="checkbox" id="signupcheck" name='signupcheck'>
+								<span class="cbx rounded-pill float-none d-inline-block align-middle">
+									<svg width="12px" height="11px" viewBox="0 0 12 11">
+										<polyline points="1 6.29411765 4.5 10 11 1"></polyline>
+									</svg>
+								</span>
+								<span class="float-none text-black-50">I agree to your <a href="#" class="text-primary">Terms and conditions</a> and <a href="#" class="text-primary">Privacy policy.</a></span>
+							</label>
+						</div>
+						<div class="text-center">
+							<div class="position-relative border-0 mt-md-0 mt-3 btn btn-primary submit-btn">
+								<i class="icon-login btn-icon input-icon"></i> Proceed
+								<input id='signupbtn' name="submit" disabled type="submit" class="h-100 w-100 position-absolute" value="register">
+							</div>
+						</div>
+						<div class="text-center pt-25">
+							<p>Already have an account? <a href="#" data-dismiss="modal" data-toggle="modal" data-target="#exampleModal" class="text-primary">Sign in here</a></p>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock contents %}

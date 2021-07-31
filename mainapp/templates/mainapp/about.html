@@ -1,0 +1,332 @@
+{% extends "mainapp/base.html" %}
+{% load static %}
+
+{% block contents %}
+	<!-- Page Header -->
+	<section id="et-pagehead" class="container-fluid text-center text-white img-overlay no-hover position-relative pt-5 pb-5">
+		<div class="container position-relative pt-5 pb-5 mt-5 mb-5">
+			<h1 class="box-heading mb-5 position-relative mb-0 text-white">About us</h1>
+		</div>
+		<div class="breadcrumb position-absolute text-center m-0 justify-content-center bg-transparent text-white">
+			<a href="#" class="text-white d-inline-block p-2">Home</a>
+			<a href="#" class="text-white d-inline-block p-2">About us</a>
+		</div>
+	</section>
+
+	<!-- Content Area -->
+	<section id="et-content" class="container-fluid">
+		<div class="container">
+			<div class="row">
+				<!-- Intro -->
+				<div class="col-md-8">
+					<p class="text-muted">The recorded voice scratched in the speaker.</p>
+					<h2 class="mb-4">Almost before we knew it, we had left the ground.</h2>
+					<blockquote class="desc mb-4">
+						Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+					</blockquote>
+					<p class="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+					<p class="description">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+					<p class="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+					<a href="#" class="btn btn-primary border-0 mt-3"><i class="fas fa-angle-right btn-icon"></i> Read More</a>
+				</div>
+				<div class="col-md-4 d-none d-md-block">
+					<div class="image-cluster position-relative">
+						<div class="img img-overlay position-absolute bg-white overflow-hidden rounded shadow"><img src="{% static 'img/clust-1.jpg' %}" alt="img"></div>
+						<div class="img img-overlay position-absolute bg-white overflow-hidden rounded shadow"><img src="{% static 'img/clust-2.jpg' %}" alt="img"></div>
+						<div class="img img-overlay position-absolute bg-white overflow-hidden rounded shadow"><img src="{% static 'img/clust-3.jpg' %}" alt="img"></div>
+						<div class="img img-overlay position-absolute bg-white overflow-hidden rounded shadow"><img src="{% static 'img/clust-4.jpg' %}" alt="img"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Team -->
+	<section id="et-team" class="container-fluid bg-light">
+		<div class="container">
+			<div class="section-heading">
+				<p>Hosted Speakers for Events</p>
+				<br>
+				<h2 class="mb-0">Meet the Speakers</h2>
+			</div>
+			<div class="row">
+				<div class="col-md-4 pt-25">
+					<div class="team-grid rounded shadow">
+						<div class="image-wrap img-overlay overflow-hidden position-relative">
+							<img src="{% static 'img/team-1.jpg' %}" alt="img" class="w-100 rounded-top">
+							<div class="info transition position-absolute text-center">
+								<ul class="nostyle info-inner text-white p-0">
+									<li class="mt-4 d-block"><i class="fas fa-envelope"></i>&nbsp; Events@example.com</li>
+									<li class="mt-4 d-block"><i class="fas fa-phone-alt"></i>&nbsp; (888)451-8908-7845</li>
+									<li class="mt-4 d-block"><i class="fas fa-map-marker-alt"></i>&nbsp; Bell Str, P.O. Box 22484, Dallas</li>
+								</ul>
+								<ul class="social d-inline-block m-0 nostyle inline p-0">
+									<li><a href="#" class="d-flex p-2 border rounded-pill text-white align-items-center justify-content-center text-decoration-none transition"><i class="fab fa-facebook" aria-hidden="true"></i></a></li>
+									<li><a href="#" class="d-flex p-2 border rounded-pill text-white align-items-center justify-content-center text-decoration-none transition"><i class="fab fa-google" aria-hidden="true"></i></a></li>
+									<li><a href="#" class="d-flex p-2 border rounded-pill text-white align-items-center justify-content-center text-decoration-none transition"><i class="fab fa-instagram" aria-hidden="true"></i></a></li>
+									<li><a href="#" class="d-flex p-2 border rounded-pill text-white align-items-center justify-content-center text-decoration-none transition"><i class="fab fa-youtube" aria-hidden="true"></i></a></li>
+									<li><a href="#" class="d-flex p-2 border rounded-pill text-white align-items-center justify-content-center text-decoration-none transition"><i class="fab fa-linkedin" aria-hidden="true"></i></a></li>
+								</ul>
+							</div>
+						</div>
+						<div class="content p-4 bg-white">
+							<div class="d-flex align-items-center">
+								<div>
+									<h4 class="mb-2"><a href="#" class="text-decoration-none text-primary">James Nixon</a></h4>
+									Operational Manager
+								</div>
+								<a href="#" class="bg-primary text-white readmore rounded text-decoration-none d-inline-flex align-items-center justify-content-center border-0 ml-auto"><i class="icon-download"></i></a>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4 pt-25">
+					<div class="team-grid rounded shadow">
+						<div class="image-wrap img-overlay overflow-hidden position-relative">
+							<img src="{% static 'img/team-2.jpg' %}" alt="img" class="w-100 rounded-top">
+							<div class="info transition position-absolute text-center">
+								<ul class="nostyle info-inner text-white p-0">
+									<li class="mt-4 d-block"><i class="fas fa-envelope"></i>&nbsp; Events@example.com</li>
+									<li class="mt-4 d-block"><i class="fas fa-phone-alt"></i>&nbsp; (888)451-8908-7845</li>
+									<li class="mt-4 d-block"><i class="fas fa-map-marker-alt"></i>&nbsp; Bell Str, P.O. Box 22484, Dallas</li>
+								</ul>
+								<ul class="social d-inline-block m-0 nostyle inline p-0">
+									<li><a href="#" class="d-flex p-2 border rounded-pill text-white align-items-center justify-content-center text-decoration-none transition"><i class="fab fa-facebook" aria-hidden="true"></i></a></li>
+									<li><a href="#" class="d-flex p-2 border rounded-pill text-white align-items-center justify-content-center text-decoration-none transition"><i class="fab fa-google" aria-hidden="true"></i></a></li>
+									<li><a href="#" class="d-flex p-2 border rounded-pill text-white align-items-center justify-content-center text-decoration-none transition"><i class="fab fa-instagram" aria-hidden="true"></i></a></li>
+									<li><a href="#" class="d-flex p-2 border rounded-pill text-white align-items-center justify-content-center text-decoration-none transition"><i class="fab fa-youtube" aria-hidden="true"></i></a></li>
+									<li><a href="#" class="d-flex p-2 border rounded-pill text-white align-items-center justify-content-center text-decoration-none transition"><i class="fab fa-linkedin" aria-hidden="true"></i></a></li>
+								</ul>
+							</div>
+						</div>
+						<div class="content p-4 bg-white">
+							<div class="d-flex align-items-center">
+								<div>
+									<h4 class="mb-2"><a href="#" class="text-decoration-none text-primary">Alexa Wolken</a></h4>
+									Chief Finance Officer
+								</div>
+								<a href="#" class="bg-primary text-white readmore rounded text-decoration-none d-inline-flex align-items-center justify-content-center border-0 ml-auto"><i class="icon-download"></i></a>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4 pt-25">
+					<div class="team-grid rounded shadow">
+						<div class="image-wrap img-overlay overflow-hidden position-relative">
+							<img src="{% static 'img/team-3.jpg' %}" alt="img" class="w-100 rounded-top">
+							<div class="info transition position-absolute text-center">
+								<ul class="nostyle info-inner text-white p-0">
+									<li class="mt-4 d-block"><i class="fas fa-envelope"></i>&nbsp; Events@example.com</li>
+									<li class="mt-4 d-block"><i class="fas fa-phone-alt"></i>&nbsp; (888)451-8908-7845</li>
+									<li class="mt-4 d-block"><i class="fas fa-map-marker-alt"></i>&nbsp; Bell Str, P.O. Box 22484, Dallas</li>
+								</ul>
+								<ul class="social d-inline-block m-0 nostyle inline p-0">
+									<li><a href="#" class="d-flex p-2 border rounded-pill text-white align-items-center justify-content-center text-decoration-none transition"><i class="fab fa-facebook" aria-hidden="true"></i></a></li>
+									<li><a href="#" class="d-flex p-2 border rounded-pill text-white align-items-center justify-content-center text-decoration-none transition"><i class="fab fa-google" aria-hidden="true"></i></a></li>
+									<li><a href="#" class="d-flex p-2 border rounded-pill text-white align-items-center justify-content-center text-decoration-none transition"><i class="fab fa-instagram" aria-hidden="true"></i></a></li>
+									<li><a href="#" class="d-flex p-2 border rounded-pill text-white align-items-center justify-content-center text-decoration-none transition"><i class="fab fa-youtube" aria-hidden="true"></i></a></li>
+									<li><a href="#" class="d-flex p-2 border rounded-pill text-white align-items-center justify-content-center text-decoration-none transition"><i class="fab fa-linkedin" aria-hidden="true"></i></a></li>
+								</ul>
+							</div>
+						</div>
+						<div class="content p-4 bg-white">
+							<div class="d-flex align-items-center">
+								<div>
+									<h4 class="mb-2"><a href="#" class="text-decoration-none text-primary">Mike Trevor</a></h4>
+									Business Analyst
+								</div>
+								<a href="#" class="bg-primary text-white readmore rounded text-decoration-none d-inline-flex align-items-center justify-content-center border-0 ml-auto"><i class="icon-download"></i></a>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4 pt-25">
+					<div class="team-grid rounded shadow">
+						<div class="image-wrap img-overlay overflow-hidden position-relative">
+							<img src="{% static 'img/team-4.jpg' %}" alt="img" class="w-100 rounded-top">
+							<div class="info transition position-absolute text-center">
+								<ul class="nostyle info-inner text-white p-0">
+									<li class="mt-4 d-block"><i class="fas fa-envelope"></i>&nbsp; Events@example.com</li>
+									<li class="mt-4 d-block"><i class="fas fa-phone-alt"></i>&nbsp; (888)451-8908-7845</li>
+									<li class="mt-4 d-block"><i class="fas fa-map-marker-alt"></i>&nbsp; Bell Str, P.O. Box 22484, Dallas</li>
+								</ul>
+								<ul class="social d-inline-block m-0 nostyle inline p-0">
+									<li><a href="#" class="d-flex p-2 border rounded-pill text-white align-items-center justify-content-center text-decoration-none transition"><i class="fab fa-facebook" aria-hidden="true"></i></a></li>
+									<li><a href="#" class="d-flex p-2 border rounded-pill text-white align-items-center justify-content-center text-decoration-none transition"><i class="fab fa-google" aria-hidden="true"></i></a></li>
+									<li><a href="#" class="d-flex p-2 border rounded-pill text-white align-items-center justify-content-center text-decoration-none transition"><i class="fab fa-instagram" aria-hidden="true"></i></a></li>
+									<li><a href="#" class="d-flex p-2 border rounded-pill text-white align-items-center justify-content-center text-decoration-none transition"><i class="fab fa-youtube" aria-hidden="true"></i></a></li>
+									<li><a href="#" class="d-flex p-2 border rounded-pill text-white align-items-center justify-content-center text-decoration-none transition"><i class="fab fa-linkedin" aria-hidden="true"></i></a></li>
+								</ul>
+							</div>
+						</div>
+						<div class="content p-4 bg-white">
+							<div class="d-flex align-items-center">
+								<div>
+									<h4 class="mb-2"><a href="#" class="text-decoration-none text-primary">Illean Cruise</a></h4>
+									Technical Recruiter
+								</div>
+								<a href="#" class="bg-primary text-white readmore rounded text-decoration-none d-inline-flex align-items-center justify-content-center border-0 ml-auto"><i class="icon-download"></i></a>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4 pt-25">
+					<div class="team-grid rounded shadow">
+						<div class="image-wrap img-overlay overflow-hidden position-relative">
+							<img src="{% static 'img/team-5.jpg' %}" alt="img" class="w-100 rounded-top">
+							<div class="info transition position-absolute text-center">
+								<ul class="nostyle info-inner text-white p-0">
+									<li class="mt-4 d-block"><i class="fas fa-envelope"></i>&nbsp; Events@example.com</li>
+									<li class="mt-4 d-block"><i class="fas fa-phone-alt"></i>&nbsp; (888)451-8908-7845</li>
+									<li class="mt-4 d-block"><i class="fas fa-map-marker-alt"></i>&nbsp; Bell Str, P.O. Box 22484, Dallas</li>
+								</ul>
+								<ul class="social d-inline-block m-0 nostyle inline p-0">
+									<li><a href="#" class="d-flex p-2 border rounded-pill text-white align-items-center justify-content-center text-decoration-none transition"><i class="fab fa-facebook" aria-hidden="true"></i></a></li>
+									<li><a href="#" class="d-flex p-2 border rounded-pill text-white align-items-center justify-content-center text-decoration-none transition"><i class="fab fa-google" aria-hidden="true"></i></a></li>
+									<li><a href="#" class="d-flex p-2 border rounded-pill text-white align-items-center justify-content-center text-decoration-none transition"><i class="fab fa-instagram" aria-hidden="true"></i></a></li>
+									<li><a href="#" class="d-flex p-2 border rounded-pill text-white align-items-center justify-content-center text-decoration-none transition"><i class="fab fa-youtube" aria-hidden="true"></i></a></li>
+									<li><a href="#" class="d-flex p-2 border rounded-pill text-white align-items-center justify-content-center text-decoration-none transition"><i class="fab fa-linkedin" aria-hidden="true"></i></a></li>
+								</ul>
+							</div>
+						</div>
+						<div class="content p-4 bg-white">
+							<div class="d-flex align-items-center">
+								<div>
+									<h4 class="mb-2"><a href="#" class="text-decoration-none text-primary">Hiu Michelle</a></h4>
+									Marketing Head
+								</div>
+								<a href="#" class="bg-primary text-white readmore rounded text-decoration-none d-inline-flex align-items-center justify-content-center border-0 ml-auto"><i class="icon-download"></i></a>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4 pt-25">
+					<div class="team-grid rounded shadow">
+						<div class="image-wrap img-overlay overflow-hidden position-relative">
+							<img src="{% static 'img/team-6.jpg' %}" alt="img" class="w-100 rounded-top">
+							<div class="info transition position-absolute text-center">
+								<ul class="nostyle info-inner text-white p-0">
+									<li class="mt-4 d-block"><i class="fas fa-envelope"></i>&nbsp; Events@example.com</li>
+									<li class="mt-4 d-block"><i class="fas fa-phone-alt"></i>&nbsp; (888)451-8908-7845</li>
+									<li class="mt-4 d-block"><i class="fas fa-map-marker-alt"></i>&nbsp; Bell Str, P.O. Box 22484, Dallas</li>
+								</ul>
+								<ul class="social d-inline-block m-0 nostyle inline p-0">
+									<li><a href="#" class="d-flex p-2 border rounded-pill text-white align-items-center justify-content-center text-decoration-none transition"><i class="fab fa-facebook" aria-hidden="true"></i></a></li>
+									<li><a href="#" class="d-flex p-2 border rounded-pill text-white align-items-center justify-content-center text-decoration-none transition"><i class="fab fa-google" aria-hidden="true"></i></a></li>
+									<li><a href="#" class="d-flex p-2 border rounded-pill text-white align-items-center justify-content-center text-decoration-none transition"><i class="fab fa-instagram" aria-hidden="true"></i></a></li>
+									<li><a href="#" class="d-flex p-2 border rounded-pill text-white align-items-center justify-content-center text-decoration-none transition"><i class="fab fa-youtube" aria-hidden="true"></i></a></li>
+									<li><a href="#" class="d-flex p-2 border rounded-pill text-white align-items-center justify-content-center text-decoration-none transition"><i class="fab fa-linkedin" aria-hidden="true"></i></a></li>
+								</ul>
+							</div>
+						</div>
+						<div class="content p-4 bg-white">
+							<div class="d-flex align-items-center">
+								<div>
+									<h4 class="mb-2"><a href="#" class="text-decoration-none text-primary">Nelsa Grewt</a></h4>
+									Operational Manager
+								</div>
+								<a href="#" class="bg-primary text-white readmore rounded text-decoration-none d-inline-flex align-items-center justify-content-center border-0 ml-auto"><i class="icon-download"></i></a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Call to action -->
+	<section id="et-callto-action-2" class="container-fluid">
+		<div class="row m-0">
+			<div class="col-md-6 textbox p-5 bg-primary text-white d-flex flex-wrap align-content-center">
+				<h2 class="mb-4 text-white">Almost before we knew it, we had left the ground.</h2>
+				<p class="desc">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+			</div>
+			<div class="col-md-6 imagebox">
+				<img src="{% static 'img/cta-2.jpg' %}" alt="cta" class="img-fluid shadow">
+			</div>
+		</div>
+	</section>
+
+	<!-- Testimonial -->
+	<section id="et-testimonial2" class="container-fluid bg-light">
+		<div class="container">
+			<div class="section-heading">
+				<p>Lorem ipsum dolor emet</p>
+				<br>
+				<h2 class="mb-0">Words from users</h2>
+			</div>
+			<div class="owl-carousel owl-theme">
+				<div class="item bg-white shadow p-5 m-4">
+					<i class="icon-quote-2 text-muted d-block h1"></i>
+					<p class="description font-italic">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
+					<div class="d-flex align-items-center">
+						<div class="d-inline-block pr-3">
+							<div class="thumb-wrap overflow-hidden rounded-pill shadow">
+								<img src="{% static 'img/author-2.jpg' %}" class="w-100" alt="user">
+							</div>
+						</div>
+						<div class="d-inline-block">
+							<h6 class="mb-1">Steve Guzlemian</h6>
+							<p class="text-primary mb-0">Manager at UXF</p>
+						</div>
+					</div>
+				</div>
+				<div class="item bg-white shadow p-5 m-4">
+					<i class="icon-quote-2 text-muted d-block h1"></i>
+					<p class="description font-italic">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
+					<div class="d-flex align-items-center">
+						<div class="d-inline-block pr-3">
+							<div class="thumb-wrap overflow-hidden rounded-pill shadow">
+								<img src="{% static 'img/author-3.jpg' %}" class="w-100" alt="user">
+							</div>
+						</div>
+						<div class="d-inline-block">
+							<h6 class="mb-1">Alexa Stephen</h6>
+							<p class="text-primary mb-0">Director SFO Technology</p>
+						</div>
+					</div>
+				</div>
+				<div class="item bg-white shadow p-5 m-4">
+					<i class="icon-quote-2 text-muted d-block h1"></i>
+					<p class="description font-italic">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
+					<div class="d-flex align-items-center">
+						<div class="d-inline-block pr-3">
+							<div class="thumb-wrap overflow-hidden rounded-pill shadow">
+								<img src="{% static 'img/author-1.jpg' %}" class="w-100" alt="user">
+							</div>
+						</div>
+						<div class="d-inline-block">
+							<h6 class="mb-1">Trevor Bilson</h6>
+							<p class="text-primary mb-0">CEO WebTechnology</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Clients -->
+	<section id="et-clients" class="container-fluid">
+		<div class="container">
+			<div class="section-heading">
+				<p>Lorem ipsum dolor emet</p>
+				<br>
+				<h2 class="mb-0">Our valuable clients</h2>
+			</div>
+			<div class="d-flex flex-wrap justify-content-center client-icons">
+				<span class="m-3 rounded transition"><img src="{% static 'img/client-1.png' %}" class="img-fluid" alt="client"></span>
+				<span class="m-3 rounded transition"><img src="{% static 'img/client-2.png' %}" class="img-fluid" alt="client"></span>
+				<span class="m-3 rounded transition"><img src="{% static 'img/client-3.png' %}" class="img-fluid" alt="client"></span>
+				<span class="m-3 rounded transition"><img src="{% static 'img/client-4.png' %}" class="img-fluid" alt="client"></span>
+				<span class="m-3 rounded transition"><img src="{% static 'img/client-5.png' %}" class="img-fluid" alt="client"></span>
+				<span class="m-3 rounded transition"><img src="{% static 'img/client-6.png' %}" class="img-fluid" alt="client"></span>
+				<span class="m-3 rounded transition"><img src="{% static 'img/client-4.png' %}" class="img-fluid" alt="client"></span>
+				<span class="m-3 rounded transition"><img src="{% static 'img/client-5.png' %}" class="img-fluid" alt="client"></span>
+				<span class="m-3 rounded transition"><img src="{% static 'img/client-1.png' %}" class="img-fluid" alt="client"></span>
+				<span class="m-3 rounded transition"><img src="{% static 'img/client-6.png' %}" class="img-fluid" alt="client"></span>
+				<span class="m-3 rounded transition"><img src="{% static 'img/client-2.png' %}" class="img-fluid" alt="client"></span>
+				<span class="m-3 rounded transition"><img src="{% static 'img/client-4.png' %}" class="img-fluid" alt="client"></span>
+			</div>
+		</div>
+	</section>
+{% endblock contents %}

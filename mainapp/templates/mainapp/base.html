@@ -1,0 +1,227 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zxx">
+
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content="">
+	<meta name="author" content="Exact Themes">
+
+    {% if title %}
+	    <title>Bonspiels - {{ title }}</title>
+    {% else %}
+	    <title>Bonspiels</title>
+    {% endif %}
+    
+
+	<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+	<link rel="stylesheet" href="{% static 'style.css' %}">
+	<link rel="stylesheet" href="{% static 'css/responsive.css' %}">
+	<link rel="stylesheet" href="{% static 'css/icons.css' %}">
+	<link rel="stylesheet" href="{% static 'css/fontawesome.min.css' %}">
+	<link rel="stylesheet" href="{% static 'css/colors.css' %}">
+	<link rel="stylesheet" href="{% static 'css/typography.css' %}">
+	<link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}">
+	<link rel="stylesheet" href="{% static 'css/animate.css' %}">
+	<link rel="stylesheet" href="{% static 'css/hc-offcanvas-nav.css' %}">
+	<link rel="stylesheet" href="{% static 'css/jquery.scrollbar.css' %}">
+	<link rel="stylesheet" href="{% static 'css/jquery.fancybox.min.css' %}" />
+
+	<!-- Bootstrap DateTimePicker -->
+	<link rel="stylesheet" href="{% static 'css/bootstrap-datetimepicker.min.css' %}"/>
+	<!-- jQuery Nice Select -->
+	<link rel="stylesheet" href="{% static 'css/nice-select.css' %}"/>
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-155204293-2"></script>
+	<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+
+	gtag('config', 'UA-155204293-2');
+	</script>
+</head>
+<body class="home">
+
+	{% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            {{message}}
+        </div>
+        {% endfor %}
+    {% endif %}
+
+	<!-- Navbar -->
+	<nav class="et-navbar navbar">
+		<a class="logo h6 mb-0" href="index.html"><img src="{% static 'img/logo.png' %}" alt="img"></a>
+		<ul class="nostyle nav-links inline mr-lg-auto text-right text-lg-left flex-lg-grow-1 mb-0">
+			<li class="dropdown">
+				<a href="{% url 'mainapp:home' %}">Home</a>
+			</li>
+			
+			<li class="dropdown">
+				<a href="search-map-right.html">Search</a>
+			
+			</li>
+			<li class="dropdown">
+				<a href="#">Events</a>
+				<ul class="submenu shadow">
+					<li><a href="{% url 'events:add-event' %}">Add Events</a></li>
+					<li><a href="event-detail.html">Event Detail</a></li>
+					<li><a href="event-calendar.html">Event Calendar</a></li>
+				</ul>
+			</li>
+
+
+			<li><a href="{% url 'mainapp:about' %}">About</a></li>
+			<li class="dropdown">
+				<a href="{% url 'mainapp:contact' %}">Contact</a>
+			</li>
+
+		</ul>
+		<div class="nav-actions ml-auto">
+			<a href="search.html"><i class="icon-search-2"></i> Search</a>
+			{% if request.user.is_authenticated %}
+				<a href="{% url 'account:logout' %}" style="color: red;"><i class="icon-login"></i> Logout</a>
+			{% else %}
+				<a href="#" data-toggle="modal" data-target="#exampleModal"><i class="icon-login"></i> Login/Signup</a>
+			{% endif %}
+			
+			<a href="pricing.html" class="btn btn-primary border-0"><i class="icon-plus btn-icon"></i> Add Event</a>
+		</div>
+	</nav>
+
+	<!-- Mobile Menu -->
+	<nav id="et-mobile-nav">
+		<ul class="text-capitalize">
+			<li>
+				<a href="#">Home</a>
+			</li>
+			<li><a href="about.html">About</a></li>
+	
+			<li>
+				<a href="search-map-right.html">Search</a>
+				
+			</li>
+			<li>
+				<a href="#">Events</a>
+				<ul class="submenu shadow">
+					<li><a href="add-event.html">Add Events</a></li>
+					<li><a href="event-detail.html">Event Detail</a></li>
+					<li><a href="event-calendar.html">Event Calendar</a></li>
+				</ul>
+			</li>
+		
+			<li><a href="contact.html">Contact</a></li>
+		</ul>
+	</nav>
+
+    
+    {% block contents %}
+        
+    {% endblock contents %}
+        
+
+	<!-- Subscribe -->
+	<section id="et-subscribe-form">
+		<div class="box-wrap img-overlay no-hover position-relative rounded shadow p-5 text-white">
+			<div class="container position-relative">
+				<h4 class="text-white">Get The Best Of All Hands Delivered To Your Inbox</h4>
+				<p>Subscribe to our newsletter and stay updated.</p>
+				<form class="d-md-flex">
+					<input type="text" class="form-control text-white mr-3 bg-transparent border-bottom d-inline-block subinput rounded-0" placeholder="Enter your email">
+					<div class="position-relative border-0 mt-md-0 mt-3 btn bg-white submit-btn">
+						<i class="icon-login btn-icon input-icon"></i> Subscribe
+						<input type="submit" class="h-100 w-100 position-absolute" value="Discover Now">
+					</div>
+				</form>
+			</div>
+		</div>
+	</section>
+
+	<footer id="et-site-footer" class="container-fluid position-relative bg-footer text-white pt-5 pb-2">
+		<div class="container">
+			<div class="row">
+				<!--About-->
+				<div class="col-md-3 about widget">
+					<a class="logo h6 mb-0 text-decoration-none text-white" href="#"><img src="{% static 'img/logo-footer.png' %}" alt="img"> Bonspiels</a>
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore.</p>
+					<ul class="social nostyle inline text-white p-0">
+						<li class="mr-2"><a href="#" class="text-white d-block text-decoration-none transition"><i class="fab fa-facebook" aria-hidden="true"></i></a></li>
+						<li class="mr-2"><a href="#" class="text-white d-block text-decoration-none transition"><i class="fab fa-google" aria-hidden="true"></i></a></li>
+						<li class="mr-2"><a href="#" class="text-white d-block text-decoration-none transition"><i class="fab fa-instagram" aria-hidden="true"></i></a></li>
+						<li class="mr-2"><a href="#" class="text-white d-block text-decoration-none transition"><i class="fab fa-youtube" aria-hidden="true"></i></a></li>
+						<li class="mr-2"><a href="#" class="text-white d-block text-decoration-none transition"><i class="fab fa-linkedin" aria-hidden="true"></i></a></li>
+					</ul>
+				</div>
+				<!--Contact-->
+				<div class="col-md-3 contact widget">
+					<h5>Contact Us</h5>
+					<ul class="nostyle text-white p-0">
+						<li class="mt-4 d-block"><i class="fas fa-envelope"></i>&nbsp; info@bonspiels.com</li>
+						<li class="mt-4 d-block"><i class="fas fa-phone-alt"></i>&nbsp; (888)000-000 - 000</li>
+						<li class="mt-4 d-block"><i class="fas fa-map-marker-alt"></i>&nbsp;BD land, P.O. Box 0000, Demo, TX 00000-0000</li>
+					</ul>
+				</div>
+				<!--Navigation-->
+				<div class="col-md-3 navigation widget">
+					<h5>Navigation</h5>
+					<ul class="nostyle text-white p-0">
+						<li class="mt-4 d-block"><a href="#">Home</a></li>
+						<li class="mt-4 d-block"><a href="#">About us</a></li>
+						<li class="mt-4 d-block"><a href="#">What We Do</a></li>
+						<li class="mt-4 d-block"><a href="#">Privacy Policy</a></li>
+					</ul>
+				</div>
+
+				<!--Navigation-->
+				<div class="col-md-3 navigation widget">
+					<h5>Navigation</h5>
+					<ul class="nostyle text-white p-0">
+						<li class="mt-4 d-block"><a href="#">Terms & conditions</a></li>
+						<li class="mt-4 d-block"><a href="#">Privacy policy</a></li>
+						<li class="mt-4 d-block"><a href="#">Cookies policy</a></li>
+						<li class="mt-4 d-block"><a href="#">Copyrights Policy</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</footer>
+	<div class="et-bottom-bar pt-2 pb-2">
+		<div class="container">
+			<div class="row justify-content-md-left justify-content-center align-items-center">
+				<div class="partners">
+					
+				</div>
+				<div class="ml-sm-auto mt-3 mt-sm-0">
+					<p class="mb-0">Copyright © 2021 - <a class="text-decoration-none text-reset" href="#">Codecell ltd</a></p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="et-preloader"><div></div><div></div></div>
+
+	<!-- Scripts -->
+	<script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+	<script src="{% static 'js/popper.min.js' %}"></script>
+	<script src="{% static 'js/bootstrap.min.js' %}"></script>
+	<script src="{% static 'js/owl.carousel.min.js' %}"></script>
+	<script src="{% static 'js/hc-offcanvas-nav.js' %}"></script>
+	<!--Bootstrap DateTimePicker -->
+	<script src="{% static 'js/bootstrap-datetimepicker.min.js' %}"></script>
+	<!--jQuery Nice Select -->
+	<script src="{% static 'js/jquery.nice-select.min.js' %}"></script>
+	<script src="{% static 'js/jquery.scrollbar.min.js' %}"></script>
+
+	<script src="{% static 'js/jquery.fancybox.min.js' %}"></script>
+
+	<script src="{% static 'js/custom.js' %}"></script>
+
+	<script src='https://maps.googleapis.com/maps/api/js?key=AIzaSyAmrxCFuWyNUlMh6wLitVLI3pF7j_HqAFY&amp;libraries=places&amp;ver=1.1'></script>
+</body>
+
+
+</html>

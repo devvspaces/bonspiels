@@ -1,0 +1,99 @@
+{% extends "mainapp/base.html" %}
+{% load static %}
+
+{% block contents %}
+
+	<!-- Page Header -->
+	<section id="et-pagehead" class="container-fluid text-center text-white img-overlay no-hover position-relative pt-5 pb-5">
+		<div class="container position-relative pt-5 pb-5 mt-5 mb-5">
+			<h1 class="box-heading mb-5 position-relative mb-0 text-white">Contact Us</h1>
+		</div>
+		<div class="breadcrumb position-absolute text-center m-0 justify-content-center bg-transparent text-white">
+			<a href="#" class="text-white d-inline-block p-2">Home</a>
+			<a href="#" class="text-white d-inline-block p-2">Contact us</a>
+		</div>
+	</section>
+
+	<!-- Content Area -->
+	<section id="et-content" class="container-fluid">
+		<div class="container">
+			<!-- Contact info -->
+			<div class="row">
+				<div class="col-lg-4">
+					<div class="bg-white boxhover transition pt-5 pb-5 shadow d-flex align-items-center justify-content-center">
+						<i class="icon-clock text-primary h1 m-0"></i>
+						<div class="pl-4">
+							<h6>Monday - Friday</h6>
+							<p class="m-0">Office hours</p>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-4">
+					<div class="bg-white boxhover transition pt-5 pb-5 shadow d-flex align-items-center justify-content-center">
+						<i class="icon-contact text-primary h1 m-0"></i>
+						<div class="pl-4">
+							<h6>business@bonspiels.net</h6>
+							<p class="m-0">Business email</p>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-4">
+					<div class="bg-white boxhover transition pt-5 pb-5 shadow d-flex align-items-center justify-content-center">
+						<i class="icon-phone text-primary h1 m-0"></i>
+						<div class="pl-4">
+							<h6>+00 000 00 00</h6>
+							<p class="m-0">Toll free</p>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Map -->
+			<div class="et-contact-map mt-5">
+				<div id="loadmaps" class="w-100 mb-3"></div>
+			</div>
+
+			<!-- Contact form -->
+			<div class="et-contact-form mt-5">
+				<h5>Drop a message</h5>
+				<p class="description mb-4">Please fill this form. We usually reply back within same day</p>
+				<form autocomplete="off">
+					<div class="row">
+						<div class="form-group col-sm-6">
+							<input type="text" class="form-control bg-light" placeholder="Name" name="name">
+						</div>
+						<div class="form-group col-sm-6">
+							<input type="email" class="form-control bg-light" placeholder="Email" name="email">
+						</div>
+						<div class="form-group col-sm-6">
+							<input type="text" class="form-control bg-light" placeholder="Phone" name="phone">
+						</div>
+						<div class="form-group col-sm-6">
+							<input type="text" class="form-control bg-light" placeholder="Subject" name="subject">
+						</div>
+						<div class="form-group col-sm-12">
+							<textarea rows="6" class="form-control resize-none bg-light" placeholder="Type your message" name="message"></textarea>
+						</div>
+					</div>
+					<div class="form-group text-center mb-3 mt-4 check-types">
+						<label for="cbk1">
+							<input type="checkbox" id="cbk1">
+							<span class="cbx rounded-pill float-none d-inline-block align-middle">
+								<svg width="12px" height="11px" viewBox="0 0 12 11">
+									<polyline points="1 6.29411765 4.5 10 11 1"></polyline>
+								</svg>
+							</span>
+							<span class="float-none text-black-50">I agree to the <a href="#" class="text-primary">Terms and conditions</a> and <a href="#" class="text-primary">Privacy policy.</a></span>
+						</label>
+					</div>
+					<div class="text-center">
+						<div class="position-relative border-0 mt-md-0 mt-3 btn btn-primary submit-btn">
+							<i class="icon-login btn-icon input-icon"></i> Send Email
+							<input type="submit" class="h-100 w-100 position-absolute" value="Submit Review">
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</section>
+{% endblock contents %}

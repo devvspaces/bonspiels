@@ -1,0 +1,206 @@
+
+/************* Primary Color *************/
+
+.text-primary,
+.form-control:focus + .input-icon,
+.form-control:active + .input-icon,
+.star-rating .fa,
+.fake-file-upload:hover,
+.social li a:hover,
+.event-actions .event-action:hover,
+.event-actions .event-action i:hover,
+blockquote:before,
+.side-widget.categories a:hover,
+.side-widget.related-news .post-data > p:hover,
+.et-navbar .nav-links li > a:hover,
+.et-navbar .nav-actions > a:not(.btn):hover,
+.calendar .cells-row .cell.event,
+.timer.search > div.hours,
+#et-team .team-grid .info .info-inner li i,
+#et-search-event .event-results .blog-grid h4 a:hover,
+.nice-select.default > span.current,
+.scroll-tabs > a.active
+{
+	color: #ee0979 !important;
+}
+
+
+/************* Secondary Color *************/
+
+a.text-primary:hover,
+.timer.search > div.minutes,
+.text-secondary
+{
+	color: #ff6a00 !important;
+}
+
+
+/************* Primary BG Color *************/
+
+.btn-primary,
+.bg-primary,
+.calendar-nav .btn:focus,
+.grid-categories a:hover,
+.badge-primary,
+button.owl-prev:hover, button.owl-next:hover,
+.et-navbar .nav-links a:before,
+.et-navbar .nav-links a:after,
+.hc-offcanvas-nav li.nav-close a,
+.hc-offcanvas-nav li.nav-back a,
+.hc-offcanvas-nav:not(.touch-device) a:hover,
+.timer:not(.search) > div:not(.seconds),
+.box-heading:not(.text-white)::before, .box-heading:not(.text-white)::after,
+.price-plans .price-plan:hover,
+.price-plans .price-plan.active,
+.hc-nav-trigger span,
+.hc-nav-trigger span::before,
+.hc-nav-trigger span::after,
+.post-tags a:hover,
+.modal .close:hover,
+.check-types input[type="checkbox"]:checked + .cbx,
+.check-types input[type="radio"]:checked + .rdo,
+.calendar .cells-row .cell:not(.day):not(.empty):hover,
+.social-share .social-icons a,
+.post-nav a:hover i,
+.datetimepicker table tr td span.active:active, .datetimepicker table tr td span.active:hover:active, .datetimepicker table tr td span.active.disabled:active, .datetimepicker table tr td span.active.disabled:hover:active, .datetimepicker table tr td span.active.active, .datetimepicker table tr td span.active:hover.active, .datetimepicker table tr td span.active.disabled.active, .datetimepicker table tr td span.active.disabled:hover.active,
+.datetimepicker table tr td.active:active, .datetimepicker table tr td.active:hover:active, .datetimepicker table tr td.active.disabled:active, .datetimepicker table tr td.active.disabled:hover:active, .datetimepicker table tr td.active.active, .datetimepicker table tr td.active:hover.active, .datetimepicker table tr td.active.disabled.active, .datetimepicker table tr td.active.disabled:hover.active,
+#et-subscribe-form .box-wrap.img-overlay:before,
+.et-bottom-bar,
+.et-preloader,
+.bg-danger,
+.irs--big .irs-handle
+{
+	background: rgb(238,9,121) !important;
+	background: linear-gradient(90deg, rgba(238,9,121,1) 0%, rgba(255,106,0,1) 100%) !important;
+}
+
+
+/************* Primary Flat BG Color *************/
+.bg-primary-flat,
+#et-location-events .event-results .photocount,
+#et-search-event .event-results .photocount,
+.irs-single, .irs--big .irs-bar--single
+{
+	background: #ee0979 !important;
+}
+/************* Footer dark bg *************/
+.bg-footer
+{
+	background: #212529 !important;
+}
+
+
+/************* Primary BG Color With Transparency *************/
+
+#et-site-footer.img-overlay:before,
+.gallery-mason .image-box:after{
+	background-color: rgba(238,60,60,0.9);
+}
+
+/************* Primary border color *************/
+
+.fake-file-upload:hover,
+#et-clients .client-icons > span:hover,
+.form-control:not(.subinput):focus,
+.form-control:not(.subinput):active,
+.form-control:not(.subinput):hover,
+.scroll-tabs > a.active{
+	border-color: #ee0979 !important;
+}
+
+
+/************* Secondary BG Color *************/
+
+.badge-secondary-flat,
+.badge-green:hover,
+.bg-secondary-flat,
+.btn-secondary-flat,
+.badge-primary:hover,
+a.bg-primary:hover,
+a.bg-primary:focus,
+.hc-offcanvas-nav .nav-container,
+.hc-offcanvas-nav .nav-wrapper,
+.hc-offcanvas-nav ul,
+.timer:not(.search) > div.seconds{
+	background-color: #fe6308 !important;
+}
+
+/************* Green Text Color *************/
+.text-green{
+	color: #53b82b;
+}
+
+/************* Green BG Color *************/
+.bg-green,
+.badge-green{
+	background-color: #53b82b;
+}
+
+
+/************* Social Icons Color *************/
+.fb-icon{
+	color: #4064ad; /* Facebook */
+}
+.tw-icon{
+	color: #1c9ceb; /* Twitter */
+}
+.yt-icon{
+	color: #f80000; /* Youtube */
+}
+.ig-icon{
+	color: #dd3560; /* instagram */
+}
+.gp-icon{
+	color: #d5493e; /* Google Plus */
+}
+.li-icon{
+	color: #0070ac; /* LinkedIn */
+}
+.dg-icon{
+	color: #005d8f; /* Digg */
+}
+.db-icon{
+	color: #e44a85; /* Dribbble */
+}
+
+/************* Selection Color *************/
+
+::selection {
+	background: #191919;
+	color:#ffffff;
+}
+::-webkit-selection {
+	background: #191919;
+	color: #ffffff;
+}
+::-moz-selection {
+	background: #191919;
+	color: #ffffff;
+}
+
+
+::-webkit-input-placeholder {
+	color: #949597 !important;
+}
+::-moz-placeholder {
+	color: #949597 !important;
+}
+:-ms-input-placeholder {
+	color: #949597 !important;
+}
+:-moz-placeholder {
+	color: #949597 !important;
+}
+
+.subinput::-webkit-input-placeholder {
+	color: #fff !important;
+}
+.subinput::-moz-placeholder {
+	color: #fff !important;
+}
+.subinput:-ms-input-placeholder {
+	color: #fff !important;
+}
+.subinput:-moz-placeholder {
+	color: #fff !important;
+}
