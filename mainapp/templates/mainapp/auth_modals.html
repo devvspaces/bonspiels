@@ -1,0 +1,159 @@
+	<!-- Login Modal -->
+	<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-lg" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title w-100 text-center" id="exampleModalLabel">Login</h4>
+					<button type="button" class="close position-absolute rounded-pill bg-primary text-white" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body p-5">
+					<div class="social-signup text-center pb-25 pt-25">
+						<a class="text-body p-2 text-decoration-none" href="#"><i class="fab fa-google rounded-pill shadow text-white"></i> Sign in with Google</a>
+						<a class="text-body p-2 text-decoration-none" href="#"><i class="fab fa-facebook rounded-pill shadow text-white"></i> Sign in with Facebook</a>
+						<a class="text-body p-2 text-decoration-none" href="#"><i class="fab fa-twitter rounded-pill shadow text-white"></i> Sign in with Twitter</a>
+					</div>
+					<p class="or-sep">OR</p>
+					<form autocomplete="off" method="POST">
+						{% csrf_token %}
+						{% for i in form.non_field_errors %}
+							<small class="text-danger d-block mt-2 mb-3 text-right">{{ i }}</small>
+						{% endfor %}
+						<div class="form-group">
+							<input type="email" class="form-control bg-light" placeholder="Email" name="email">
+							{% for i in form.email.errors %}
+								<small class="text-danger d-block mt-2 mb-3 text-right">{{ i }}</small>
+							{% endfor %}
+						</div>
+						<div class="form-group">
+							<input type="password" class="form-control bg-light" placeholder="Password" name="password">
+							{% for i in form.password.errors %}
+								<small class="text-danger d-block mt-2 mb-3 text-right">{{ i }}</small>
+							{% endfor %}
+						</div>
+						<div class="text-center">
+							<div class="position-relative border-0 mt-md-0 mt-3 btn btn-primary submit-btn">
+								<i class="icon-login btn-icon input-icon"></i> Login
+								<input type="submit" name="submit" class="h-100 w-100 position-absolute" value="login">
+							</div>
+						</div>
+						<div class="text-center pt-25">
+							<p>Forgot password? <a href="#" data-dismiss="modal" data-toggle="modal" data-target="#resetPassword" class="text-primary">Reset now</a></p>
+							<p>Don't have an account? <a href="#" data-dismiss="modal" data-toggle="modal" data-target="#signUpModal" class="text-primary">Sign up here</a></p>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Reset Password Modal -->
+	<div class="modal fade" id="resetPassword" tabindex="-1" role="dialog" aria-labelledby="resetPasswordModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-lg" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title w-100 text-center" id="resetPasswordModalLabel">Reset Password</h4>
+					<button type="button" class="close position-absolute rounded-pill bg-primary text-white" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body p-5">
+					<form autocomplete="off" method="POST">
+						{% csrf_token %}
+						{% for i in reset_form.non_field_errors %}
+							<small class="text-danger d-block mt-2 mb-3 text-right">{{ i }}</small>
+						{% endfor %}
+						<div class="form-group">
+							<input type="email" class="form-control bg-light" placeholder="Enter your email address" name="email">
+							{% for i in reset_form.email.errors %}
+								<small class="text-danger d-block mt-2 mb-3 text-right">{{ i }}</small>
+							{% endfor %}
+						</div>
+						<div class="text-center">
+							<div class="position-relative border-0 mt-md-0 mt-3 btn btn-primary submit-btn">
+								<i class="icon-login btn-icon input-icon"></i> Proceed
+								<input type="submit" class="h-100 w-100 position-absolute" value="reset" name="submit">
+							</div>
+						</div>
+						<div class="text-center pt-25">
+							<p>Don't have an account? <a href="#" data-dismiss="modal" data-toggle="modal" data-target="#signUpModal" class="text-primary">Create account now</a></p>
+							<p>Already have an account? <a href="#" data-dismiss="modal" data-toggle="modal" data-target="#exampleModal" class="text-primary">Sign in here</a></p>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Signup Modal -->
+	<div class="modal fade" id="signUpModal" tabindex="-1" role="dialog" aria-labelledby="signUpModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-lg" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title w-100 text-center" id="signUpModalLabel">Create an account</h4>
+					<button type="button" class="close position-absolute rounded-pill bg-primary text-white" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body p-5">
+					<div class="social-signup text-center pb-25">
+						<a class="text-body p-2 text-decoration-none" href="#"><i class="fab fa-google rounded-pill shadow text-white"></i> Sign Up with Google</a>
+						<a class="text-body p-2 text-decoration-none" href="#"><i class="fab fa-facebook rounded-pill shadow text-white"></i> Sign Up with Facebook</a>
+						<a class="text-body p-2 text-decoration-none" href="#"><i class="fab fa-twitter rounded-pill shadow text-white"></i> Sign Up with Twitter</a>
+					</div>
+					<p class="or-sep">OR</p>
+					<form autocomplete="off" method="POST">
+						{% csrf_token %}
+						{% for i in reg_form.non_field_errors %}
+							<small class="text-danger d-block mt-2 mb-3 text-right">{{ i }}</small>
+						{% endfor %}
+						<div class="form-group">
+							<input type="email" class="form-control bg-light" placeholder="Your email address" name="email" value="{% if reg_form.email.value %}{{ reg_form.email.value }}{% endif %}">
+							{% for i in reg_form.email.errors %}
+								<small class="text-danger d-block mt-2 mb-3 text-right">{{ i }}</small>
+							{% endfor %}
+						</div>
+						<div class="form-group">
+							<input type="text" class="form-control bg-light" placeholder="Your username" name="username" value="{% if reg_form.username.value %}{{ reg_form.username.value }}{% endif %}">
+							{% for i in reg_form.username.errors %}
+								<small class="text-danger d-block mt-2 mb-3 text-right">{{ i }}</small>
+							{% endfor %}
+						</div>
+						<div class="form-group">
+							<input type="password" class="form-control bg-light" placeholder="Your password" name="password">
+							{% for i in reg_form.password.errors %}
+								<small class="text-danger d-block mt-2 mb-3 text-right">{{ i }}</small>
+							{% endfor %}
+						</div>
+						<div class="form-group">
+							<input type="password" class="form-control bg-light" placeholder="Your confirm password" name="confirm_password">
+							{% for i in reg_form.confirm_password.errors %}
+								<small class="text-danger d-block mt-2 mb-3 text-right">{{ i }}</small>
+							{% endfor %}
+						</div>
+						<div class="form-group text-center mb-3 mt-4 check-types">
+							<label for="signupcheck">
+								<input type="checkbox" id="signupcheck" name='signupcheck'>
+								<span class="cbx rounded-pill float-none d-inline-block align-middle">
+									<svg width="12px" height="11px" viewBox="0 0 12 11">
+										<polyline points="1 6.29411765 4.5 10 11 1"></polyline>
+									</svg>
+								</span>
+								<span class="float-none text-black-50">I agree to your <a href="#" class="text-primary">Terms and conditions</a> and <a href="#" class="text-primary">Privacy policy.</a></span>
+							</label>
+						</div>
+						<div class="text-center">
+							<div class="position-relative border-0 mt-md-0 mt-3 btn btn-primary submit-btn">
+								<i class="icon-login btn-icon input-icon"></i> Proceed
+								<input id='signupbtn' name="submit" disabled type="submit" class="h-100 w-100 position-absolute" value="register">
+							</div>
+						</div>
+						<div class="text-center pt-25">
+							<p>Already have an account? <a href="#" data-dismiss="modal" data-toggle="modal" data-target="#exampleModal" class="text-primary">Sign in here</a></p>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>

@@ -2268,3 +2268,54 @@ section#et-notfound{
 	width: 80px;
     height: 80px;
 }
+
+.showOption{
+  margin: 0;
+  margin-bottom: 1rem !important;
+  margin-left: 3rem;
+}
+
+.schedule-head{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 1rem 0 1.5rem 0;
+}
+
+.error-social{
+  margin-top: -2rem;
+  margin-bottom: 1.5rem;
+}
+
+.addsocial .col-sm-6{
+  margin-bottom: 1.5rem;
+}
+
+.event-featured-image{
+  max-height: 300px;
+  width: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.driv{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 3rem;
+  padding-top: 2rem;
+  /* position: absolute; */
+  top: -200px;
+  width: 100%;
+  left: 50%;
+  /* transform: translateX(-50%); */
+  z-index: 1;
+}
+.driv a{
+  width: 80px;
+  margin: 0 1rem;
+}
+.driv a img{
+  width: 100%;
+}

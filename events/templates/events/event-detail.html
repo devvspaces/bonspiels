@@ -12,7 +12,7 @@
 						<p class="description mb-4">{{ event.description|truncatechars:50 }}</p>
 						<div class="d-md-flex justify-content-between">
 							<div class="info">
-								<div class="h6"><i class="icon-clock text-primary"></i>&nbsp; {{ event.start_time }}</div>
+								<div class="h6"><i class="icon-clock text-primary"></i>&nbsp; {{ event.start_date }}</div>
 								<div class="mb-2"><i class="icon-contact"></i>&nbsp; {{ event.email }}</div>
 								<div class="text-primary"><i class="icon-phone"></i>&nbsp; {{ event.phone }}</div>
 							</div>
@@ -42,10 +42,10 @@
 				<div class="col-lg-7 col-md-6 col-sm-12 d-flex mb-2 flex-wrap pt-md-0 pt-3 align-items-end">
 					<div class="align-items-md-end align-items-center flex-fill text-center d-sm-flex">
 						<div class="event-features text-white">
-							<div><span class="circle-icon text-primary bg-white"><i class="icon-quote"></i></span>23 Reviews</div>
-							<div><span class="circle-icon text-primary bg-white"><i class="icon-eye"></i></span>33 views</div>
+							<div><span class="circle-icon text-primary bg-white"><i class="icon-quote"></i></span>{{ reviews.count }} Reviews</div>
+							<div><span class="circle-icon text-primary bg-white"><i class="icon-eye"></i></span>{{event_views}} views</div>
 							<div><span class="circle-icon text-primary bg-white"><i class="fas fa-ticket-alt"></i></span>Tickets left: {{ event.seats }}</div>
-							<div><span class="circle-icon bg-green"><i class="fas fa-check text-white"></i></span>Running</div>
+							<div><span class="circle-icon bg-green"><i class="fas fa-check text-white"></i></span>{{ event.status }}</div>
 						</div>
 						<div class="event-actions ml-auto">
 							<span class="badge badge-primary pointer" data-toggle="tooltip" data-placement="top" title="Report"><i class="icon-maps-and-location"></i></span>
@@ -53,7 +53,7 @@
 						</div>
 					</div>
 					<div class="mt-5 w-100 d-none d-md-block">
-						<p class="event-location d-inline-block m-0"><i class="icon-compass h3 align-middle"></i>&nbsp; 89 Hill Road, Folsome Street 3H California, US</p>
+						<p class="event-location d-inline-block m-0"><i class="icon-compass h3 align-middle"></i>&nbsp; {{ event.location }}</p>
 						<a href="#" class="float-right text-decoration-none text-primary">Get Directions <i class="fas fa-external-link-alt"></i></a>
 					</div>
 				</div>
@@ -82,102 +82,64 @@
 					<!-- Description -->
 					<div id="data-description" class="event-description shadow rounded p-5 content-box mt-5">
 						<h4 class="mb-4 font-weight-bold">Description</h4>
-						<p class="description">{{ event.description }}</p>
-						<p class="description mb-0">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+						<p class="description mb-0">{{ event.description }}</p>
 					</div>
 
 					<!-- Schedule -->
 					<div id="data-schedule" class="event-schedule shadow rounded p-5 content-box mt-5">
 						<h4 class="mb-4 font-weight-bold">Schedule</h4>
+						{% for i in schedules %}
 						<div class="title-row mb-3">
-							<strong>Day 1: &nbsp;</strong> Musical night with refreshment <span>&nbsp;&nbsp; <i class="icon-clock text-primary"></i> &nbsp; 03: 30pm </span>
+							<strong>Day {{ forloop.counter }}: &nbsp;</strong> {{ i.title }} <span>&nbsp;&nbsp; <i class="icon-clock text-primary"></i> &nbsp; {{ i.start_date }} </span>
 						</div>
-						<p class="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+						<p class="description">{{ i.description }}</p>
 						<hr>
-						<div class="title-row mb-3">
-							<strong>Day 1: &nbsp;</strong> Musical night with refreshment <span>&nbsp;&nbsp; <i class="icon-clock text-primary"></i> &nbsp; 03: 30pm </span>
-						</div>
-						<p class="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-						<hr>
-						<div class="title-row mb-3">
-							<strong>Day 1: &nbsp;</strong> Musical night with refreshment <span>&nbsp;&nbsp; <i class="icon-clock text-primary"></i> &nbsp; 03: 30pm </span>
-						</div>
-						<p class="description mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+						{% endfor %}
 					</div>
 
 					<!-- Speakers -->
+					{% if eventspeakers.count > 0 %}
 					<div id="data-speakers" class="event-Speakers shadow rounded p-5 content-box mt-5">
 						<h4 class="mb-4 font-weight-bold">Speakers</h4>
 						<div class="row">
+							{% for i in eventspeakers %}
 							<div class="col-md-4">
 								<div class="speaker position-relative">
-									<img src="{% static 'img/speaker-1.jpg' %}" alt="speaker" class="img-fluid">
+									<img src="{{ i.image.url }}" alt="speaker" class="img-fluid w-100">
 									<div class="content rounded shadow text-center p-2 w-75 m-auto bg-white transition position-relative">
-										<h6>Eli Brek</h6>
-										<p class="mb-0 small text-primary">Manager at UXF</p>
-										<ul class="social position-absolute transition d-inline-block m-0 nostyle inline p-0">
+										<h6>{{ i.name }}</h6>
+										<p class="mb-0 small text-primary">{{ i.designation }}</p>
+										<!-- <ul class="social position-absolute transition d-inline-block m-0 nostyle inline p-0">
 											<li><a href="#" class="d-flex align-items-center justify-content-center text-decoration-none transition"><i class="fab fa-facebook" aria-hidden="true"></i></a></li>
 											<li><a href="#" class="d-flex align-items-center justify-content-center text-decoration-none transition"><i class="fab fa-google" aria-hidden="true"></i></a></li>
 											<li><a href="#" class="d-flex align-items-center justify-content-center text-decoration-none transition"><i class="fab fa-instagram" aria-hidden="true"></i></a></li>
 											<li><a href="#" class="d-flex align-items-center justify-content-center text-decoration-none transition"><i class="fab fa-youtube" aria-hidden="true"></i></a></li>
 											<li><a href="#" class="d-flex align-items-center justify-content-center text-decoration-none transition"><i class="fab fa-linkedin" aria-hidden="true"></i></a></li>
-										</ul>
+										</ul> -->
 									</div>
 								</div>
 							</div>
-							<div class="col-md-4">
-								<div class="speaker position-relative">
-									<img src="{% static 'img/speaker-2.jpg' %}" alt="speaker" class="img-fluid">
-									<div class="content rounded shadow text-center p-2 w-75 m-auto bg-white transition position-relative">
-										<h6>Feng Grom</h6>
-										<p class="mb-0 small text-primary">Business Analyst</p>
-										<ul class="social position-absolute transition d-inline-block m-0 nostyle inline p-0">
-											<li><a href="#" class="d-flex align-items-center justify-content-center text-decoration-none transition"><i class="fab fa-facebook" aria-hidden="true"></i></a></li>
-											<li><a href="#" class="d-flex align-items-center justify-content-center text-decoration-none transition"><i class="fab fa-google" aria-hidden="true"></i></a></li>
-											<li><a href="#" class="d-flex align-items-center justify-content-center text-decoration-none transition"><i class="fab fa-instagram" aria-hidden="true"></i></a></li>
-											<li><a href="#" class="d-flex align-items-center justify-content-center text-decoration-none transition"><i class="fab fa-youtube" aria-hidden="true"></i></a></li>
-											<li><a href="#" class="d-flex align-items-center justify-content-center text-decoration-none transition"><i class="fab fa-linkedin" aria-hidden="true"></i></a></li>
-										</ul>
-									</div>
-								</div>
-							</div>
-							<div class="col-md-4">
-								<div class="speaker position-relative">
-									<img src="{% static 'img/speaker-3.jpg' %}" alt="speaker" class="img-fluid">
-									<div class="content rounded shadow text-center p-2 w-75 m-auto bg-white transition position-relative">
-										<h6>Warry Heum</h6>
-										<p class="mb-0 small text-primary">Technical officer</p>
-										<ul class="social position-absolute transition d-inline-block m-0 nostyle inline p-0">
-											<li><a href="#" class="d-flex align-items-center justify-content-center text-decoration-none transition"><i class="fab fa-facebook" aria-hidden="true"></i></a></li>
-											<li><a href="#" class="d-flex align-items-center justify-content-center text-decoration-none transition"><i class="fab fa-google" aria-hidden="true"></i></a></li>
-											<li><a href="#" class="d-flex align-items-center justify-content-center text-decoration-none transition"><i class="fab fa-instagram" aria-hidden="true"></i></a></li>
-											<li><a href="#" class="d-flex align-items-center justify-content-center text-decoration-none transition"><i class="fab fa-youtube" aria-hidden="true"></i></a></li>
-											<li><a href="#" class="d-flex align-items-center justify-content-center text-decoration-none transition"><i class="fab fa-linkedin" aria-hidden="true"></i></a></li>
-										</ul>
-									</div>
-								</div>
-							</div>
+							{% endfor %}
 						</div>
 					</div>
+					{% endif %}
 
 					<!-- Gallery -->
+					{% if gallery.count > 0 %}
 					<div id="data-gallery" class="gallery-mason shadow rounded p-5 content-box mt-5">
 						<h4 class="mb-4 font-weight-bold">Gallery</h4>
 						<i class="icon-download prev pointer"></i>
 						<i class="icon-download next pointer"></i>
 						<div class="mason-container">
-							<div class="image-box"><img src="https://picsum.photos/id/21/800" alt="img"></div>
-							<div class="vertical image-box"><img src="https://picsum.photos/id/22/800/1000" alt="img"></div>
-							<div class="horizontal image-box"><img src="https://picsum.photos/id/23/1400/800" alt="img"></div>
-							<div class="big image-box"><img src="https://picsum.photos/id/26/800" alt="img"></div>
-							<div class="image-box"><img src="https://picsum.photos/id/25/800" alt="img"></div>
-							<div class="image-box"><img src="https://picsum.photos/id/24/800" alt="img"></div>
-							<div class="image-box"><img src="https://picsum.photos/id/27/800" alt="img"></div>
+							{% for i in gallery %}
+							<div class="image-box"><img src="{{ i.image.url }}" alt="img"></div>
+							{% endfor %}
 						</div>
 					</div>
+					{% endif %}
 
 					<!-- Event Sponsors -->
-					<div id="data-sponsors" class="event-sponsors shadow rounded p-5 content-box mt-5">
+					<!-- <div id="data-sponsors" class="event-sponsors shadow rounded p-5 content-box mt-5">
 						<h4 class="mb-4 font-weight-bold">Event Sponsors</h4>
 						<img src="{% static 'img/sponsor-1.png' %}" alt="sponsor">
 						<img src="{% static 'img/sponsor-2.png' %}" alt="sponsor">
@@ -187,13 +149,14 @@
 						<img src="{% static 'img/sponsor-2.png' %}" alt="sponsor">
 						<img src="{% static 'img/sponsor-3.png' %}" alt="sponsor">
 						<img src="{% static 'img/sponsor-4.png' %}" alt="sponsor">
-					</div>
+					</div> -->
 
 					<!-- Customer Reviews -->
 					<div id="data-reviews" class="event-reviews shadow rounded p-5 content-box mt-5">
 						<h4 class="mb-4 font-weight-bold">Reviews</h4>
 						<!-- Comments -->
 						<div class="post-comments">
+							{% for review in reviews %}
 							<!-- Comment -->
 							<div class="user-comment border-bottom pb-1 mb-3">
 								<div class="d-md-flex d-sm-block mb-2">
@@ -201,265 +164,26 @@
 										<img src="{% static 'img/userthumb.jpg' %}" alt="comment" class="img-fluid rounded-pill">
 									</div>
 									<div class="comment-content">
-										<h6>Joseph Bellistor - <span class="text-muted review-date small">26 Jun 2019 02:15</span> <i class="report-comment ml-3 pointer float-right text-muted fa fa-flag" data-toggle="tooltip" data-placement="top" title="Report"></i> <i class="reply-trigger pointer float-right text-muted fa fa-reply" data-toggle="tooltip" data-placement="top" title="Reply"></i></h6>
+										<h6>{{ review.user.profile.full_name }} - <span class="text-muted review-date small">{{ review.created }}</span> <i class="report-comment ml-3 pointer float-right text-muted fa fa-flag" data-toggle="tooltip" data-placement="top" title="Report"></i> <i class="reply-trigger pointer float-right text-muted fa fa-reply" data-toggle="tooltip" data-placement="top" title="Reply"></i></h6>
 										<div class="star-rating d-inline-block mb-2">
-											<i class="fa fa-star align-middle checked"></i>
-											<i class="fa fa-star align-middle checked"></i>
-											<i class="fa fa-star align-middle checked"></i>
-											<i class="fa fa-star align-middle"></i>
-											<i class="fa fa-star align-middle"></i>
+											{% for i in review.get_stars %}
+											<i class="fa fa-star {% if i %}checked{% endif %} align-middle"></i>
+											{% endfor %}
 										</div>
-										<p class="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+										<p class="description">{{ review.comment }}</p>
 										<div class="product-shots lightbox">
-											<a href="{% static 'img/post-1.jpg' %}" title="Caption for gallery item 3">
-												<img src="{% static 'img/post-1.jpg' %}" width="50" alt="img" class="img-fluid mb-2 mr-2">
+											{% for x in review.reviewimage_set.all %}
+											<a href="{{ x.image.url }}" blank='_' title="Caption for gallery item {{ forloop.counter }}">
+												<img src="{{ x.image.url }}" width="50" alt="img" class="img-fluid mb-2 mr-2">
 											</a>
-											<a href="{% static 'img/post-1.jpg' %}" title="Caption for gallery item 3">
-												<img src="{% static 'img/post-1.jpg' %}" width="50" alt="img" class="img-fluid mb-2 mr-2">
-											</a>
-											<a href="{% static 'img/post-1.jpg' %}" title="Caption for gallery item 3">
-												<img src="{% static 'img/post-1.jpg' %}" width="50" alt="img" class="img-fluid mb-2 mr-2">
-											</a>
-											<a href="{% static 'img/post-1.jpg' %}" title="Caption for gallery item 3">
-												<img src="{% static 'img/post-1.jpg' %}" width="50" alt="img" class="img-fluid mb-2 mr-2">
-											</a>
-											<a href="{% static 'img/post-1.jpg' %}" title="Caption for gallery item 3">
-												<img src="{% static 'img/post-1.jpg' %}" width="50" alt="img" class="img-fluid mb-2 mr-2">
-											</a>
+											{% endfor %}
 										</div>
 									</div>
 								</div>
 							</div>
+							{% endfor %}
 							<!-- /Comment -->
-
-							<!-- Comment -->
-							<div class="user-comment border-bottom pb-1 mb-3">
-								<div class="d-md-flex d-sm-block mb-2">
-									<div class="commenter-thumbnail">
-										<img src="{% static 'img/userthumb.jpg' %}" alt="comment" class="img-fluid rounded-pill">
-									</div>
-									<div class="comment-content">
-										<h6>Joseph Bellistor - <span class="text-muted review-date small">26 Jun 2019 02:15</span> <i class="report-comment ml-3 pointer float-right text-muted fa fa-flag" data-toggle="tooltip" data-placement="top" title="Report"></i> <i class="reply-trigger pointer float-right text-muted fa fa-reply" data-toggle="tooltip" data-placement="top" title="Reply"></i></h6>
-										<div class="star-rating d-inline-block mb-2">
-											<i class="fa fa-star align-middle checked"></i>
-											<i class="fa fa-star align-middle checked"></i>
-											<i class="fa fa-star align-middle checked"></i>
-											<i class="fa fa-star align-middle"></i>
-											<i class="fa fa-star align-middle"></i>
-										</div>
-										<p class="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-										<div class="product-shots lightbox">
-											<a href="{% static 'img/post-1.jpg' %}" title="Caption for gallery item 3">
-												<img src="{% static 'img/post-1.jpg' %}" width="50" alt="img" class="img-fluid mb-2 mr-2">
-											</a>
-											<a href="{% static 'img/post-1.jpg' %}" title="Caption for gallery item 3">
-												<img src="{% static 'img/post-1.jpg' %}" width="50" alt="img" class="img-fluid mb-2 mr-2">
-											</a>
-											<a href="{% static 'img/post-1.jpg' %}" title="Caption for gallery item 3">
-												<img src="{% static 'img/post-1.jpg' %}" width="50" alt="img" class="img-fluid mb-2 mr-2">
-											</a>
-											<a href="{% static 'img/post-1.jpg' %}" title="Caption for gallery item 3">
-												<img src="{% static 'img/post-1.jpg' %}" width="50" alt="img" class="img-fluid mb-2 mr-2">
-											</a>
-											<a href="{% static 'img/post-1.jpg' %}" title="Caption for gallery item 3">
-												<img src="{% static 'img/post-1.jpg' %}" width="50" alt="img" class="img-fluid mb-2 mr-2">
-											</a>
-										</div>
-									</div>
-								</div>
-								<!-- Reply -->
-								<div class="user-comment border-bottom mt-4 pb-1 mb-3">
-									<div class="d-md-flex d-sm-block mb-2">
-										<div class="commenter-thumbnail">
-											<img src="{% static 'img/userthumb.jpg' %}" alt="comment" class="img-fluid rounded-pill">
-										</div>
-										<div class="comment-content">
-											<h6>Joseph Bellistor - <span class="text-muted review-date small">26 Jun 2019 02:15</span> <i class="report-comment ml-3 pointer float-right text-muted fa fa-flag" data-toggle="tooltip" data-placement="top" title="Report"></i> <i class="reply-trigger pointer float-right text-muted fa fa-reply" data-toggle="tooltip" data-placement="top" title="Reply"></i></h6>
-											<div class="star-rating d-inline-block mb-2">
-												<i class="fa fa-star align-middle checked"></i>
-												<i class="fa fa-star align-middle checked"></i>
-												<i class="fa fa-star align-middle checked"></i>
-												<i class="fa fa-star align-middle"></i>
-												<i class="fa fa-star align-middle"></i>
-											</div>
-											<p class="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-											<div class="product-shots lightbox">
-												<a href="{% static 'img/post-1.jpg' %}" title="Caption for gallery item 3">
-													<img src="{% static 'img/post-1.jpg' %}" width="50" alt="img" class="img-fluid mb-2 mr-2">
-												</a>
-												<a href="{% static 'img/post-1.jpg' %}" title="Caption for gallery item 3">
-													<img src="{% static 'img/post-1.jpg' %}" width="50" alt="img" class="img-fluid mb-2 mr-2">
-												</a>
-												<a href="{% static 'img/post-1.jpg' %}" title="Caption for gallery item 3">
-													<img src="{% static 'img/post-1.jpg' %}" width="50" alt="img" class="img-fluid mb-2 mr-2">
-												</a>
-												<a href="{% static 'img/post-1.jpg' %}" title="Caption for gallery item 3">
-													<img src="{% static 'img/post-1.jpg' %}" width="50" alt="img" class="img-fluid mb-2 mr-2">
-												</a>
-												<a href="{% static 'img/post-1.jpg' %}" title="Caption for gallery item 3">
-													<img src="{% static 'img/post-1.jpg' %}" width="50" alt="img" class="img-fluid mb-2 mr-2">
-												</a>
-											</div>
-										</div>
-									</div>
-								</div>
-								<!-- /Reply -->
-
-								<!-- Reply -->
-								<div class="user-comment mt-4 pb-1">
-									<div class="d-md-flex d-sm-block mb-2">
-										<div class="commenter-thumbnail">
-											<img src="{% static 'img/userthumb.jpg' %}" alt="comment" class="img-fluid rounded-pill">
-										</div>
-										<div class="comment-content">
-											<h6>Joseph Bellistor - <span class="text-muted review-date small">26 Jun 2019 02:15</span> <i class="report-comment ml-3 pointer float-right text-muted fa fa-flag" data-toggle="tooltip" data-placement="top" title="Report"></i> <i class="reply-trigger pointer float-right text-muted fa fa-reply" data-toggle="tooltip" data-placement="top" title="Reply"></i></h6>
-											<div class="star-rating d-inline-block mb-2">
-												<i class="fa fa-star align-middle checked"></i>
-												<i class="fa fa-star align-middle checked"></i>
-												<i class="fa fa-star align-middle checked"></i>
-												<i class="fa fa-star align-middle"></i>
-												<i class="fa fa-star align-middle"></i>
-											</div>
-											<p class="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-											<div class="product-shots lightbox">
-												<a href="{% static 'img/post-1.jpg' %}" title="Caption for gallery item 3">
-													<img src="{% static 'img/post-1.jpg' %}" width="50" alt="img" class="img-fluid mb-2 mr-2">
-												</a>
-												<a href="{% static 'img/post-1.jpg' %}" title="Caption for gallery item 3">
-													<img src="{% static 'img/post-1.jpg' %}" width="50" alt="img" class="img-fluid mb-2 mr-2">
-												</a>
-												<a href="{% static 'img/post-1.jpg' %}" title="Caption for gallery item 3">
-													<img src="{% static 'img/post-1.jpg' %}" width="50" alt="img" class="img-fluid mb-2 mr-2">
-												</a>
-												<a href="{% static 'img/post-1.jpg' %}" title="Caption for gallery item 3">
-													<img src="{% static 'img/post-1.jpg' %}" width="50" alt="img" class="img-fluid mb-2 mr-2">
-												</a>
-												<a href="{% static 'img/post-1.jpg' %}" title="Caption for gallery item 3">
-													<img src="{% static 'img/post-1.jpg' %}" width="50" alt="img" class="img-fluid mb-2 mr-2">
-												</a>
-											</div>
-										</div>
-									</div>
-								</div>
-								<!-- /Reply -->
-							</div>
-							<!-- /Comment -->
-
-							<!-- Comment -->
-							<div class="user-comment border-bottom pb-1 mb-3">
-								<div class="d-md-flex d-sm-block mb-2">
-									<div class="commenter-thumbnail">
-										<img src="{% static 'img/userthumb.jpg' %}" alt="comment" class="img-fluid rounded-pill">
-									</div>
-									<div class="comment-content">
-										<h6>Joseph Bellistor - <span class="text-muted review-date small">26 Jun 2019 02:15</span> <i class="report-comment ml-3 pointer float-right text-muted fa fa-flag" data-toggle="tooltip" data-placement="top" title="Report"></i> <i class="reply-trigger pointer float-right text-muted fa fa-reply" data-toggle="tooltip" data-placement="top" title="Reply"></i></h6>
-										<div class="star-rating d-inline-block mb-2">
-											<i class="fa fa-star align-middle checked"></i>
-											<i class="fa fa-star align-middle checked"></i>
-											<i class="fa fa-star align-middle checked"></i>
-											<i class="fa fa-star align-middle"></i>
-											<i class="fa fa-star align-middle"></i>
-										</div>
-										<p class="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-										<div class="product-shots lightbox">
-											<a href="{% static 'img/post-1.jpg' %}" title="Caption for gallery item 3">
-												<img src="{% static 'img/post-1.jpg' %}" width="50" alt="img" class="img-fluid mb-2 mr-2">
-											</a>
-											<a href="{% static 'img/post-1.jpg' %}" title="Caption for gallery item 3">
-												<img src="{% static 'img/post-1.jpg' %}" width="50" alt="img" class="img-fluid mb-2 mr-2">
-											</a>
-											<a href="{% static 'img/post-1.jpg' %}" title="Caption for gallery item 3">
-												<img src="{% static 'img/post-1.jpg' %}" width="50" alt="img" class="img-fluid mb-2 mr-2">
-											</a>
-											<a href="{% static 'img/post-1.jpg' %}" title="Caption for gallery item 3">
-												<img src="{% static 'img/post-1.jpg' %}" width="50" alt="img" class="img-fluid mb-2 mr-2">
-											</a>
-											<a href="{% static 'img/post-1.jpg' %}" title="Caption for gallery item 3">
-												<img src="{% static 'img/post-1.jpg' %}" width="50" alt="img" class="img-fluid mb-2 mr-2">
-											</a>
-										</div>
-									</div>
-								</div>
-							</div>
-							<!-- /Comment -->
-
-							<!-- Comment -->
-							<div class="user-comment border-bottom pb-1 mb-3">
-								<div class="d-md-flex d-sm-block mb-2">
-									<div class="commenter-thumbnail">
-										<img src="{% static 'img/userthumb.jpg' %}" alt="comment" class="img-fluid rounded-pill">
-									</div>
-									<div class="comment-content">
-										<h6>Joseph Bellistor - <span class="text-muted review-date small">26 Jun 2019 02:15</span> <i class="report-comment ml-3 pointer float-right text-muted fa fa-flag" data-toggle="tooltip" data-placement="top" title="Report"></i> <i class="reply-trigger pointer float-right text-muted fa fa-reply" data-toggle="tooltip" data-placement="top" title="Reply"></i></h6>
-										<div class="star-rating d-inline-block mb-2">
-											<i class="fa fa-star align-middle checked"></i>
-											<i class="fa fa-star align-middle checked"></i>
-											<i class="fa fa-star align-middle checked"></i>
-											<i class="fa fa-star align-middle"></i>
-											<i class="fa fa-star align-middle"></i>
-										</div>
-										<p class="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-										<div class="product-shots lightbox">
-											<a href="{% static 'img/post-1.jpg' %}" title="Caption for gallery item 3">
-												<img src="{% static 'img/post-1.jpg' %}" width="50" alt="img" class="img-fluid mb-2 mr-2">
-											</a>
-											<a href="{% static 'img/post-1.jpg' %}" title="Caption for gallery item 3">
-												<img src="{% static 'img/post-1.jpg' %}" width="50" alt="img" class="img-fluid mb-2 mr-2">
-											</a>
-											<a href="{% static 'img/post-1.jpg' %}" title="Caption for gallery item 3">
-												<img src="{% static 'img/post-1.jpg' %}" width="50" alt="img" class="img-fluid mb-2 mr-2">
-											</a>
-											<a href="{% static 'img/post-1.jpg' %}" title="Caption for gallery item 3">
-												<img src="{% static 'img/post-1.jpg' %}" width="50" alt="img" class="img-fluid mb-2 mr-2">
-											</a>
-											<a href="{% static 'img/post-1.jpg' %}" title="Caption for gallery item 3">
-												<img src="{% static 'img/post-1.jpg' %}" width="50" alt="img" class="img-fluid mb-2 mr-2">
-											</a>
-										</div>
-									</div>
-								</div>
-							</div>
-							<!-- /Comment -->
-
-							<!-- Comment -->
-							<div class="user-comment">
-								<div class="d-md-flex d-sm-block mb-2">
-									<div class="commenter-thumbnail">
-										<img src="{% static 'img/userthumb.jpg' %}" alt="comment" class="img-fluid rounded-pill">
-									</div>
-									<div class="comment-content">
-										<h6>Joseph Bellistor - <span class="text-muted review-date small">26 Jun 2019 02:15</span> <i class="report-comment ml-3 pointer float-right text-muted fa fa-flag" data-toggle="tooltip" data-placement="top" title="Report"></i> <i class="reply-trigger pointer float-right text-muted fa fa-reply" data-toggle="tooltip" data-placement="top" title="Reply"></i></h6>
-										<div class="star-rating d-inline-block mb-2">
-											<i class="fa fa-star align-middle checked"></i>
-											<i class="fa fa-star align-middle checked"></i>
-											<i class="fa fa-star align-middle checked"></i>
-											<i class="fa fa-star align-middle"></i>
-											<i class="fa fa-star align-middle"></i>
-										</div>
-										<p class="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-										<div class="product-shots lightbox">
-											<a href="{% static 'img/post-1.jpg' %}" title="Caption for gallery item 3">
-												<img src="{% static 'img/post-1.jpg' %}" width="50" alt="img" class="img-fluid mb-2 mr-2">
-											</a>
-											<a href="{% static 'img/post-1.jpg' %}" title="Caption for gallery item 3">
-												<img src="{% static 'img/post-1.jpg' %}" width="50" alt="img" class="img-fluid mb-2 mr-2">
-											</a>
-											<a href="{% static 'img/post-1.jpg' %}" title="Caption for gallery item 3">
-												<img src="{% static 'img/post-1.jpg' %}" width="50" alt="img" class="img-fluid mb-2 mr-2">
-											</a>
-											<a href="{% static 'img/post-1.jpg' %}" title="Caption for gallery item 3">
-												<img src="{% static 'img/post-1.jpg' %}" width="50" alt="img" class="img-fluid mb-2 mr-2">
-											</a>
-											<a href="{% static 'img/post-1.jpg' %}" title="Caption for gallery item 3">
-												<img src="{% static 'img/post-1.jpg' %}" width="50" alt="img" class="img-fluid mb-2 mr-2">
-											</a>
-										</div>
-									</div>
-								</div>
-							</div>
-							<hr>
-							<!-- /Comment -->
-							<a href="#" class="d-block text-center text-primary">View More</a>
+							<!-- <a href="#" class="d-block text-center text-primary">View More</a> -->
 						</div>
 						<!-- /Comments -->
 					</div>
@@ -467,27 +191,51 @@
 					<div class="event-comment-form shadow rounded p-5 content-box mt-5">
 						<h4 class="mb-4 font-weight-bold">Add Review</h4>
 						<div class="post-comment-form">
-							<form autocomplete="off">
+							<form id="review_form" autocomplete="off" method='post' enctype="multipart/form-data">
+								{% csrf_token %}
 								<div class="row">
 									<div class="form-group col-md-12 col-sm-12">
 										<div class="fake-file-upload rounded-pill transition-1 d-flex align-items-center justify-content-center p-3 text-center text-muted position-relative">
-											<input type="file" name="file_upload" class="position-absolute pointer" multiple>
+											<input type="file" name="images" class="position-absolute pointer" multiple>
 											<i class="fas fa-cloud-upload-alt h3 m-0"></i>&nbsp; Choose images
 										</div>
 									</div>
-									<div class="form-group col-md-6 col-sm-12">
+									<div class="form-group col-md-g col-sm-12 mt-3">
+										<input type="number" name='stars' hidden>
+										<label for="">Rate this event:</label>
+										<div class='rating-stars' id="review_ratings">
+											<ul id='stars' class="d-inline-block">
+												<li class='star' title='Poor' data-value='1'>
+													<i class='fa fa-star fa-fw'></i>
+												</li>
+												<li class='star' title='Fair' data-value='2'>
+													<i class='fa fa-star fa-fw'></i>
+												</li>
+												<li class='star' title='Good' data-value='3'>
+													<i class='fa fa-star fa-fw'></i>
+												</li>
+												<li class='star' title='Excellent' data-value='4'>
+													<i class='fa fa-star fa-fw'></i>
+												</li>
+												<li class='star' title='WOW!!!' data-value='5'>
+													<i class='fa fa-star fa-fw'></i>
+												</li>
+											</ul>
+										</div>
+									</div>
+									<!-- <div class="form-group col-md-6 col-sm-12">
 										<input type="text" class="form-control bg-light" placeholder="Name" name="name">
 									</div>
 									<div class="form-group col-md-6 col-sm-12">
 										<input type="text" class="form-control bg-light" placeholder="Email address" name="email">
-									</div>
+									</div> -->
 									<div class="form-group col-sm-12">
-										<textarea rows="6" class="form-control resize-none bg-light" placeholder="Type your comment" name="comment"></textarea>
+										<textarea required rows="6" class="form-control resize-none bg-light" placeholder="Type your comment" name="comment"></textarea>
 									</div>
 								</div>
 
 								<!-- Add rating -->
-								<div class="rating-types flex-wrap d-md-flex d-block pt-3">
+								<!-- <div class="rating-types flex-wrap d-md-flex d-block pt-3">
 									<div class="rating-span mb-3">
 										<strong>4.5</strong>
 										<div class="rating-tooltip pl-3 pr-3 pt-2 pb-2 rounded-pill d-inline-block">
@@ -543,12 +291,12 @@
 											</div>
 										</div>
 									</div>
-								</div>
+								</div> -->
 								<!-- /Add rating -->
 
 								<div class="position-relative border-0 mt-md-0 mt-3 btn btn-primary submit-btn">
 									<i class="icon-login btn-icon input-icon"></i> Submit Review
-									<input type="submit" class="h-100 w-100 position-absolute" value="Submit Review">
+									<input id="review_submit" type="submit" class="h-100 w-100 position-absolute" value="Submit">
 								</div>
 							</form>
 						</div>
@@ -593,16 +341,16 @@
 							<h4 class="box-heading mb-5 position-relative mb-0">Hosted By</h4>
 							<img src="{% static 'img/author-1.jpg' %}" class="rounded-pill shadow d-inline-block" alt="author">
 							<div class="d-inline-block position-relative align-middle pl-2">
-								<span>Nick Foley</span>
+								<span>{{ event.user.profile.full_name }}</span>
 								<p class="description position-relative small mb-2">Operational Manager</p>
 								<a href="#" class="badge badge-primary host-contact position-absolute show-host-info border-0 font-weight-normal">Contact</a>
 								<div class="position-absolute custom-tooltip host-info shadow bg-white p-3 rounded">
 									<span class="d-flex align-items-center">
-										<i class="icon-contact text-primary pr-2"></i> Business@web.com
+										<i class="icon-contact text-primary pr-2"></i> {{ event.email }}
 									</span>
 									<hr>
 									<span class="d-flex align-items-center">
-										<i class="icon-phone text-primary pr-2"></i> +12 345 678 9 0
+										<i class="icon-phone text-primary pr-2"></i> {{ event.phone }}
 									</span>
 								</div>
 							</div>
@@ -611,7 +359,7 @@
 						<!-- Get a seat -->
 						<div class="side-widget w-100 reservation shadow rounded p-4 mt-5">
 							<h4 class="box-heading mb-5 position-relative mb-0">Get a Seat</h4>
-							<p class="text-primary"> <i class="fas fa-exclamation-triangle"></i> Only <span class="text-secondary">20</span> seats left</p>
+							<p class="text-primary"> <i class="fas fa-exclamation-triangle"></i> Only <span class="text-secondary">{{ event.seats }}</span> seats left</p>
 							<form autocomplete="off">
 								<div class="form-group">
 									<div class="form-group position-relative">
@@ -684,7 +432,7 @@
 						</div>
 
 						<!-- Sponsored Events -->
-						<div class="side-widget w-100 sponsored-events shadow rounded p-4 mt-5">
+						<!-- <div class="side-widget w-100 sponsored-events shadow rounded p-4 mt-5">
 							<h4 class="box-heading mb-5 position-relative mb-0">Sponsored Events</h4>
 							<a href="#" class="eventbox text-decoration-none text-reset d-block">
 								<div class="img-overlay position-relative overlay-hidden rounded-top">
@@ -744,7 +492,7 @@
 									</div>
 								</div>
 							</a>
-						</div>
+						</div> -->
 					</div>
 				</div>
 			</div>
@@ -759,101 +507,29 @@
 			<h2 class="mb-0">Related events</h2>
 		</div>
 		<div class="owl-carousel owl-theme">
+			{% for i in related_events %}
 			<div class="item pt-25 pb-25">
 				<div class="event-grid shadow">
 					<div class="image-wrap img-overlay">
 						<span class="badge badge-primary like pointer position-absolute"><i class="icon-heart"></i></span>
-						<span class="badge badge-secondary photocount position-absolute"><i class="icon-photo"></i> 26</span>
-						<img src="{% static 'img/related-event-1.jpg' %}" alt="img" class="img-fluid">
+						<span class="badge badge-secondary photocount position-absolute"><i class="icon-photo"></i> {{ event.gallery_set.count }}</span>
+						<img src="{{ i.featured_image.url }}" alt="img" class="img-fluid">
 					</div>
 					<div class="content p-4">
-						<h4 class="mb-3"><a href="#" class="text-decoration-none text-reset">Free seminar</a></h4>
-						<p><i class="icon-clock align-middle text-primary"></i>&nbsp; 26 Feb - 28 Feb</p>
+						<h4 class="mb-3"><a href="{% url 'events:event-detail' event.uid %}" class="text-decoration-none text-reset">{{ event.title }}</a></h4>
+						<p><i class="icon-clock align-middle text-primary"></i>&nbsp; {{ event.start_date|date:"d M" }} - {{ event.end_date|date:"d M" }}</p>
 						<div class="d-flex event-actions">
-							<span class="event-action pointer" data-toggle="tooltip" data-placement="bottom" title="Info@event.com"><i class="icon-contact"></i></span>
-							<span class="event-action pointer" data-toggle="tooltip" data-placement="bottom" title="001-234-5678"><i class="icon-phone"></i></span>
-							<span class="event-action pointer" data-toggle="tooltip" data-placement="bottom" title="43C, BlockChain ST, California, US"><i class="icon-compass"></i></span>
-							<span class="event-action pointer" data-toggle="tooltip" data-placement="bottom" title="Prices are high">$$$</span>
+							<span class="event-action pointer" data-toggle="tooltip" data-placement="bottom" title="{{ event.email }}"><i class="icon-contact"></i></span>
+							<span class="event-action pointer" data-toggle="tooltip" data-placement="bottom" title="{{ event.phone }}"><i class="icon-phone"></i></span>
+							<span class="event-action pointer" data-toggle="tooltip" data-placement="bottom" title="{{ event.location }}"><i class="icon-compass"></i></span>
+							<span class="event-action pointer" data-toggle="tooltip" data-placement="bottom" title="{{ event.price_text }}">{{ event.price_val }}</span>
 						</div>
 					</div>
 				</div>
 			</div>
-			<div class="item pt-25 pb-25">
-				<div class="event-grid shadow">
-					<div class="image-wrap img-overlay">
-						<span class="badge badge-primary like pointer position-absolute"><i class="icon-heart"></i></span>
-						<span class="badge badge-secondary photocount position-absolute"><i class="icon-photo"></i> 26</span>
-						<img src="{% static 'img/related-event-2.jpg' %}" alt="img" class="img-fluid">
-					</div>
-					<div class="content p-4">
-						<h4 class="mb-3"><a href="#" class="text-decoration-none text-reset">Food Festival</a></h4>
-						<p><i class="icon-clock align-middle text-primary"></i>&nbsp; 26 Feb - 28 Feb</p>
-						<div class="d-flex event-actions">
-							<span class="event-action pointer" data-toggle="tooltip" data-placement="bottom" title="Info@event.com"><i class="icon-contact"></i></span>
-							<span class="event-action pointer" data-toggle="tooltip" data-placement="bottom" title="001-234-5678"><i class="icon-phone"></i></span>
-							<span class="event-action pointer" data-toggle="tooltip" data-placement="bottom" title="43C, BlockChain ST, California, US"><i class="icon-compass"></i></span>
-							<span class="event-action pointer" data-toggle="tooltip" data-placement="bottom" title="Prices are high">$$$</span>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="item pt-25 pb-25">
-				<div class="event-grid shadow">
-					<div class="image-wrap img-overlay">
-						<span class="badge badge-primary like pointer position-absolute"><i class="icon-heart"></i></span>
-						<span class="badge badge-secondary photocount position-absolute"><i class="icon-photo"></i> 26</span>
-						<img src="{% static 'img/related-event-3.jpg' %}" alt="img" class="img-fluid">
-					</div>
-					<div class="content p-4">
-						<h4 class="mb-3"><a href="#" class="text-decoration-none text-reset">Music festival</a></h4>
-						<p><i class="icon-clock align-middle text-primary"></i>&nbsp; 26 Feb - 28 Feb</p>
-						<div class="d-flex event-actions">
-							<span class="event-action pointer" data-toggle="tooltip" data-placement="bottom" title="Info@event.com"><i class="icon-contact"></i></span>
-							<span class="event-action pointer" data-toggle="tooltip" data-placement="bottom" title="001-234-5678"><i class="icon-phone"></i></span>
-							<span class="event-action pointer" data-toggle="tooltip" data-placement="bottom" title="43C, BlockChain ST, California, US"><i class="icon-compass"></i></span>
-							<span class="event-action pointer" data-toggle="tooltip" data-placement="bottom" title="Prices are high">$$$</span>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="item pt-25 pb-25">
-				<div class="event-grid shadow">
-					<div class="image-wrap img-overlay">
-						<span class="badge badge-primary like pointer position-absolute"><i class="icon-heart"></i></span>
-						<span class="badge badge-secondary photocount position-absolute"><i class="icon-photo"></i> 26</span>
-						<img src="{% static 'img/related-event-4.jpg' %}" alt="img" class="img-fluid">
-					</div>
-					<div class="content p-4">
-						<h4 class="mb-3"><a href="#" class="text-decoration-none text-reset">Auto show</a></h4>
-						<p><i class="icon-clock align-middle text-primary"></i>&nbsp; 26 Feb - 28 Feb</p>
-						<div class="d-flex event-actions">
-							<span class="event-action pointer" data-toggle="tooltip" data-placement="bottom" title="Info@event.com"><i class="icon-contact"></i></span>
-							<span class="event-action pointer" data-toggle="tooltip" data-placement="bottom" title="001-234-5678"><i class="icon-phone"></i></span>
-							<span class="event-action pointer" data-toggle="tooltip" data-placement="bottom" title="43C, BlockChain ST, California, US"><i class="icon-compass"></i></span>
-							<span class="event-action pointer" data-toggle="tooltip" data-placement="bottom" title="Prices are high">$$$</span>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="item pt-25 pb-25">
-				<div class="event-grid shadow">
-					<div class="image-wrap img-overlay">
-						<span class="badge badge-primary like pointer position-absolute"><i class="icon-heart"></i></span>
-						<span class="badge badge-secondary photocount position-absolute"><i class="icon-photo"></i> 26</span>
-						<img src="{% static 'img/related-event-4.jpg' %}" alt="img" class="img-fluid">
-					</div>
-					<div class="content p-4">
-						<h4 class="mb-3"><a href="#" class="text-decoration-none text-reset">Auto show</a></h4>
-						<p><i class="icon-clock align-middle text-primary"></i>&nbsp; 26 Feb - 28 Feb</p>
-						<div class="d-flex event-actions">
-							<span class="event-action pointer" data-toggle="tooltip" data-placement="bottom" title="Info@event.com"><i class="icon-contact"></i></span>
-							<span class="event-action pointer" data-toggle="tooltip" data-placement="bottom" title="001-234-5678"><i class="icon-phone"></i></span>
-							<span class="event-action pointer" data-toggle="tooltip" data-placement="bottom" title="43C, BlockChain ST, California, US"><i class="icon-compass"></i></span>
-							<span class="event-action pointer" data-toggle="tooltip" data-placement="bottom" title="Prices are high">$$$</span>
-						</div>
-					</div>
-				</div>
-			</div>
+			{% endfor %}
 		</div>
 	</section>
+	
+	{% include 'mainapp/auth_modals.html' %}
 {% endblock contents %}

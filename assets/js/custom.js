@@ -1,5 +1,13 @@
 $(document).ready(function(){
 
+	// Helper functions
+	// This helps to set multiple attributes at once
+	function setAttributes(el, attrs) {
+		for(var key in attrs) {
+			el.setAttribute(key, attrs[key]);
+		}
+	}
+
 	$(".et-preloader").fadeOut("slow");
 	//-------------------------------
 	// Mobile Nav Menu
@@ -58,7 +66,6 @@ $(document).ready(function(){
 		})
 	}
 
-
 	//-------------------------------
 	// Gallery Images Upload
 	//-------------------------------
@@ -75,6 +82,80 @@ $(document).ready(function(){
 
 	});
 
+	//-------------------------------
+	// Gallery Images Upload
+	//-------------------------------
+	function listenRemoveSchedules() {
+		$('.remove-schedule').on("click", function() {
+			let num = $("#event-schedules").children().length;
+			if (num > 1){
+				this.parentElement.parentElement.remove()
+			} else {
+				alert('You are required to add at least a schedule')
+			}
+			// Update form-TOTAL_FORMS
+			let tot_form = $("input[name='form-TOTAL_FORMS']")
+			tot_form[0].value = num - 1
+		})
+	}
+	if($("#event-schedules").length) {
+		$('#add_schedule').on("click", function(){
+			let num = $("#event-schedules").children().length + 1
+
+			$("#event-schedules").append(`
+			<div class="row">
+				<div class="schedule-head col-sm-12">
+					<h3>Day `+ num +`</h3>
+					<span class="badge badge-primary pointer border-0 font-weight-normal remove-schedule"><i class="fas fa-trash"></i></span>
+				</div>
+				<div class="form-group col-sm-6">
+						<label>Start time*</label>
+						<div class='position-relative'>
+							<input required size="16" name="form-`+ (num - 1) +`-start_time" type="text" value="2021-06-15 14:45" readonly class="form-control bg-light form_datetime">
+							<i class="icon-clock input-icon"></i>
+						</div>
+				</div>
+				<div class="form-group col-sm-6">
+						<label>End time*</label>
+						<div class='position-relative'>
+							<input required size="16" name="form-`+ (num - 1) +`-end_time" type="text" value="2012-06-15 14:45" readonly class="form-control bg-light form_datetime">
+							<i class="icon-clock input-icon"></i>
+						</div>
+				</div>
+				<div class="form-group getcontent col-sm-12">
+					<label>Event title*</label>
+					<input required type="text"name="form-`+ (num - 1) +`-title" class="form-control bg-light" title="Please enter the title for the event happening this day. All fields are necessary" placeholder="Event title" name="event_title">
+				</div>
+				<div class="form-group getcontent col-sm-12">
+					<label>Description*</label>
+					<textarea required rows="6" name="form-`+ (num - 1) +`-description" class="form-control resize-none bg-light" placeholder="Add description about this day" title="Please enter full description about this event" name="event_description"></textarea>
+				</div>
+			</div>
+			`)
+
+			listenRemoveSchedules()
+
+			refreshDatepickers()
+
+			// Update form-TOTAL_FORMS
+			let tot_form = $("input[name='form-TOTAL_FORMS']")
+			tot_form[0].value = num
+		});
+
+		listenRemoveSchedules()
+	}
+
+
+	// -------------------------------
+	// Add event form validation
+	// -------------------------------
+	// let addEventForm = document.getElementById('addEventForm')
+
+	// function submitForm(e) {
+	// 	// Add some validations here
+	// }
+
+	// addEventForm.addEventListener('submit', submitForm)
 
 	//-------------------------------
 	// Toggle Event Filter
@@ -88,13 +169,68 @@ $(document).ready(function(){
 	//-------------------------------
 	// Append/Remove Event Speakers
 	//-------------------------------
-	if($(".speakers-list").length) {
-		$("#add_speaker").on("click", function(){
-			$(".speakers-list table tbody").append('<tr><td contenteditable="true">Name</td><td><input class="form-control border" type="text" name="designation" placeholder="e.g Show Stopper"></td><td><div class="position-relative text-center change-speaker-avatar"><input type="file" name="change_image"><img src="img/user-avatar.jpg" class="img-fluid" alt="img"></div></td><td><span class="badge badge-primary ml-3 mt-3 pointer border-0 font-weight-normal position-absolute"><i class="fas fa-trash"></i></span></td></tr>');
-		});
+	function setRemoveSpeakerEvent() {
 		$(".remove-speaker").on("click", function(){
 			$(this).parents("tr").remove();
+
+			// Update form-TOTAL_FORMS
+			let tot_form = $("input[name='speaker-TOTAL_FORMS']")
+			let num = $(".speakers-list table tbody").children().length 
+			tot_form[0].value = num
 		})
+	}
+	function setSpeakerInput() {
+		// Code to update the name fields of the speakers
+		$('.speaker_name').on('keyup', function(){
+			this.lastElementChild.value = this.innerText;
+		})
+	}
+	if($(".speakers-list").length) {
+		$("#add_speaker").on("click", function(){
+			let num = $(".speakers-list table tbody").children().length 
+			
+			$(".speakers-list table tbody").append(`
+			<tr>
+				<td class="speaker_name" contenteditable="true"><input name="speaker-`+num+`-name" hidden></td>
+				<td>
+					<input class="form-control border" type="text" name="speaker-`+num+`-designation" placeholder="e.g Show Stopper">
+				</td>
+				<td>
+					<div class="position-relative text-center change-speaker-avatar">
+						<input type="file" name="speaker-`+num+`-image">
+						<img src="/" class="img-fluid" alt="img">
+					</div>
+				</td>
+				<td>
+					<span class="badge badge-primary remove-speaker ml-3 mt-3 pointer border-0 font-weight-normal position-absolute"><i class="fas fa-trash"></i></span>
+				</td>
+			</tr>
+			`);
+			setRemoveSpeakerEvent()
+			setSpeakerInput()
+
+			// Update form-TOTAL_FORMS
+			let tot_form = $("input[name='speaker-TOTAL_FORMS']")
+			tot_form[0].value = num + 1
+
+		});
+		
+		setRemoveSpeakerEvent()
+
+		// // Code to display and remove views
+		// $('.selecter').on("click", function() {
+		// 	let board = $(this).attr('selection')
+		// 	let checked = this.querySelector('input').checked
+		// 	if (checked){
+		// 		$(board).fadeIn()
+		// 		$(board[0].querySelectorAll('input')).attr('disabled', true)
+		// 	} else {
+		// 		$(board).fadeOut()
+		// 		$(board[0].querySelectorAll('input')).removeAttr('disabled')
+		// 	}
+		// })
+
+		setSpeakerInput()
 	}
 
 
@@ -146,13 +282,17 @@ $(document).ready(function(){
 	//-------------------------------
 	// Generic Smooth Scroll on Anchor
 	//-------------------------------
-	$(document).on('click', 'a[href^="#"]', function (event) {
-		event.preventDefault();
-		$(this).addClass("active").siblings().removeClass("active");
-		$('html, body').animate({
-			scrollTop: $($.attr(this, 'href')).offset().top-75
-		}, 500);
-	});
+	try{
+		$(document).on('click', 'a[href^="#"]', function (event) {
+			event.preventDefault();
+			$(this).addClass("active").siblings().removeClass("active");
+			$('html, body').animate({
+				scrollTop: $($.attr(this, 'href')).offset().top-75
+			}, 500);
+		});
+	} catch(e){
+
+	}
 
 	//-------------------------------
 	// Switch Galleries
@@ -426,33 +566,45 @@ $(document).ready(function(){
 	//-------------------------------
 
 	if($('.time-left').length){
+		// Get all the timers on screen to get their enddates
+		let timers = document.querySelectorAll('.time-left')
 
-		function makeTimer() {
+		timers.forEach(i=>{
+			function makeTimer() {
+				//		var endTime = new Date("29 July 2018 9:56:00 GMT+01:00");
+				var endTime = new Date(i.getAttribute('end_date'));
+				endTime = (Date.parse(endTime) / 1000);
+	
+				var now = new Date();
+				now = (Date.parse(now) / 1000);
+	
+				var timeLeft = endTime - now;
 
-			//		var endTime = new Date("29 July 2018 9:56:00 GMT+01:00");
-			var endTime = new Date("29 July 2020 9:56:00 GMT+01:00");
-			endTime = (Date.parse(endTime) / 1000);
+				if (timeLeft < 0 ){
+					$(i.querySelector('.days')).html(0 + "<span>Days</span>");
+					$(i.querySelector('.hours')).html(0 + "<span>Hr</span>");
+					$(i.querySelector('.minutes')).html(0 + "<span>Min</span>");
+					$(i.querySelector('.seconds')).html(0 + "<span>Sec</span>");
+				} else {
+	
+					var days = Math.floor(timeLeft / 86400);
+					var hours = Math.floor((timeLeft - (days * 86400)) / 3600);
+					var minutes = Math.floor((timeLeft - (days * 86400) - (hours * 3600 )) / 60);
+					var seconds = Math.floor((timeLeft - (days * 86400) - (hours * 3600) - (minutes * 60)));
+		
+					if (hours < "10") { hours = "0" + hours; }
+					if (minutes < "10") { minutes = "0" + minutes; }
+					if (seconds < "10") { seconds = "0" + seconds; }
 
-			var now = new Date();
-			now = (Date.parse(now) / 1000);
+					$(i.querySelector('.days')).html(days + "<span>Days</span>");
+					$(i.querySelector('.hours')).html(hours + "<span>Hr</span>");
+					$(i.querySelector('.minutes')).html(minutes + "<span>Min</span>");
+					$(i.querySelector('.seconds')).html(seconds + "<span>Sec</span>");
 
-			var timeLeft = endTime - now;
-
-			var days = Math.floor(timeLeft / 86400);
-			var hours = Math.floor((timeLeft - (days * 86400)) / 3600);
-			var minutes = Math.floor((timeLeft - (days * 86400) - (hours * 3600 )) / 60);
-			var seconds = Math.floor((timeLeft - (days * 86400) - (hours * 3600) - (minutes * 60)));
-
-			if (hours < "10") { hours = "0" + hours; }
-			if (minutes < "10") { minutes = "0" + minutes; }
-			if (seconds < "10") { seconds = "0" + seconds; }
-
-			$(".days").html(days + "<span>Days</span>");
-			$(".hours").html(hours + "<span>Hr</span>");
-			$(".minutes").html(minutes + "<span>Min</span>");
-			$(".seconds").html(seconds + "<span>Sec</span>");
-		}
-		setInterval(function() { makeTimer(); }, 1000);
+				}
+			}
+			setInterval(function() { makeTimer(); }, 1000);
+		})
 	}
 
 	//-------------------------------
@@ -563,8 +715,11 @@ $(document).ready(function(){
 	//-------------------------------
 	// Bootstrap DateTimePicker
 	//-------------------------------
-	if($(".form_datetime").length) {
+	function refreshDatepickers(){
 		$(".form_datetime").datetimepicker({format: 'yyyy-mm-dd hh:ii'});
+	}
+	if($(".form_datetime").length) {
+		refreshDatepickers()
 	}
 
 	//-------------------------------
@@ -629,6 +784,18 @@ $(document).ready(function(){
 	}
 
 	signupcheck.addEventListener('click', setSignupbtn)
+
+
+	// Review submission
+	$('#review_submit').on('click', function(){
+		// Count selected starts
+		let stars_count = document.querySelectorAll('#review_ratings .star.selected').length
+
+		// Set the input value of the stars
+		$("#review_form input[name='stars'")[0].value = stars_count
+
+		$("#review_form").submit()
+	})
 
 });
 

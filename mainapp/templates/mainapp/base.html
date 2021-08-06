@@ -33,6 +33,13 @@
 	<link rel="stylesheet" href="{% static 'css/bootstrap-datetimepicker.min.css' %}"/>
 	<!-- jQuery Nice Select -->
 	<link rel="stylesheet" href="{% static 'css/nice-select.css' %}"/>
+
+	<!-- Plugin CSS file with desired skin -->
+	<link rel="stylesheet" href="{% static 'css/ion.rangeSlider.min.css' %}"/>
+
+	<!-- Plugin CSS file with desired skin -->
+	<link rel="stylesheet" href="{% static 'css/jquery.mswitch.css' %}"/>
+
 	<!-- Global site tag (gtag.js) - Google Analytics -->
 	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-155204293-2"></script>
 	<script>
@@ -55,22 +62,22 @@
 
 	<!-- Navbar -->
 	<nav class="et-navbar navbar">
-		<a class="logo h6 mb-0" href="index.html"><img src="{% static 'img/logo.png' %}" alt="img"></a>
+		<a class="logo h6 mb-0" href="{% url 'mainapp:home' %}"><img src="{% static 'img/logo.png' %}" alt="img"></a>
 		<ul class="nostyle nav-links inline mr-lg-auto text-right text-lg-left flex-lg-grow-1 mb-0">
 			<li class="dropdown">
 				<a href="{% url 'mainapp:home' %}">Home</a>
 			</li>
 			
 			<li class="dropdown">
-				<a href="search-map-right.html">Search</a>
+				<a href="{% url 'events:event-search' %}">Search</a>
 			
 			</li>
 			<li class="dropdown">
 				<a href="#">Events</a>
 				<ul class="submenu shadow">
 					<li><a href="{% url 'events:add-event' %}">Add Events</a></li>
-					<li><a href="event-detail.html">Event Detail</a></li>
-					<li><a href="event-calendar.html">Event Calendar</a></li>
+					<li><a href="{% url 'events:event-calendar' %}">Event Detail</a></li>
+					<li><a href="{% url 'events:event-calendar' %}">Event Calendar</a></li>
 				</ul>
 			</li>
 
@@ -82,14 +89,14 @@
 
 		</ul>
 		<div class="nav-actions ml-auto">
-			<a href="search.html"><i class="icon-search-2"></i> Search</a>
+			<a href="{% url 'events:event-search' %}"><i class="icon-search-2"></i> Search</a>
 			{% if request.user.is_authenticated %}
 				<a href="{% url 'account:logout' %}" style="color: red;"><i class="icon-login"></i> Logout</a>
 			{% else %}
 				<a href="#" data-toggle="modal" data-target="#exampleModal"><i class="icon-login"></i> Login/Signup</a>
 			{% endif %}
 			
-			<a href="pricing.html" class="btn btn-primary border-0"><i class="icon-plus btn-icon"></i> Add Event</a>
+			<a href="{% url 'events:add-event' %}" class="btn btn-primary border-0"><i class="icon-plus btn-icon"></i> Add Event</a>
 		</div>
 	</nav>
 
@@ -97,24 +104,24 @@
 	<nav id="et-mobile-nav">
 		<ul class="text-capitalize">
 			<li>
-				<a href="#">Home</a>
+				<a href="{% url 'mainapp:home' %}">Home</a>
 			</li>
-			<li><a href="about.html">About</a></li>
+			<li><a href="{% url 'mainapp:about' %}">About</a></li>
 	
 			<li>
-				<a href="search-map-right.html">Search</a>
+				<a href="{% url 'events:event-search' %}">Search</a>
 				
 			</li>
 			<li>
 				<a href="#">Events</a>
 				<ul class="submenu shadow">
-					<li><a href="add-event.html">Add Events</a></li>
-					<li><a href="event-detail.html">Event Detail</a></li>
-					<li><a href="event-calendar.html">Event Calendar</a></li>
+					<li><a href="{% url 'events:add-event' %}">Add Events</a></li>
+					<li><a href="{% url 'events:event-calendar' %}">Event Lists</a></li>
+					<li><a href="{% url 'events:event-calendar' %}">Event Calendar</a></li>
 				</ul>
 			</li>
 		
-			<li><a href="contact.html">Contact</a></li>
+			<li><a href="{% url 'mainapp:contact' %}">Contact</a></li>
 		</ul>
 	</nav>
 
@@ -169,8 +176,8 @@
 				<div class="col-md-3 navigation widget">
 					<h5>Navigation</h5>
 					<ul class="nostyle text-white p-0">
-						<li class="mt-4 d-block"><a href="#">Home</a></li>
-						<li class="mt-4 d-block"><a href="#">About us</a></li>
+						<li class="mt-4 d-block"><a href="{% url 'mainapp:home' %}">Home</a></li>
+						<li class="mt-4 d-block"><a href="{% url 'mainapp:about' %}">About us</a></li>
 						<li class="mt-4 d-block"><a href="#">What We Do</a></li>
 						<li class="mt-4 d-block"><a href="#">Privacy Policy</a></li>
 					</ul>
@@ -214,6 +221,12 @@
 	<script src="{% static 'js/bootstrap-datetimepicker.min.js' %}"></script>
 	<!--jQuery Nice Select -->
 	<script src="{% static 'js/jquery.nice-select.min.js' %}"></script>
+
+	<!--Ion Range Slider-->
+	<script src="{% static 'js/ion.rangeSlider.min.js' %}"></script>
+	<!--Toggle Switcher -->
+	<script src="{% static 'js/jquery.mswitch.js' %}"></script>
+
 	<script src="{% static 'js/jquery.scrollbar.min.js' %}"></script>
 
 	<script src="{% static 'js/jquery.fancybox.min.js' %}"></script>

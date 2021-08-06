@@ -15,7 +15,7 @@ from account.forms import (UserRegisterForm, LoginForm, ChangePasswordForm,
     ResetPasswordValidateEmailForm, ForgetPasswordForm)
 from account.tokens import acount_confirm_token
 
-from events.models import Event
+from events.models import Category, Event, FeaturedLocation, Gallery
 
 
 def verification_message(request, user, template):
@@ -53,6 +53,7 @@ class Home(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        queryset = Event.objects.all()
         
 
         # Sending the form to the template
@@ -60,7 +61,20 @@ class Home(TemplateView):
         context['reg_form'] = self.register_form()
         context['reg_form'] = self.reset_form()
 
-        context['events'] = Event.objects.all()
+        context['events'] = queryset[:5]
+
+        # Get featured and upcoming events (4)
+        context['featured_events'] = queryset.filter(featured=True)[:2]
+        context['upcoming_events'] = queryset.get_upcoming()[:2]
+        context['gallery_images'] = Gallery.objects.all()[:10]
+
+        # Get the events by location
+        locations = FeaturedLocation.objects.all()[:4]
+        context['locations'] = locations
+
+        # Get the categories to context
+        categories = Category.objects.all()[:4]
+        context['categories'] = categories
 
         return context
     

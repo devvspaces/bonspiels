@@ -99,9 +99,14 @@ class Profile(models.Model):
     username = models.CharField(max_length=200, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     uid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    first_name = models.CharField(max_length=30)
+    last_name = models.CharField(max_length=30)
 
     def __str__(self):
         return self.username
+    
+    def full_name(self):
+        return f'{self.first_name} {self.last_name}'.capitalize()
 
     # def get_absolute_url(self):
     #     return reverse('profile', args=[self.first_name])
