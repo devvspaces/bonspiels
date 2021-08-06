@@ -22,11 +22,11 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         try:
             # No of events to create
-            num = 60
+            num = 600
             titles = ['Picture', 'Home', 'going', 'music', 'Live party', 'Homecoming', 'Summer Holiday', 'Metal club', 'Openig up']
             user = User.objects.first()
             categories = Category.objects.all()
-            cities = ['Canada', 'California', 'London', 'New york', 'Dubai', 'Lagos', 'Mumbai', 'Barcelona']
+            cities = ['Manitoba', 'California', 'London', 'New york', 'Dubai', 'New-Brunswick', 'Newfoundland and Labrador', 'Northwest Territories', 'alberta']
             description = "Productivity is never an accident. It is always the result of a commitment to excellence, intelligent planning, and focused effort. \
                 There are some people who live in a dream world, and there are some who face reality; and then there are those who turn one into the other"
             phone = '+233-533248378'

@@ -7,12 +7,12 @@
 		<div class="container position-relative h-100 pt-5">
 			<div class="masthead-caption text-center">
 				<div class="driv">
-					<a href="#"><img src="{% static 'img/regions/alberta.png' %}" alt=""></a>
-					<a href="#"><img src="{% static 'img/regions/british-columbia.png' %}" alt=""></a>
-					<a href="#"><img src="{% static 'img/regions/Manitoba.png' %}" alt=""></a>
-					<a href="#"><img src="{% static 'img/regions/New-Brunswick.png' %}" alt=""></a>
-					<a href="#"><img src="{% static 'img/regions/fff.png' %}" alt=""></a>
-					<a href="#"><img src="{% static 'img/regions/ggg.png' %}" alt=""></a>
+					<a href="{% url 'events:event-search' %}?location=alberta&search=Submit"><img src="{% static 'img/regions/alberta.png' %}" alt=""></a>
+					<a href="{% url 'events:event-search' %}?location=british-columbia&search=Submit"><img src="{% static 'img/regions/british-columbia.png' %}" alt=""></a>
+					<a href="{% url 'events:event-search' %}?location=Manitoba&search=Submit"><img src="{% static 'img/regions/Manitoba.png' %}" alt=""></a>
+					<a href="{% url 'events:event-search' %}?location=New-Brunswick&search=Submit"><img src="{% static 'img/regions/New-Brunswick.png' %}" alt=""></a>
+					<a href="{% url 'events:event-search' %}?location=Newfoundland and Labrador&search=Submit"><img src="{% static 'img/regions/fff.png' %}" alt=""></a>
+					<a href="{% url 'events:event-search' %}?location=Northwest Territories&search=Submit"><img src="{% static 'img/regions/ggg.png' %}" alt=""></a>
 				</div>
 				<h2 class="text-white d-lg-block d-none position-relative z-index-2">Explore on-going and upcoming</h2>
 				<h1 class="mb-3 text-white"><span class="text-primary text-white">Events</span> Around you...</h1>
@@ -125,14 +125,14 @@
 												<div class="seconds"></div>
 											</div>
 										</div>
-										<div class="position-relative float-right border-0 mt-3 btn btn-primary btn-small submit-btn">
+										<a href="{% url 'events:event-detail' i.uid %}" style="width: 150px;" class="position-relative float-right border-0 mt-3 btn btn-primary btn-small submit-btn">
 											<i class="icon-calendar btn-icon input-icon"></i> Schedule
-											<input type="submit" class="h-100 w-100 position-absolute" value="Discover Now">
-										</div>
+											<input class='mover' href="{% url 'events:event-detail' i.uid %}" type="submit" class="h-100 w-100 position-absolute" value="Discover Now">
+										</a>
 									</div>
 								</div>
 								{% endfor %}
-								</div>
+							</div>
 							{% endwith %}
 						</div>
 					</div>

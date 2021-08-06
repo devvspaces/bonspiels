@@ -129,3 +129,14 @@ MEDIA_URL='/media/'
 LOGIN_REDIRECT_URL="mainapp:home"
 LOGIN_URL="mainapp:home"
 LOGOUT_URL = 'account:logout'
+
+
+EMAIL_BACKEND= 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST="smtp.gmail.com"
+EMAIL_PORT= 587
+EMAIL_USE_TLS= True
+EMAIL_HOST_USER = "netrobeweb@gmail.com"
+EMAIL_HOST_PASSWORD = "wpcgtxfwmiqnlbwv"
+# Custom user defined mail username
+DEFAULT_FROM_EMAIL = "bonspiels@gmail.com"
+DEFAULT_COMPANY_EMAIL = "bonspiels@gmail.com"
