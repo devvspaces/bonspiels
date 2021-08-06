@@ -280,14 +280,14 @@ class CreateEvent(LoginRequiredMixin, TemplateView):
         return render(request, self.template_name, context)
 
 
-class CreateEvent(LoginRequiredMixin, TemplateView):
-    template_name = 'events/add-event.html'
-    extra_context = {
-        'title': 'Add event'
-    }
-    form_class = EventForm
-    event_schedule_form = formset_factory(EventScheduleForm)
-    event_speaker_form = formset_factory(EventSpeakerForm)
+# class CreateEvent(LoginRequiredMixin, TemplateView):
+#     template_name = 'events/add-event.html'
+#     extra_context = {
+#         'title': 'Add event'
+#     }
+#     form_class = EventForm
+#     event_schedule_form = formset_factory(EventScheduleForm)
+#     event_speaker_form = formset_factory(EventSpeakerForm)
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)

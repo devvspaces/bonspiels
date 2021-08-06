@@ -22,7 +22,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         try:
             # No of events to create
-            num = 600
+            num = 50
             titles = ['Picture', 'Home', 'going', 'music', 'Live party', 'Homecoming', 'Summer Holiday', 'Metal club', 'Openig up']
             user = User.objects.first()
             categories = Category.objects.all()
