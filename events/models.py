@@ -6,7 +6,7 @@ from django.utils import timezone
 from account.models import User
 
 from .managers import EventManager
-from .utils import strDate
+from .utils import strDate, ordinal
 
 
 class Category(models.Model):
@@ -18,6 +18,9 @@ class Category(models.Model):
 
     def __str__(self):
         return self.name
+    
+    def get_first_event(self):
+        return self.event_set.first()
 
 class Amenity(models.Model):
     name = models.CharField(max_length=30)
@@ -57,7 +60,25 @@ class Event(models.Model):
 
     def __str__(self):
         return self.title
+
+    def calc_rating(self):
+        queryset = self.eventreview_set.all()
+        x = queryset.count()
+        rating = sum([i.stars for i in queryset])/(x if x else 1)
+        return rating
     
+    def get_stars(self):
+        rating = int(self.calc_rating())
+        all = [False] * 5
+        for i in range(rating):
+            all[i] = True
+        
+        return all
+    
+    def get_first_image(self):
+        return self.gallery_set.first()
+        
+
     def days_since_created(self):
         delta = timezone.now() - self.created
         days = delta.days
@@ -174,6 +195,13 @@ class Ticket(models.Model):
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
     uid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
 
+
+    def get_featured(self):
+        row = ordinal(self.row) + ' row'
+        features = [i.name for i in self.featuring.all()]
+        features.insert(0, row)
+        return ', '.join(features)
+
     def __str__(self):
         return self.title
 
@@ -261,3 +289,20 @@ class FeaturedLocation(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class UserTicket(models.Model):
+    name = models.CharField(max_length=50)
+    email = models.EmailField()
+    phone = models.CharField(max_length=20)
+    attendees = models.IntegerField(default=1)
+    ticket = models.ForeignKey(Ticket, on_delete=models.DO_NOTHING)
+    user = models.ForeignKey('account.User', on_delete=models.CASCADE)
+    uid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    created = models.DateTimeField(auto_now_add=True)
+
+    def get_amount(self):
+        return self.attendees * self.ticket.price
+
+    def __str__(self):
+        return str(self.uid)

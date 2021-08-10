@@ -1,0 +1,109 @@
+{% extends "mainapp/base.html" %}
+{% load static %}
+
+{% block contents %}
+	<!-- Page Header -->
+	<section id="et-pagehead" class="container-fluid text-center text-white img-overlay no-hover position-relative pt-5 pb-5">
+		<div class="container position-relative pt-5 pb-5 mt-5 mb-5">
+            {% if custom_title %}
+			<h1 class="box-heading mb-5 position-relative mb-0 text-white">{{ custom_title }}</h1>
+            {% else %}
+			<h1 class="box-heading mb-5 position-relative mb-0 text-white">My Events</h1>
+            {% endif %}
+		</div>
+		<div class="breadcrumb position-absolute text-center m-0 justify-content-center bg-transparent text-white">
+			<a href="#" class="text-white d-inline-block p-2">Home</a>
+			<a href="#" class="text-white d-inline-block p-2">Events</a>
+			<a href="#" class="text-white d-inline-block p-2">My Events</a>
+		</div>
+	</section>
+
+	<!-- Filter -->
+	<div id="et-filter-row" class="container-fluid pt-3 pb-3 bg-primary text-white">
+		<div class="container">
+			<div class="d-flex align-items-center">
+				<div class="d-flex mb-3 mb-sm-0 align-items-center">
+					<h5 class="small m-0 pr-2 d-none d-md-block text-white">Search result(s) for:</h5> <p class="small m-0 text-white">My Events (27 results)</p>
+				</div>
+				<div class="ml-auto d-flex align-items-center">
+					<label class="pr-3 mb-0">Sort: </label>
+					<select class="bg-white form-control pb-0 pt-0 pl-4 mb-0" name="sort">
+						<option value="most_viewed">Most Viewed</option>
+						<option value="most_recent">Most Recent</option>
+						<option value="most_liked">Most Liked</option>
+					</select>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Content section -->
+	<section id="et-events-area" class="container-fluid pt-4">
+		<div class="container">
+			<div class="row">
+                {% for i in events %}
+                    <div class="col-md-6 mt-3 mb-3">
+                        <div class="blog-grid w-100 mt-4 rounded shadow" style="min-width: 400px;">
+                            <div class="image-wrap position-relative">
+                                <!-- <span class="badge badge-primary listings photocount position-absolute">110 Listings</span> -->
+                                <img src="{{ i.featured_image.url }}" alt="img" class="img-fluid rounded-top event-featured-image">
+                            </div>
+                            <div class="content p-4">
+                                <span class="text-muted"><i class="icon-clock text-primary"></i> &nbsp;Posted {{ i.days_since_created }}</span>
+                                <span class="text-primary float-right">{{ i.price_val }}</span>
+                                <hr>
+                                <h4 class="mb-3"><a href="{% url 'events:event-detail' i.uid %}" class="text-decoration-none text-reset">{{ i.title }}</a></h4>
+                                <p class="description">
+                                    {{ i.description|truncatechars:30}}
+                                </p>
+                                <div class="info">
+                                    <div class="mb-2"><i class="icon-clock"></i>&nbsp; {{ i.start_date|date:"d M Y" }} - {{ i.end_date|date:"d M Y" }}</div>
+                                    <div class="mb-2"><i class="icon-contact"></i>&nbsp; {{ i.email }}</div>
+                                    <div><i class="icon-phone"></i>&nbsp; {{ i.phone }}</div>
+                                </div>
+                                <hr>
+                                <div class="time-left mt-4 d-inline-block pt-2 pt-md-0" end_date = "{{ i.end_date_js_format }}">
+                                    <div class="timer search">
+                                        <div class="days d-none"></div>
+                                        <div class="hours text-primary-flat"></div>
+                                        <div class="minutes text-secondary-flat"></div>
+                                        <div class="seconds"></div>
+                                    </div>
+                                </div>
+                                {% if request.user == i.user %}
+                                <a href="#" class="position-relative float-right border-0 mt-3 btn btn-primary btn-small submit-btn">
+                                    <i class="icon-calendar btn-icon input-icon"></i> Edit
+                                    <input type="submit" class="h-100 w-100 position-absolute" value="Discover Now">
+                                </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+			</div>
+            {% if page_obj %}
+            <div class="pagination">
+                <div style="margin-left: auto;" class="pagination">
+                {% if page_obj.has_previous %}
+                    <a class="badge badge-secondary" href="?page=1">First</a>
+                    <a class="badge badge-secondary" href="?page={{page_obj.previous_page_number}}">Previous</a>
+                {% endif%}
+                {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                    <a class="badge badge-primary" href="?page={{ num }}">{{ num }}</a>
+                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                    <a class="badge badge-secondary" href="?page={{ num }}">{{ num }}</a>
+                    {% endif %}
+                {% endfor %}
+                {% if page_obj.has_next %}
+                    <a class="badge badge-secondary" href="?page={{ page_obj.next_page_number }}">Next</a>
+                    <a class="badge badge-secondary" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+                {% endif%}
+                </div>
+            </div>
+            {% endif %}
+		</div>
+	</section>
+
+	{% include 'mainapp/auth_modals.html' %}
+{% endblock %}

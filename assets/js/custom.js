@@ -725,9 +725,29 @@ $(document).ready(function(){
 	//-------------------------------
 	// Choose Package Plan
 	//-------------------------------
+	function calculateTicketPrice(priceText){
+		// Calculate total and display
+		let attendees = parseInt($('#attendees').val())
+		let total = parseInt(priceText.getAttribute('price'))*attendees
+		$('#ticket-total').text('$'+total)
+	}
 	if($(".price-plans").length) {
 		$(".price-plans .price-plan").on('click', function(){
 			$(this).addClass("active").siblings().removeClass("active");
+			let priceText = this.querySelector('.price-text');
+			let val = priceText.getAttribute('ticket');
+			let ticket_plan = document.querySelector('#ticket-plan-id')
+			ticket_plan.value = val
+
+			calculateTicketPrice(priceText)
+		})
+
+		$('#attendees').on('keyup', function(){
+			let price = $('.price-plan.active')[0]
+			if (price){
+				let priceText = price.querySelector('.price-text')
+				calculateTicketPrice(priceText)
+			}
 		})
 	}
 

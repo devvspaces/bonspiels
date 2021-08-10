@@ -101,13 +101,13 @@
 								<h3 class="mb-4 fixed-bottom pl-4 title text-white font-weight-bold position-absolute">{{ loc.name.capitalize }}</h3>
 							</div>
 							<div class="content-slides bg-white">
-								{% for i in l_events %}
 								<div class="owl-carousel owl-theme">
+									{% for i in l_events %}
 									<div class="content w-100 item p-4">
 										<span class="text-muted"><i class="icon-clock text-primary"></i> &nbsp;Posted {{ i.days_since_created }}</span>
 										<span class="text-primary float-right" data-toggle="tooltip" data-placement="bottom" title="Prices are high">$$$</span>
 										<hr>
-										<h4 class="mb-3"><a href="{% url 'events:event-detail' i.uid %}" class="text-decoration-none text-reset"></a>{{ i.title }}</a></h4>
+										<h4 class="mb-3"><a href="{% url 'events:event-detail' i.uid %}" class="text-decoration-none text-reset">{{ i.title }}</h4></a>
 										<p class="description">
 											{{ i.description|truncatechars:30}}
 										</p>
@@ -125,111 +125,18 @@
 												<div class="seconds"></div>
 											</div>
 										</div>
-										<a href="{% url 'events:event-detail' i.uid %}" style="width: 150px;" class="position-relative float-right border-0 mt-3 btn btn-primary btn-small submit-btn">
+										<a href="{% url 'events:add-calendar' i.uid %}" style="width: 150px;" class="position-relative float-right border-0 mt-3 btn btn-primary btn-small submit-btn">
 											<i class="icon-calendar btn-icon input-icon"></i> Schedule
 											<input class='mover' href="{% url 'events:event-detail' i.uid %}" type="submit" class="h-100 w-100 position-absolute" value="Discover Now">
 										</a>
 									</div>
-								</div>
 								{% endfor %}
+								</div>
 							</div>
 							{% endwith %}
 						</div>
 					</div>
 					{% endfor %}
-				</div>
-
-				<!-- List view -->
-				<div class="row list-view">
-					<div class="d-flex mt-3 align-items-center">
-						<a href="#" class="position-relative thumb d-block text-decoration-none">
-							<img src="{% static 'img/event-grid-1.jpg' %}" class="img-fluid" alt="event">
-						</a>
-						<a href="#" class="event p-3 d-block text-decoration-none text-reset">
-							<h6 class="d-inline-block">Food Festival</h6>
-							<span class="pl-3"><i class="icon-clock text-primary"></i> 29 Feb, 2020</span>
-							<span class="badge badge-primary pointer float-right"><i class="icon-heart"></i></span>
-							<p class="mt-2 mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor...</p>
-						</a>
-					</div>
-					<div class="d-flex mt-3 align-items-center">
-						<a href="#" class="position-relative thumb d-block text-decoration-none">
-							<img src="{% static 'img/event-grid-1.jpg' %}" class="img-fluid" alt="event">
-						</a>
-						<a href="#" class="event p-3 d-block text-decoration-none text-reset">
-							<h6 class="d-inline-block">Food Festival</h6>
-							<span class="pl-3"><i class="icon-clock text-primary"></i> 29 Feb, 2020</span>
-							<span class="badge badge-primary pointer float-right"><i class="icon-heart"></i></span>
-							<p class="mt-2 mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor...</p>
-						</a>
-					</div>
-					<div class="d-flex mt-3 align-items-center">
-						<a href="#" class="position-relative thumb d-block text-decoration-none">
-							<img src="{% static 'img/event-grid-1.jpg' %}" class="img-fluid" alt="event">
-						</a>
-						<a href="#" class="event p-3 d-block text-decoration-none text-reset">
-							<h6 class="d-inline-block">Food Festival</h6>
-							<span class="pl-3"><i class="icon-clock text-primary"></i> 29 Feb, 2020</span>
-							<span class="badge badge-primary pointer float-right"><i class="icon-heart"></i></span>
-							<p class="mt-2 mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor...</p>
-						</a>
-					</div>
-					<hr>
-					<div class="d-flex mt-3 align-items-center">
-						<a href="#" class="position-relative thumb d-block text-decoration-none">
-							<img src="{% static 'img/event-grid-1.jpg' %}" class="img-fluid" alt="event">
-						</a>
-						<a href="#" class="event p-3 d-block text-decoration-none text-reset">
-							<h6 class="d-inline-block">Food Festival</h6>
-							<span class="pl-3"><i class="icon-clock text-primary"></i> 29 Feb, 2020</span>
-							<span class="badge badge-primary pointer float-right"><i class="icon-heart"></i></span>
-							<p class="mt-2 mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor...</p>
-						</a>
-					</div>
-					<div class="d-flex mt-3 align-items-center">
-						<a href="#" class="position-relative thumb d-block text-decoration-none">
-							<img src="{% static 'img/event-grid-1.jpg' %}" class="img-fluid" alt="event">
-						</a>
-						<a href="#" class="event p-3 d-block text-decoration-none text-reset">
-							<h6 class="d-inline-block">Food Festival</h6>
-							<span class="pl-3"><i class="icon-clock text-primary"></i> 29 Feb, 2020</span>
-							<span class="badge badge-primary pointer float-right"><i class="icon-heart"></i></span>
-							<p class="mt-2 mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor...</p>
-						</a>
-					</div>
-					<div class="d-flex mt-3 align-items-center">
-						<a href="#" class="position-relative thumb d-block text-decoration-none">
-							<img src="{% static 'img/event-grid-1.jpg' %}" class="img-fluid" alt="event">
-						</a>
-						<a href="#" class="event p-3 d-block text-decoration-none text-reset">
-							<h6 class="d-inline-block">Food Festival</h6>
-							<span class="pl-3"><i class="icon-clock text-primary"></i> 29 Feb, 2020</span>
-							<span class="badge badge-primary pointer float-right"><i class="icon-heart"></i></span>
-							<p class="mt-2 mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor...</p>
-						</a>
-					</div>
-					<div class="d-flex mt-3 align-items-center">
-						<a href="#" class="position-relative thumb d-block text-decoration-none">
-							<img src="{% static 'img/event-grid-1.jpg' %}" class="img-fluid" alt="event">
-						</a>
-						<a href="#" class="event p-3 d-block text-decoration-none text-reset">
-							<h6 class="d-inline-block">Food Festival</h6>
-							<span class="pl-3"><i class="icon-clock text-primary"></i> 29 Feb, 2020</span>
-							<span class="badge badge-primary pointer float-right"><i class="icon-heart"></i></span>
-							<p class="mt-2 mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor...</p>
-						</a>
-					</div>
-					<div class="d-flex mt-3 align-items-center">
-						<a href="#" class="position-relative thumb d-block text-decoration-none">
-							<img src="{% static 'img/event-grid-1.jpg' %}" class="img-fluid" alt="event">
-						</a>
-						<a href="#" class="event p-3 d-block text-decoration-none text-reset">
-							<h6 class="d-inline-block">Food Festival</h6>
-							<span class="pl-3"><i class="icon-clock text-primary"></i> 29 Feb, 2020</span>
-							<span class="badge badge-primary pointer float-right"><i class="icon-heart"></i></span>
-							<p class="mt-2 mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor...</p>
-						</a>
-					</div>
 				</div>
 			</div>
 		</div>
@@ -332,13 +239,13 @@
 				{% for category in categories %}
 				<div class="grid">
 					<img src="{{ category.image.url }}" alt="Popular event">
-					<a href="#" class="overlay transition text-decoration-none">
-						<span class="badge-green category badge-secondary">{{ category_event_set.count }} Listings</span>
+					<a href="{% url 'events:event-detail' category.get_first_event.uid %}" class="overlay transition text-decoration-none">
+						<span class="badge-green category badge-secondary">{{ category.event_set.count }} Listings</span>
 						<span class="badge badge-secondary float-right"><i class="icon-heart"></i></span>
 						<div class="hidden-data transition">
-							<h3 class="title text-white">{{ category.name }}</h3>
-							<p class="transition mb-2">{{ category.first.name }}</p>
-							<p class="transition"><i class="fas fa-map-marker-alt"></i> Fremont St, Las Vegas, NV 89101, United States</p>
+							<h3 class="title text-white">{{ category.get_first_event.title }}</h3>
+							<p class="transition mb-2">{{ category.get_first_event.description|truncatechars:30 }}</p>
+							<p class="transition"><i class="fas fa-map-marker-alt"></i> {{ category.get_first_event.location }}</p>
 						</div>
 						<div class="timing bg-primary position-absolute w-100 transition"><i class="icon-clock"></i> Starts 12AM | Feb, 20 - Ends 06PM | Feb, 24</div>
 					</a>
@@ -369,7 +276,7 @@
 								</div>
 								<div class="col-sm-8 pl-md-0">
 									<div class="content-box p-3">
-										<h5 class="d-inline-block"><a href="#" class="text-decoration-none text-reset"> {{ i.title }}</a></h5>
+										<h5 class="d-inline-block"><a href="{% url 'events:event-detail' i.uid %}" class="text-decoration-none text-reset"> {{ i.title }}</a></h5>
 										<small class="float-right"><i class="icon-clock text-primary"></i>&nbsp; {{ i.end_date|date:"d M, Y" }}</small>
 										<p class="description">{{ i.description|truncatechars:30}}</p>
 										<small class="tm">Time left</small>
@@ -382,10 +289,10 @@
 												<div class="seconds"></div>
 											</div>
 										</div>
-										<div class="position-relative border-0 btn btn-primary btn-small transform-origin-right float-right submit-btn">
+										<a href="{% url 'events:add-calendar' i.uid %}" class="position-relative border-0 btn btn-primary btn-small transform-origin-right float-right submit-btn">
 											<i class="icon-calendar btn-icon input-icon"></i> Schedule
 											<input type="submit" class="h-100 w-100 position-absolute" value="Discover Now">
-										</div>
+										</a>
 									</div>
 								</div>
 							</div>
@@ -412,7 +319,7 @@
 								</div>
 								<div class="col-sm-8 pl-md-0">
 									<div class="content-box p-3">
-										<h5 class="d-inline-block"><a href="#" class="text-decoration-none text-reset"> {{ i.title }}</a></h5>
+										<h5 class="d-inline-block"><a href="{% url 'events:event-detail' i.uid %}" class="text-decoration-none text-reset"> {{ i.title }}</a></h5>
 										<small class="float-right"><i class="icon-clock text-primary"></i>&nbsp; {{ i.end_date|date:"d M, Y" }}</small>
 										<p class="description">{{ i.description|truncatechars:30}}</p>
 										<small class="tm">Time left</small>
@@ -425,10 +332,10 @@
 												<div class="seconds"></div>
 											</div>
 										</div>
-										<div class="position-relative border-0 btn btn-primary btn-small transform-origin-right float-right submit-btn">
+										<a href="{% url 'events:add-calendar' i.uid %}" class="position-relative border-0 btn btn-primary btn-small transform-origin-right float-right submit-btn">
 											<i class="icon-calendar btn-icon input-icon"></i> Schedule
 											<input type="submit" class="h-100 w-100 position-absolute" value="Discover Now">
-										</div>
+										</a>
 									</div>
 								</div>
 							</div>
@@ -439,9 +346,6 @@
 			</div>
 		</div>
 	</section>
-
-
-
 
 
 	<!-- Gallery -->
@@ -455,248 +359,34 @@
 			<div class="row">
 				<div class="col-md-7 pt-25">
 					<div class="big-gallery text-center">
-						<!-- Gallery 1-->
-						<div class="gallery-1">
+						{% for event in gallery_events %}
+						<div class="gallery-{{ forloop.counter }}">
 							<div class="owl-carousel owl-theme">
 								<!-- Item -->
+								{% for i in event.gallery_set.all %}
 								<div class="item">
-									<a data-fancybox="gallery" href="{% static 'img/gallery-1.jpg' %}">
+									<a data-fancybox="gallery" href="{{ i.image.url	}}">
 									<div class="img img-overlay position-relative">
-										<img src="{% static 'img/gallery-1.jpg' %}" class="img-fluid" alt="img">
+										<img src="{{ i.image.url }}" class="img-fluid" alt="img">
 										<div class="caption text-white p-4">
-											<h4 class="text-white">Lorem ipsum dolor sit amet</h4>
-											<small><i class="icon-photo"></i> 20 Photos</small>
+											<h4 class="text-white">{{ event.description|truncatechars:20 }}</h4>
+											<small><i class="icon-photo"></i> {{ event.gallery_set.count }} Photos</small>
 										</div>
 									</div>
 									</a>
 								</div>
-								<div class="item">
-									<a data-fancybox="gallery" href="{% static 'img/gallery-2.jpg' %}">
-									<div class="img img-overlay position-relative">
-										<img src="{% static 'img/gallery-2.jpg' %}" class="img-fluid" alt="img">
-										<div class="caption text-white p-4">
-											<h4 class="text-white">Lorem ipsum dolor sit amet</h4>
-											<small><i class="icon-photo"></i> 20 Photos</small>
-										</div>
-									</div>
-									</a>
-								</div>
-								<div class="item">
-									<a data-fancybox="gallery" href="{% static 'img/gallery-3.jpg' %}">
-									<div class="img img-overlay position-relative">
-										<img src="{% static 'img/gallery-3.jpg' %}" class="img-fluid" alt="img">
-										<div class="caption text-white p-4">
-											<h4 class="text-white">Lorem ipsum dolor sit amet</h4>
-											<small><i class="icon-photo"></i> 20 Photos</small>
-										</div>
-									</div>
-									</a>
-								</div>
+								{% endfor %}
 							</div>
 						</div>
-						<!-- Gallery 2-->
-						<div class="gallery-2">
-							<div class="owl-carousel owl-theme">
-								<!-- Item -->
-								<div class="item">
-									<a data-fancybox="gallery" href="{% static 'img/gallery-1.jpg' %}">
-									<div class="img img-overlay position-relative">
-										<img src="{% static 'img/gallery-1.jpg' %}" class="img-fluid" alt="img">
-										<div class="caption text-white p-4">
-											<h4 class="text-white">Lorem ipsum dolor sit amet</h4>
-											<small><i class="icon-photo"></i> 20 Photos</small>
-										</div>
-									</div>
-									</a>
-								</div>
-								<div class="item">
-									<a data-fancybox="gallery" href="{% static 'img/gallery-2.jpg' %}">
-									<div class="img img-overlay position-relative">
-										<img src="{% static 'img/gallery-2.jpg' %}" class="img-fluid" alt="img">
-										<div class="caption text-white p-4">
-											<h4 class="text-white">Lorem ipsum dolor sit amet</h4>
-											<small><i class="icon-photo"></i> 20 Photos</small>
-										</div>
-									</div>
-									</a>
-								</div>
-								<div class="item">
-									<a data-fancybox="gallery" href="{% static 'img/gallery-3.jpg' %}">
-									<div class="img img-overlay position-relative">
-										<img src="{% static 'img/gallery-3.jpg' %}" class="img-fluid" alt="img">
-										<div class="caption text-white p-4">
-											<h4 class="text-white">Lorem ipsum dolor sit amet</h4>
-											<small><i class="icon-photo"></i> 20 Photos</small>
-										</div>
-									</div>
-									</a>
-								</div>
-							</div>
-						</div>
-						<!-- Gallery 3-->
-						<div class="gallery-3">
-							<div class="owl-carousel owl-theme">
-								<!-- Item -->
-								<div class="item">
-									<a data-fancybox="gallery" href="{% static 'img/gallery-1.jpg' %}">
-									<div class="img img-overlay position-relative">
-										<img src="{% static 'img/gallery-1.jpg' %}" class="img-fluid" alt="img">
-										<div class="caption text-white p-4">
-											<h4 class="text-white">Lorem ipsum dolor sit amet</h4>
-											<small><i class="icon-photo"></i> 20 Photos</small>
-										</div>
-									</div>
-									</a>
-								</div>
-								<div class="item">
-									<a data-fancybox="gallery" href="{% static 'img/gallery-2.jpg' %}">
-									<div class="img img-overlay position-relative">
-										<img src="{% static 'img/gallery-2.jpg' %}" class="img-fluid" alt="img">
-										<div class="caption text-white p-4">
-											<h4 class="text-white">Lorem ipsum dolor sit amet</h4>
-											<small><i class="icon-photo"></i> 20 Photos</small>
-										</div>
-									</div>
-									</a>
-								</div>
-								<div class="item">
-									<a data-fancybox="gallery" href="{% static 'img/gallery-3.jpg' %}">
-									<div class="img img-overlay position-relative">
-										<img src="{% static 'img/gallery-3.jpg' %}" class="img-fluid" alt="img">
-										<div class="caption text-white p-4">
-											<h4 class="text-white">Lorem ipsum dolor sit amet</h4>
-											<small><i class="icon-photo"></i> 20 Photos</small>
-										</div>
-									</div>
-									</a>
-								</div>
-							</div>
-						</div>
-						<!-- Gallery 4-->
-						<div class="gallery-4">
-							<div class="owl-carousel owl-theme">
-								<!-- Item -->
-								<div class="item">
-									<a data-fancybox="gallery" href="{% static 'img/gallery-1.jpg' %}">
-									<div class="img img-overlay position-relative">
-										<img src="{% static 'img/gallery-1.jpg' %}" class="img-fluid" alt="img">
-										<div class="caption text-white p-4">
-											<h4 class="text-white">Lorem ipsum dolor sit amet</h4>
-											<small><i class="icon-photo"></i> 20 Photos</small>
-										</div>
-									</div>
-									</a>
-								</div>
-								<div class="item">
-									<a data-fancybox="gallery" href="{% static 'img/gallery-2.jpg' %}">
-									<div class="img img-overlay position-relative">
-										<img src="{% static 'img/gallery-2.jpg' %}" class="img-fluid" alt="img">
-										<div class="caption text-white p-4">
-											<h4 class="text-white">Lorem ipsum dolor sit amet</h4>
-											<small><i class="icon-photo"></i> 20 Photos</small>
-										</div>
-									</div>
-									</a>
-								</div>
-								<div class="item">
-									<a data-fancybox="gallery" href="{% static 'img/gallery-3.jpg' %}">
-									<div class="img img-overlay position-relative">
-										<img src="{% static 'img/gallery-3.jpg' %}" class="img-fluid" alt="img">
-										<div class="caption text-white p-4">
-											<h4 class="text-white">Lorem ipsum dolor sit amet</h4>
-											<small><i class="icon-photo"></i> 20 Photos</small>
-										</div>
-									</div>
-									</a>
-								</div>
-							</div>
-						</div>
-						<!-- Gallery 5-->
-						<div class="gallery-5">
-							<div class="owl-carousel owl-theme">
-								<!-- Item -->
-								<div class="item">
-									<a data-fancybox="gallery" href="{% static 'img/gallery-1.jpg' %}">
-									<div class="img img-overlay position-relative">
-										<img src="{% static 'img/gallery-1.jpg' %}" class="img-fluid" alt="img">
-										<div class="caption text-white p-4">
-											<h4 class="text-white">Lorem ipsum dolor sit amet</h4>
-											<small><i class="icon-photo"></i> 20 Photos</small>
-										</div>
-									</div>
-									</a>
-								</div>
-								<div class="item">
-									<a data-fancybox="gallery" href="{% static 'img/gallery-2.jpg' %}">
-									<div class="img img-overlay position-relative">
-										<img src="{% static 'img/gallery-2.jpg' %}" class="img-fluid" alt="img">
-										<div class="caption text-white p-4">
-											<h4 class="text-white">Lorem ipsum dolor sit amet</h4>
-											<small><i class="icon-photo"></i> 20 Photos</small>
-										</div>
-									</div>
-									</a>
-								</div>
-								<div class="item">
-									<a data-fancybox="gallery" href="{% static 'img/gallery-3.jpg' %}">
-									<div class="img img-overlay position-relative">
-										<img src="{% static 'img/gallery-3.jpg' %}" class="img-fluid" alt="img">
-										<div class="caption text-white p-4">
-											<h4 class="text-white">Lorem ipsum dolor sit amet</h4>
-											<small><i class="icon-photo"></i> 20 Photos</small>
-										</div>
-									</div>
-									</a>
-								</div>
-							</div>
-						</div>
-						<!-- Gallery 6-->
-						<div class="gallery-6">
-							<div class="owl-carousel owl-theme">
-								<!-- Item -->
-								<div class="item">
-									<a data-fancybox="gallery" href="{% static 'img/gallery-1.jpg' %}">
-									<div class="img img-overlay position-relative">
-										<img src="{% static 'img/gallery-1.jpg' %}" class="img-fluid" alt="img">
-										<div class="caption text-white p-4">
-											<h4 class="text-white">Lorem ipsum dolor sit amet</h4>
-											<small><i class="icon-photo"></i> 20 Photos</small>
-										</div>
-									</div>
-									</a>
-								</div>
-								<div class="item">
-									<a data-fancybox="gallery" href="{% static 'img/gallery-2.jpg' %}">
-									<div class="img img-overlay position-relative">
-										<img src="{% static 'img/gallery-2.jpg' %}" class="img-fluid" alt="img">
-										<div class="caption text-white p-4">
-											<h4 class="text-white">Lorem ipsum dolor sit amet</h4>
-											<small><i class="icon-photo"></i> 20 Photos</small>
-										</div>
-									</div>
-									</a>
-								</div>
-								<div class="item">
-									<a data-fancybox="gallery" href="{% static 'img/gallery-3.jpg' %}">
-									<div class="img img-overlay position-relative">
-										<img src="{% static 'img/gallery-3.jpg' %}" class="img-fluid" alt="img">
-										<div class="caption text-white p-4">
-											<h4 class="text-white">Lorem ipsum dolor sit amet</h4>
-											<small><i class="icon-photo"></i> 20 Photos</small>
-										</div>
-									</div>
-									</a>
-								</div>
-							</div>
-						</div>
+						{% endfor %}
 					</div>
 				</div>
 				<div class="col-md-5 pt-25">
 					<div class="gallery-thumbnails row">
-						{% for i in gallery_images %}
+						{% for event in gallery_events %}
 						<div class="col-sm-6">
-							<div class="img-box pointer p-2 bg-white shadow" id="gallery-1">
-								<img src="{{ i.image.url }}" class="img-fluid" alt="">
+							<div class="img-box pointer p-2 bg-white shadow" id="gallery-{{ forloop.counter }}">
+								<img src="{{ event.get_first_image.image.url }}" class="img-fluid" alt="">
 							</div>
 						</div>
 						{% endfor %}

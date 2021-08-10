@@ -1,0 +1,58 @@
+{% extends "mainapp/base.html" %}
+{% load static %}
+
+{% block contents %}
+	<!-- Page Header -->
+	<section id="et-pagehead" class="container-fluid text-center text-white img-overlay no-hover position-relative pt-5 pb-5">
+		<div class="container position-relative pt-5 pb-5 mt-5 mb-5">
+			<h1 class="box-heading mb-5 position-relative mb-0 text-white">Ticket Orders</h1>
+		</div>
+		<div class="breadcrumb position-absolute text-center m-0 justify-content-center bg-transparent text-white">
+			<a href="#" class="text-white d-inline-block p-2">Home</a>
+			<a href="#" class="text-white d-inline-block p-2">Events</a>
+			<a href="#" class="text-white d-inline-block p-2">Event Calendar</a>
+		</div>
+	</section>
+
+	<!-- Filter -->
+	<div id="et-filter-row" class="container-fluid pt-3 pb-3 bg-primary text-white">
+		<div class="container">
+			<div class="d-flex align-items-center">
+				<div class="d-flex mb-3 mb-sm-0 align-items-center">
+					<h5 class="small m-0 pr-2 d-none d-md-block text-white">Ticket orders:</h5> <p class="small m-0 text-white"> ({{ tickets.count }})</p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Content section -->
+	<section id="et-calendar-area" class="container-fluid pt-4">
+		<div class="container">
+			<div class="row justify-content-center">
+
+				<!-- Listing Result -->
+                {% for i in tickets %}
+				<div class="col-md-5 my-5 mt-md-0">
+					<div class=" scrollbar-inner bg-white shadow overflow-auto">
+						
+						<a href="{% url 'events:event-detail' i.uid %}" class="event p-3 d-block text-decoration-none text-reset">
+							<h4 class="d-inline-block">{{ i.ticket.event.title }}</h4>
+							<span class="pl-3"><i class="icon-clock text-primary"></i> {{ i.ticket.event.start_date|date:"d M, Y"}}</span>
+							<span class="badge badge-primary pointer float-right"><i class="icon-heart"></i></span>
+							<p class="mt-2 mb-0">{{ i.ticket.event.description|truncatechars:30}}</p>
+							<p class="mt-3 mb-0">Name: {{ i.name }}</p>
+							<p class="mt-2 mb-0">Email: {{ i.email }}</p>
+							<p class="mt-2 mb-0">Phone: {{ i.phone }}</p>
+							<p class="mt-2 mb-0">Attendees: {{ i.attendees }}</p>
+							<p class="mt-2 mb-0">Amount: ${{ i.get_amount }}</p>
+						</a>
+						
+					</div>
+				</div>
+                {% endfor %}
+			</div>
+		</div>
+	</section>
+
+	{% include 'mainapp/auth_modals.html' %}
+{% endblock %}

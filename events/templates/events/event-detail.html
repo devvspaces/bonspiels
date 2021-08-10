@@ -16,7 +16,7 @@
 								<div class="mb-2"><i class="icon-contact"></i>&nbsp; {{ event.email }}</div>
 								<div class="text-primary"><i class="icon-phone"></i>&nbsp; {{ event.phone }}</div>
 							</div>
-							<div class="time-left pt-2 pt-md-0">
+							<div class="time-left pt-2 pt-md-0" end_date = "{{ event.end_date_js_format }}">
 								<div class="timer">
 									<div class="days d-none"></div>
 									<div class="hours"></div>
@@ -28,13 +28,11 @@
 
 						<div class='rating-widget mt-3'>
 							<div class="star-rating d-inline-block mr-3">
-								<i class="fa fa-star align-middle checked"></i>
-								<i class="fa fa-star align-middle checked"></i>
-								<i class="fa fa-star align-middle checked"></i>
-								<i class="fa fa-star align-middle"></i>
-								<i class="fa fa-star align-middle"></i>
+								{% for i in event.get_stars %}
+								<i class="fa fa-star {% if i %}checked{% endif %} align-middle"></i>
+								{% endfor %}
 							</div>
-							<span class="badge badge-primary pointer position-absolute">4.3</span>
+							<span class="badge badge-primary pointer position-absolute">{{ event.calc_rating }}</span>
 						</div>
 					</div>
 				</div>
@@ -341,8 +339,8 @@
 							<h4 class="box-heading mb-5 position-relative mb-0">Hosted By</h4>
 							<img src="{% static 'img/author-1.jpg' %}" class="rounded-pill shadow d-inline-block" alt="author">
 							<div class="d-inline-block position-relative align-middle pl-2">
-								<span>{{ event.user.profile.full_name }}</span>
-								<p class="description position-relative small mb-2">Operational Manager</p>
+								<a href="{% url 'events:organizer-events' event.user.profile.uid %}"><span>{{ event.user.profile.full_name }}</span></a>
+								<p class="description position-relative small mb-2">Organizer</p>
 								<a href="#" class="badge badge-primary host-contact position-absolute show-host-info border-0 font-weight-normal">Contact</a>
 								<div class="position-absolute custom-tooltip host-info shadow bg-white p-3 rounded">
 									<span class="d-flex align-items-center">
@@ -360,47 +358,56 @@
 						<div class="side-widget w-100 reservation shadow rounded p-4 mt-5">
 							<h4 class="box-heading mb-5 position-relative mb-0">Get a Seat</h4>
 							<p class="text-primary"> <i class="fas fa-exclamation-triangle"></i> Only <span class="text-secondary">{{ event.seats }}</span> seats left</p>
-							<form autocomplete="off">
+							<form autocomplete="off" method="POST">
+								{% csrf_token %}
+								<!-- {% for i in ticket_form.non_field_errors %}
+								<small class="text-danger mt-1">{{ i }}</small>
+								{% endfor %} -->
 								<div class="form-group">
-									<div class="form-group position-relative">
-										<input size="16" type="text" value="2012-06-15 14:45" readonly class="form-control bg-light form_datetime">
-										<i class="icon-clock input-icon"></i>
-									</div>
+									<label>Your Fullname*</label>
+									<input type="text" class="form-control bg-light" placeholder="Name" name="name" value="{% if ticket_form.name.value %}{{ ticket_form.name.value }}{% endif %}">
+									{% for i in ticket_form.name.errors %}
+									<small class="text-danger mt-1">{{ i }}</small>
+									{% endfor %}
 								</div>
 								<div class="form-group">
-									<input type="text" class="form-control bg-light" placeholder="Name" name="name">
+									<label>Your Email*</label>
+									<input type="text" class="form-control bg-light" placeholder="Email address" name="email" value="{% if ticket_form.email.value %}{{ ticket_form.email.value }}{% endif %}">
+									{% for i in ticket_form.email.errors %}
+									<small class="text-danger mt-1">{{ i }}</small>
+									{% endfor %}
 								</div>
 								<div class="form-group">
-									<input type="text" class="form-control bg-light" placeholder="Email address" name="email">
+									<label>Number of attendees*</label>
+									<input id='attendees' type="number" class="form-control bg-light" placeholder="Number of attendees" name="attendees" value="{% if ticket_form.attendees.value %}{{ ticket_form.attendees.value }}{% endif %}">
+									{% for i in ticket_form.attendees.errors %}
+									<small class="text-danger mt-1">{{ i }}</small>
+									{% endfor %}
 								</div>
 								<div class="form-group">
-									<input type="number" class="form-control bg-light" placeholder="Number of attendees" name="attendees">
+									<label>Your Phone*</label>
+									<input type="number" class="form-control bg-light" placeholder="Phone" name="phone" value="{% if ticket_form.phone.value %}{{ ticket_form.phone.value }}{% endif %}">
+									{% for i in ticket_form.phone.errors %}
+									<small class="text-danger mt-1">{{ i }}</small>
+									{% endfor %}
 								</div>
-								<div class="form-group">
-									<input type="number" class="form-control bg-light" placeholder="Phone" name="phone">
-								</div>
+								<input type="text" hidden name="ticket" id="ticket-plan-id">
 								<div class="form-group text-center">
 									<p>Choose ticket type</p>
 									<div class="price-plans">
-										<div class="price-plan pointer transition border rounded position-relative" data-toggle="tooltip" data-placement="bottom" title="3rd Row, No Refreshment, No Smoking">
-											<span class="position-absolute m-auto d-flex align-items-center justify-content-center text-primary font-weight-bold text-center bg-white shadow rounded-pill">$60</span>
-											<label>Silver</label>
+										{% for i in event.ticket_set.all %}
+										<div class="price-plan pointer transition border rounded position-relative" data-toggle="tooltip" data-placement="bottom" title="{{ i.get_featured }}">
+											<span class="price-text position-absolute m-auto d-flex align-items-center justify-content-center text-primary font-weight-bold text-center bg-white shadow rounded-pill" ticket="{{i.id}}" price="{{i.price}}">${{i.price}}</span>
+											<label>{{ i.title.capitalize }}</label>
 										</div>
-										<div class="price-plan pointer transition border rounded position-relative" data-toggle="tooltip" data-placement="bottom" title="2nd Row, Refreshment, No Smoking">
-											<span class="position-absolute m-auto d-flex align-items-center justify-content-center text-primary font-weight-bold text-center bg-white shadow rounded-pill">$100</span>
-											<label>Gold</label>
-										</div>
-										<div class="price-plan pointer transition border rounded position-relative" data-toggle="tooltip" data-placement="bottom" title="Front Row, Refreshment, Smoking Allowed">
-											<span class="position-absolute m-auto d-flex align-items-center justify-content-center text-primary font-weight-bold text-center bg-white shadow rounded-pill">$160</span>
-											<label>Platinum</label>
-										</div>
+										{% endfor %}
 									</div>
-									<p><strong>Total:</strong> <span class="text-primary">$100</span></p>
+									<p><strong>Total:</strong> <span class="text-primary" id="ticket-total">$0</span></p>
 								</div>
 								<div class="text-center">
 									<div class="position-relative border-0 mt-md-0 mt-3 btn btn-primary submit-btn">
 										<i class="fas fa-credit-card btn-icon input-icon"></i> Pay now
-										<input type="submit" class="h-100 w-100 position-absolute" value="Submit Review">
+										<input name='submit' type="submit" class="h-100 w-100 position-absolute" value="buy_ticket">
 									</div>
 								</div>
 							</form>

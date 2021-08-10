@@ -6,7 +6,7 @@ from . import views
 app_name='account'
 urlpatterns = [
     path('logout/', views.Logout, name='logout'),
-    # path('profile/', views.P.as_view(), name='profile'),
+    path('profile/', views.ProfileView.as_view(), name='profile'),
     path('change-password/', views.ChangePassword.as_view(), name='change_password'),
     
     path("activate/<slug:uidb64>/<slug:token>/", views.activate_email, name="activate"),

@@ -9,15 +9,34 @@ from django.forms import fields
 from django.forms import formset_factory
 from django.shortcuts import get_object_or_404
 
-from .models import Event, EventSchedule, EventSpeaker
+from .models import Event, EventSpeaker, Ticket, UserTicket
 from .utils import convert_str_date
 
 
-
+class UserTicketForm(forms.ModelForm):
+    class Meta:
+        model = UserTicket
+        fields = '__all__'
+       
+        
 class ReviewForm(forms.Form):
     stars = forms.IntegerField()
     comment = forms.CharField(max_length=800)
 
+
+class EventTicketForm(forms.ModelForm):
+    # title = forms.CharField(max_length=30, required=False)
+    # price = forms.FloatField(required=False)
+    class Meta:
+        model = Ticket
+        fields = '__all__'
+        exclude = ('event',)
+    
+    def clean(self):
+        cleaned_data = super().clean()
+        print('GOt here to form cleaning')
+        print(cleaned_data)
+        return cleaned_data
 
 class EventSpeakerForm(forms.ModelForm):
     class Meta:
@@ -28,7 +47,7 @@ class EventForm(forms.ModelForm):
     class Meta:
         model = Event
         fields = '__all__'
-        exclude = ('amenities','end_time', 'start_time')
+        exclude = ('amenities','e_time', 's_time')
 
 class EventScheduleForm(forms.Form):
     start_time = forms.CharField(max_length=30)

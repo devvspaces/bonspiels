@@ -2,6 +2,9 @@ import pytz
 from datetime import datetime
 import socket
 
+import inflect
+p = inflect.engine()
+
 def strDate(val, att):
     if val > 1:
         return f'{val} {att}s ago'
@@ -24,3 +27,6 @@ def get_valid_ip(request):
         return ip
     except socket.error:
         return
+
+def ordinal(i):
+    return p.ordinal(i)

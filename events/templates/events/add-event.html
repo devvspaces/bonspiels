@@ -275,7 +275,7 @@
 							</div>
 						</div>
 						<div class="cleardiv"></div>
-						<!-- <div class="form-group col-sm-12">
+						<div class="form-group col-sm-12">
 							<div class="d-flex align-items-center justify-content-between">
 								<label>Ticket Types</label>
 								<div class="form-group check-types showOption selecter" selection='#ticket-board'>
@@ -291,33 +291,30 @@
 								</div>
 							</div>
 							<div class="row" id="ticket-board">
-								{% for x in tickets %}
+								<!-- {{ ticket_form }} -->
+								{{ ticket_form.management_form }}
+								{% for t_form in ticket_form %}
 								<div class="col-md-4">
+									{% for key, value in t_form.errors.items %}
+										<small class="text-danger mb-1">{{ key }}: {{ value }}</small>
+									{% endfor %}
 									<div class="ticket-table p-3 rounded">
-										<input required type="text" name="ticket_title" placeholder="Enter title e.g. Silver" class="border-bottom ticket-title rounded-0 form-control w-100 mb-2">
+										<input type="text" name="ticket-{{ forloop.counter|add:-1 }}-title" placeholder="Enter title e.g. Silver" class="border-bottom ticket-title rounded-0 form-control w-100 mb-2">
 										<ul class="nostyle p-0">
-											<li>
-												<span>Price:</span>
-												<select required class="ml-auto default" name="price">
-													<option value="10">$10</option>
-													<option value="20">$20</option>
-													<option value="30">$30</option>
-												</select>
+											<li class="input-coming">
+												<span>Price ($):</span>
+												<input type="number" name="ticket-{{ forloop.counter|add:-1 }}-price" placeholder="Enter a price" class="border-bottom ticket-title form-control">
 											</li>
-											<li>
-												<span>Row:</span>
-												<select required class="ml-auto default" name="row">
-													<option value="1">1</option>
-													<option value="2">2</option>
-													<option value="3">3</option>
-												</select>
+											<li class="input-coming">
+												<span>Row no:</span>
+												<input type="number" name="ticket-{{ forloop.counter|add:-1 }}-row" placeholder="Enter the row" class="border-bottom ticket-title form-control">
 											</li>
 											{% for i in features %}
 											<li>
 												<span>{{ i.name }}:</span>
 												<div class="form-group ml-auto m-0 text-center check-types">
-													<label for="ref-{{ x }}-{{ i.id }}">
-														<input type="checkbox" id="ref-{{ x }}-{{ i.id }}" name='feature-{{ x }}-{{ i.id }}'>
+													<label for="ref-{{forloop.parentloop.counter|add:-1}}-{{ i.id }}">
+														<input value="{{ i.id }}" type="checkbox" id="ref-{{forloop.parentloop.counter|add:-1}}-{{ i.id }}" name='ticket-{{forloop.parentloop.counter|add:-1}}-featuring'>
 														<span class="cbx rounded-pill float-none d-inline-block align-middle">
 															<svg width="12px" height="11px" viewBox="0 0 12 11">
 																<polyline points="1 6.29411765 4.5 10 11 1"></polyline>
@@ -332,7 +329,7 @@
 								</div>
 								{% endfor %}
 							</div>
-						</div> -->
+						</div>
 						<div class="cleardiv"></div>
 						<div class="form-group col-sm-12">
 							<label>Available Seats*</label>

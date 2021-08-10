@@ -67,7 +67,7 @@ class Command(BaseCommand):
                 # Creating gallery for event
                 for a,b in enumerate(random.sample(gallery, 3)):
                     gal = Gallery(event=event)
-                    event.featured_image.save(f'galler-y-{b}.jpg', File(open(os.path.join(BASE_DIR, b+'.jpg'), 'rb')))
+                    gal.image.save(f'galler-y-{b}.jpg', File(open(os.path.join(BASE_DIR, b+'.jpg'), 'rb')))
 
                 # Create a schedule
                 start_time = timezone.now() + timedelta(days=random.randint(2, 9))

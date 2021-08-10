@@ -1,14 +1,14 @@
 from django.conf import settings
 from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
-from django.views.generic import FormView, UpdateView
+from django.views.generic import FormView, UpdateView, TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import logout
 from django.utils.encoding import force_text
 from django.utils.http import urlsafe_base64_decode
 
-from .models import User
-from .forms import (ChangePasswordForm, ForgetPasswordForm)
+from .models import Profile, User
+from .forms import (ChangePasswordForm, ForgetPasswordForm, ProfileForm, UserForm,)
 from .tokens import acount_confirm_token
 
 def activate_email(request, uidb64, token):
@@ -61,6 +61,34 @@ class ChangePassword(LoginRequiredMixin, UpdateView):
         return render(request, self.template_name, context)
 
 
+class ProfileView(LoginRequiredMixin, TemplateView):
+    template_name = 'account/profile.html'
+    extra_context = {
+        'title': 'Profile'
+    }
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["form"] = ProfileForm(instance=self.request.user.profile)
+        context["uform"] = UserForm(instance=self.request.user)
+        return context
+
+    def post(self, request, *args, **kwargs):
+        context = super().get_context_data(**kwargs)
+        
+        uform = UserForm(instance=self.request.user, data=request.POST)
+        form = ProfileForm(instance=self.request.user.profile, data=request.POST, files=request.FILES)
+
+        if uform.is_valid() and form.is_valid():
+            uform.save()
+            form.save()
+            messages.success(request, f'Your profile is successfully updated')
+            return redirect('account:profile')
+
+        context['form'] = form
+        context['uform'] = uform
+
+        return render(request, self.template_name, context)
 class ResetPasswordVerify(FormView):
     template_name = 'account/reset_password_page.html'
     extra_context = {

@@ -147,26 +147,17 @@ class UserRegisterForm(forms.ModelForm):
 
         return user
 
-class ProfileForm(forms.Form):
-    pk = forms.IntegerField()
-    username = forms.CharField(max_length=225)
-    
-    def save(self, commit=True):
-        # Get the user object
-        pk = self.cleaned_data.get('pk')
-        user = get_object_or_404(User, id=pk)
-        profile = user.profile
+class UserForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('email',)
 
-        username = self.cleaned_data.get('username')
 
-        # Setting the profile data
-        if username:
-            profile.username = username
-        
-        if commit:
-            profile.save()
-        
-        return user
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = '__all__'
+        exclude = ('user',)
 
 
 class UserUpdateForm(forms.ModelForm):

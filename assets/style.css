@@ -2319,3 +2319,42 @@ section#et-notfound{
 .driv a img{
   width: 100%;
 }
+
+.profile-bar img{
+  width: 300px;
+  height: 350px;
+  object-fit: cover;
+  border-radius: .3rem;
+  display: block;
+  margin-left: auto;
+}
+
+.key-det{
+  font-weight: bold;
+  margin: 0;
+}
+
+.pagination{
+  margin-top: 2rem;
+}
+.pagination .badge{
+  margin-left: 1rem;
+}
+  
+.gallery-thumbnails .img-box{
+  height: 100%;
+}
+.gallery-thumbnails .img-box img{
+  height: 100%;
+  object-fit: cover;
+}
+
+.input-coming{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.input-coming input{
+  width: 120px;
+  border-radius: 0;
+}

@@ -1,0 +1,121 @@
+{% extends "mainapp/base.html" %}
+{% load static %}
+
+{% block contents %}
+
+	<!-- Page Header -->
+	<section id="et-pagehead" class="container-fluid text-center text-white img-overlay no-hover position-relative pt-5 pb-5">
+		<div class="container position-relative pt-5 pb-5 mt-5 mb-5">
+			<h1 class="box-heading mb-5 position-relative mb-0 text-white">Profile Page</h1>
+		</div>
+		<div class="breadcrumb position-absolute text-center m-0 justify-content-center bg-transparent text-white">
+			<a href="#" class="text-white d-inline-block p-2">Home</a>
+			<a href="#" class="text-white d-inline-block p-2">Profile page</a>
+		</div>
+	</section>
+
+	<section id="et-profile" class="container-fluid">
+		<div class="container">
+			<div class="row justify-content-center profile-bar">
+				<div class="col-sm-6">
+					{% if request.user.profile.image.url %}
+					<img src="{{ request.user.profile.image.url }}" alt="Bonspiels user profile image">
+					{% else %}
+					<img src="{% static 'img/general_profile.jpg' %}" alt="Bonspiels user profile image">
+					{% endif %}
+				</div>
+				<div class="col-sm-6">
+					<p class="key-det">Name</p>
+					<p class="details">{{ request.user.profile.full_name }}</p>
+					<p class="key-det">Email</p>
+					<p class="details">{{ request.user.email }}</p>
+					<p class="key-det">Phone</p>
+					<p class="details">{{ request.user.profile.phone }}</p>
+					<p class="key-det">Events in calendar</p>
+					<p class="details">23</p>
+					<p class="key-det">Events created</p>
+					<p class="details">45</p>
+					<div class="d-flex">
+						<a href="{% url 'events:event-calendar' %}" class="btn btn-primary">Events Calendar</a>
+						<a href="{% url 'events:my-event' %}" class="btn btn-primary ml-3">My Events</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section id="et-add-event" class="container-fluid">
+		<div class="container">
+			<h2 class="mb-5">Update your profile</h2>
+			<div class="row">
+				<div class="col-lg-9">
+					<form autocomplete="off" method='POST' enctype="multipart/form-data">
+						{% csrf_token %}
+						<div class="row">
+							<div class="form-group getcontent col-sm-6">
+								<label>Email</label>
+								<input required value="{% if uform.email.value %}{{ uform.email.value }}{% endif %}" type="email" class="form-control bg-light" placeholder="Enter your Email" name="email">
+								{% for i in uform.email.errors %}
+								<small class="text-danger mt-1">{{ i }}</small>
+								{% endfor %}
+							</div>
+							<div class="form-group getcontent col-sm-6">
+								<label>Username</label>
+								<input required value="{% if form.username.value %}{{ form.username.value }}{% endif %}" type="text" class="form-control bg-light" placeholder="Enter your username" name="username">
+								{% for i in form.username.errors %}
+								<small class="text-danger mt-1">{{ i }}</small>
+								{% endfor %}
+							</div>
+							<div class="form-group getcontent col-sm-6">
+								<label>Phone</label>
+								<input required value="{% if form.phone.value %}{{ form.phone.value }}{% endif %}" type="text" class="form-control bg-light" placeholder="Enter your phone" name="phone">
+								{% for i in form.phone.errors %}
+								<small class="text-danger mt-1">{{ i }}</small>
+								{% endfor %}
+							</div>
+							<div class="form-group getcontent col-sm-6">
+								<label>Profile Image</label>
+								<input type="file" class="form-control bg-light" name="image">
+								{% for i in form.image.errors %}
+								<small class="text-danger mt-1">{{ i }}</small>
+								{% endfor %}
+							</div>
+							<div class="form-group getcontent col-sm-6">
+								<label>First name</label>
+								<input required value="{% if form.first_name.value %}{{ form.first_name.value }}{% endif %}" type="text" class="form-control bg-light" placeholder="Enter your First name" name="first_name">
+								{% for i in form.first_name.errors %}
+								<small class="text-danger mt-1">{{ i }}</small>
+								{% endfor %}
+							</div>
+							<div class="form-group getcontent col-sm-6">
+								<label>Last name</label>
+								<input required value="{% if form.last_name.value %}{{ form.last_name.value }}{% endif %}" type="text" class="form-control bg-light" placeholder="Enter your Last name" name="last_name">
+								{% for i in form.first_name.errors %}
+								<small class="text-danger mt-1">{{ i }}</small>
+								{% endfor %}
+							</div>
+							<div class="form-group getcontent col-sm-12">
+								<label>Bio</label>
+								<textarea rows="6" class="form-control resize-none bg-light" placeholder="Add a little bio of yourself" name="description">{% if form.bio.value %}{{ form.bio.value }}{% endif %}</textarea>
+								{% for i in form.bio.errors %}
+								<small class="text-danger mt-1">{{ i }}</small>
+								{% endfor %}
+							</div>
+							
+						</div>
+						<div class="cleardiv"></div>
+						
+						<div class="col-sm-12">
+							<div class="position-relative border-0 mt-md-0 mt-3 btn btn-primary submit-btn">
+								<i class="icon-tick btn-icon input-icon"></i> Update Profile
+								<input type="submit" class="h-100 w-100 position-absolute" value="Submit Review">
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</section>
+
+{% endblock contents %}

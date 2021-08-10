@@ -19,7 +19,7 @@
 		<div class="container">
 			<div class="d-flex align-items-center">
 				<div class="d-flex mb-3 mb-sm-0 align-items-center">
-					<h5 class="small m-0 pr-2 d-none d-md-block text-white">Search result(s) for:</h5> <p class="small m-0 text-white">Events nearby (27 results)</p>
+					<h5 class="small m-0 pr-2 d-none d-md-block text-white">Search result(s) for:</h5> <p class="small m-0 text-white">Events nearby ({{ events.count }} results)</p>
 				</div>
 				<div class="ml-auto d-flex align-items-center">
 					<label class="pr-3 mb-0">Sort: </label>
@@ -573,54 +573,15 @@
 				<!-- Listing Result -->
 				<div class="col-md-5 mt-4 mt-md-0">
 					<div class="event-results scrollbar-inner bg-white shadow overflow-auto">
-						<a href="#" class="event p-3 d-block text-decoration-none text-reset">
-							<h4 class="d-inline-block">Food Festival</h4>
-							<span class="pl-3"><i class="icon-clock text-primary"></i> 29 Feb, 2020</span>
+						{% for i in events %}
+						<a href="{% url 'events:event-detail' i.uid %}" class="event p-3 d-block text-decoration-none text-reset">
+							<h4 class="d-inline-block">{{ i.event.title }}</h4>
+							<span class="pl-3"><i class="icon-clock text-primary"></i> {{ i.event.start_date|date:"d M, Y"}}</span>
 							<span class="badge badge-primary pointer float-right"><i class="icon-heart"></i></span>
-							<p class="mt-2 mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor...</p>
+							<p class="mt-2 mb-0">{{ i.event.description|truncatechars:30}}</p>
 						</a>
 						<hr>
-						<a href="#" class="event p-3 d-block text-decoration-none text-reset">
-							<h4 class="d-inline-block">Food Festival</h4>
-							<span class="pl-3"><i class="icon-clock text-primary"></i> 29 Feb, 2020</span>
-							<span class="badge badge-primary pointer float-right"><i class="icon-heart"></i></span>
-							<p class="mt-2 mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor...</p>
-						</a>
-						<hr>
-						<a href="#" class="event p-3 d-block text-decoration-none text-reset">
-							<h4 class="d-inline-block">Food Festival</h4>
-							<span class="pl-3"><i class="icon-clock text-primary"></i> 29 Feb, 2020</span>
-							<span class="badge badge-primary pointer float-right"><i class="icon-heart"></i></span>
-							<p class="mt-2 mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor...</p>
-						</a>
-						<hr>
-						<a href="#" class="event p-3 d-block text-decoration-none text-reset">
-							<h4 class="d-inline-block">Food Festival</h4>
-							<span class="pl-3"><i class="icon-clock text-primary"></i> 29 Feb, 2020</span>
-							<span class="badge badge-primary pointer float-right"><i class="icon-heart"></i></span>
-							<p class="mt-2 mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor...</p>
-						</a>
-						<hr>
-						<a href="#" class="event p-3 d-block text-decoration-none text-reset">
-							<h4 class="d-inline-block">Food Festival</h4>
-							<span class="pl-3"><i class="icon-clock text-primary"></i> 29 Feb, 2020</span>
-							<span class="badge badge-primary pointer float-right"><i class="icon-heart"></i></span>
-							<p class="mt-2 mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor...</p>
-						</a>
-						<hr>
-						<a href="#" class="event p-3 d-block text-decoration-none text-reset">
-							<h4 class="d-inline-block">Food Festival</h4>
-							<span class="pl-3"><i class="icon-clock text-primary"></i> 29 Feb, 2020</span>
-							<span class="badge badge-primary pointer float-right"><i class="icon-heart"></i></span>
-							<p class="mt-2 mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor...</p>
-						</a>
-						<hr>
-						<a href="#" class="event p-3 d-block text-decoration-none text-reset">
-							<h4 class="d-inline-block">Food Festival</h4>
-							<span class="pl-3"><i class="icon-clock text-primary"></i> 29 Feb, 2020</span>
-							<span class="badge badge-primary pointer float-right"><i class="icon-heart"></i></span>
-							<p class="mt-2 mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor...</p>
-						</a>
+						{% endfor %}
 					</div>
 				</div>
 			</div>

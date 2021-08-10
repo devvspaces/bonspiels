@@ -101,6 +101,8 @@ class Profile(models.Model):
     uid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
+    phone = models.CharField(max_length=20)
+    image = models.ImageField(upload_to='accounts/profiles', null=True)
 
     def __str__(self):
         return self.username

@@ -1,6 +1,9 @@
 import random
+from typing import List
 
 from django.conf import settings
+from django.contrib.auth.decorators import login_required
+from django.db.models.query_utils import Q
 from django.forms import formset_factory
 from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
@@ -13,10 +16,11 @@ from django.utils.encoding import force_text,force_bytes
 from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_encode,urlsafe_base64_decode
 
-from account.models import User
+from account.models import Profile, User
 
-from .models import Amenity, Event, EventReview, EventSchedule, EventView, Feature, Ticket, Gallery, EventSpeaker, Category, ReviewImage
-from .forms import EventForm, EventScheduleForm, EventSpeakerForm, ReviewForm
+from .models import (Amenity, Event, EventReview, EventSchedule, EventView, Feature,
+Ticket, Gallery, EventSpeaker, Category, ReviewImage, EventCalendar, UserTicket)
+from .forms import EventForm, EventScheduleForm, EventSpeakerForm, ReviewForm, EventTicketForm, UserTicketForm
 from .utils import convert_str_date, get_valid_ip
 
 
@@ -33,7 +37,7 @@ class EventSearch(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["events"] = self.model.objects.all()
+        context["events"] = self.model.objects.all()[:10]
         context["category"] = Category.objects.all()
         return context
     
@@ -74,11 +78,28 @@ class EventSearch(ListView):
     
 
 
-class EventCalendar(TemplateView):
+class EventCalendarView(LoginRequiredMixin, ListView):
     template_name = 'events/event-calendar.html'
     extra_context = {
         'title': 'Event Calendar'
     }
+    model = EventCalendar
+    context_object_name = 'events'
+    
+    def get_queryset(self):
+        return super().get_queryset().filter(user=self.request.user)
+
+
+class UserEventTickets(LoginRequiredMixin, ListView):
+    template_name = 'events/tickets.html'
+    extra_context = {
+        'title': 'Ticket Orders'
+    }
+    model = UserTicket
+    context_object_name = 'tickets'
+    
+    def get_queryset(self):
+        return super().get_queryset().filter(user=self.request.user)
 
 class EventDetail(DetailView):
     template_name = 'events/event-detail.html'
@@ -92,12 +113,9 @@ class EventDetail(DetailView):
     def get_object(self):
         self.object = get_object_or_404(Event, uid=self.kwargs.get('uid'))
         return self.object
-    
-    # @property
-    # def object(self):
-    #     return self.get_object()
 
     def get_context_data(self, **kwargs):
+        self.get_object()
         context = super().get_context_data(**kwargs)
         context["title"] = self.object.title
 
@@ -112,6 +130,12 @@ class EventDetail(DetailView):
         context['related_events'] = Event.objects.filter(id__in=random_event_id_list)
 
         context['review_form'] = ReviewForm()
+        
+        user = self.request.user
+        user_data = {}
+        if user.is_authenticated:
+            user_data = {'name': user.profile.full_name, 'email': user.email, 'phone': user.profile.phone, 'attendees': 1}
+        context['ticket_form'] = UserTicketForm(initial=user_data)
 
         return context
     
@@ -136,25 +160,42 @@ class EventDetail(DetailView):
             messages.warning(request, f'Kindly login your account or create a new account with the Login/Sign up button below')
             return redirect('mainapp:home')
         
-        review_form = ReviewForm(request.POST, request.FILES)
+        # Identify the form submitted
+        submit = request.POST.get('submit')
 
-        if review_form.is_valid():
-            comment = review_form.cleaned_data.get('comment')
-            stars = review_form.cleaned_data.get('stars')
-            
-            review = EventReview.objects.create(user=request.user, comment=comment, event=self.get_object(), stars=stars)
+        if submit == 'buy_ticket':
+            cloned = request.POST.copy()
+            cloned['user'] = request.user.id
+            ticket_form = UserTicketForm(cloned)
 
-            queryImages = dict(request.FILES.lists())
-            images = queryImages.get('images')
-            if images:
-                for i in images:
-                    ReviewImage.objects.create(review=review, image=i)
+            if ticket_form.is_valid():
+                ticket_form.save()
+                messages.success(request, 'Ticket is created succesfully')
+                return redirect('events:my-tickets')
             
-            messages.success(request, f'Your review has been successfully submitted')
-            return redirect(reverse('events:event-detail', kwargs={'uid': str(self.get_object().uid)}))
-            
+            print(ticket_form.errors)
+            messages.warning(request, 'Please fill your ticket form correctly')
 
-        context['review_form'] = review_form
+            context['ticket_form'] = ticket_form
+
+        else:
+            review_form = ReviewForm(request.POST, request.FILES)
+            if review_form.is_valid():
+                comment = review_form.cleaned_data.get('comment')
+                stars = review_form.cleaned_data.get('stars')
+                
+                review = EventReview.objects.create(user=request.user, comment=comment, event=self.get_object(), stars=stars)
+
+                queryImages = dict(request.FILES.lists())
+                images = queryImages.get('images')
+                if images:
+                    for i in images:
+                        ReviewImage.objects.create(review=review, image=i)
+                
+                messages.success(request, f'Your review has been successfully submitted')
+                return redirect(reverse('events:event-detail', kwargs={'uid': str(self.get_object().uid)}))
+            context['review_form'] = review_form
+
         return render(request, self.template_name, context)
     
 
@@ -166,6 +207,7 @@ class CreateEvent(LoginRequiredMixin, TemplateView):
     form_class = EventForm
     event_schedule_form = formset_factory(EventScheduleForm)
     event_speaker_form = formset_factory(EventSpeakerForm)
+    event_ticket_form = formset_factory(EventTicketForm, extra=3)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -174,6 +216,7 @@ class CreateEvent(LoginRequiredMixin, TemplateView):
         context['form'] = self.form_class()
         context['event_form'] = self.event_schedule_form(error_messages={'missing_management_form': 'Sorry, something went wrong.'})
         context['speaker_form'] = self.event_speaker_form(prefix='speaker', error_messages={'missing_management_form': 'Sorry, something went wrong.'})
+        context['ticket_form'] = self.event_ticket_form(prefix='ticket', error_messages={'missing_management_form': 'Sorry, something went wrong.'})
         
         # Get the amenities and put to context
         context['amenities'] = Amenity.objects.all()
@@ -193,6 +236,8 @@ class CreateEvent(LoginRequiredMixin, TemplateView):
         cloned = request.POST.copy()
         cloned['user'] = request.user
 
+        # print(cloned)
+
         queryDict = dict(cloned.lists())
         queryImages = dict(request.FILES.lists())
 
@@ -203,21 +248,6 @@ class CreateEvent(LoginRequiredMixin, TemplateView):
                 if v[0] == 'on':
                     amenity_id = k.split('-')[1]
                     amenities.append(get_object_or_404(Amenity, id=int(amenity_id)))
-        
-        # Creating the tickets
-        # Let's know if a ticket was added first
-        useTicket = queryDict.get('use-ticket')
-        if useTicket and useTicket == 'on':
-            t_features = [[] for i in range(3)]
-            ticket_titles = queryDict.get('ticket_title')
-            rows = queryDict.get('row')
-            prices = queryDict.get('price')
-            for k,v in queryDict.items():
-                if not k.find('feature-'):
-                    if v[0] == 'on':
-                        ticket_no, feature_id = k.split('-')[1], k.split('-')[2]
-                        # Add the feature to the appropriate t_features index
-                        t_features[int(ticket_no)].append(get_object_or_404(Feature, id=int(feature_id)))
 
         # Validating the event schedules
         event_form = self.event_schedule_form(cloned, error_messages={'missing_management_form': 'Sorry, something went wrong.'})
@@ -225,8 +255,11 @@ class CreateEvent(LoginRequiredMixin, TemplateView):
         # Validating the event speakers
         speaker_form = self.event_speaker_form(cloned, request.FILES, prefix='speaker',  error_messages={'missing_management_form': 'Sorry, something went wrong.'})
 
+        # Validating the event tickets
+        ticket_form = self.event_ticket_form(cloned, prefix='ticket',  error_messages={'missing_management_form': 'Sorry, something went wrong.'})
+
         form = self.form_class(cloned, request.FILES)
-        if form.is_valid() and event_form.is_valid() and speaker_form.is_valid():
+        if form.is_valid() and event_form.is_valid() and speaker_form.is_valid() and ticket_form.is_valid():
             event = form.save()
 
             # Create event schedules
@@ -247,14 +280,16 @@ class CreateEvent(LoginRequiredMixin, TemplateView):
                     image=i.cleaned_data.get('image'),
                     designation=i.cleaned_data.get('designation')
                 )
-
-            # Add the event tickets
-            if useTicket and useTicket == 'on':
-                for title, price, row, features in zip(ticket_titles, prices, rows, t_features):
-                    ticket_1 = Ticket(title=title, price=price, row=row)
-                    ticket_1.event = event
-                    ticket_1.save()
-                    ticket_1.featuring.set(features)
+            
+            # Create tickets
+            for i in ticket_form:
+                ticket_m = Ticket.objects.create(
+                    event=event,
+                    title=i.cleaned_data.get('title'),
+                    price=i.cleaned_data.get('price'),
+                    row=i.cleaned_data.get('row'),
+                )
+                ticket_m.featuring.set(i.cleaned_data.get('featuring'))
             
             # Add amenities to event
             event.amenities.set(amenities)
@@ -264,6 +299,7 @@ class CreateEvent(LoginRequiredMixin, TemplateView):
             if gallery:
                 for i in gallery:
                     Gallery.objects.create(image=i, event=event)
+            
 
             messages.success(request, 'Event has been successfully created')
             return redirect(reverse('events:event-detail', kwargs={'uid': str(event.uid)}))
@@ -271,23 +307,57 @@ class CreateEvent(LoginRequiredMixin, TemplateView):
         context['form'] = form
         context['event_form'] = event_form
         context['speaker_form'] = speaker_form
+        context['ticket_form'] = ticket_form
         messages.warning(request, 'Please make sure you correct the errors on the form')
         
         print(form.errors)
         print(event_form.errors)
         print(speaker_form.errors)
+        print(ticket_form.errors)
         
         return render(request, self.template_name, context)
 
 
-# class CreateEvent(LoginRequiredMixin, TemplateView):
-#     template_name = 'events/add-event.html'
-#     extra_context = {
-#         'title': 'Add event'
-#     }
-#     form_class = EventForm
-#     event_schedule_form = formset_factory(EventScheduleForm)
-#     event_speaker_form = formset_factory(EventSpeakerForm)
+class MyEvent(LoginRequiredMixin, ListView):
+    template_name = 'events/my_events.html'
+    extra_context = {
+        'title': 'My Events'
+    }
+    model = Event
+    paginate_by = 10
+    context_object_name = 'events'
 
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
+    def get_queryset(self):
+        return super().get_queryset().filter(user=self.request.user)
+
+
+class OrganizerEvents(LoginRequiredMixin, ListView):
+    template_name = 'events/my_events.html'
+    extra_context = {
+        'title': ''
+    }
+    model = Event
+    paginate_by = 10
+    context_object_name = 'events'
+
+    def get_object(self):
+        return get_object_or_404(Profile, uid = self.kwargs.get('uid'))
+
+    def get_queryset(self):
+        return super().get_queryset().filter(user=self.get_object().user)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.get_object()
+        context["title"] = f'{user.full_name()} events'
+        context['custom_title'] = f'{user.full_name()} events'
+        return context
+    
+
+
+@login_required
+def add_event_to_calendar(request, uid):
+    event = get_object_or_404(Event, uid=uid)
+    relation = EventCalendar.objects.get_or_create(user=request.user, event=event)
+    messages.success(request, f'Event is added to you calendar')
+    return redirect('events:event-calendar')

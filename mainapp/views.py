@@ -1,3 +1,5 @@
+import random
+
 from django.conf import settings
 from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
@@ -66,7 +68,11 @@ class Home(TemplateView):
         # Get featured and upcoming events (4)
         context['featured_events'] = queryset.filter(featured=True)[:2]
         context['upcoming_events'] = queryset.get_upcoming()[:2]
-        context['gallery_images'] = Gallery.objects.all()[:10]
+        
+        # Get the gallery events
+        valid_events_id_list = Event.objects.values_list('id', flat=True)
+        random_event_id_list = random.sample(list(valid_events_id_list), min(len(valid_events_id_list), 6))
+        context['gallery_events'] = Event.objects.filter(id__in=random_event_id_list)
 
         # Get the events by location
         locations = FeaturedLocation.objects.all()[:4]

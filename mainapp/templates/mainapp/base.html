@@ -69,14 +69,14 @@
 			</li>
 			
 			<li class="dropdown">
-				<a href="{% url 'events:event-search' %}">Search</a>
+				<a href="{% url 'account:profile' %}">Profile</a>
 			
 			</li>
 			<li class="dropdown">
 				<a href="#">Events</a>
 				<ul class="submenu shadow">
 					<li><a href="{% url 'events:add-event' %}">Add Events</a></li>
-					<li><a href="{% url 'events:event-calendar' %}">Event Detail</a></li>
+					<li><a href="{% url 'events:my-event' %}">My Events</a></li>
 					<li><a href="{% url 'events:event-calendar' %}">Event Calendar</a></li>
 				</ul>
 			</li>
@@ -109,7 +109,7 @@
 			<li><a href="{% url 'mainapp:about' %}">About</a></li>
 	
 			<li>
-				<a href="{% url 'events:event-search' %}">Search</a>
+				<a href="{% url 'account:profile' %}">Profile</a>
 				
 			</li>
 			<li>
