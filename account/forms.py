@@ -100,7 +100,6 @@ class LoginForm(forms.Form):
 class UserRegisterForm(forms.ModelForm):
     password=forms.CharField(label="Password",
         widget=forms.PasswordInput,
-        min_length=8,
         help_text=password_validation.password_validators_help_text_html())
     confirm_password=forms.CharField(label="Confirm password",
                             widget=forms.PasswordInput,

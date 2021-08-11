@@ -41,15 +41,18 @@
 								{% for i in form.city.errors %}
 								<small class="text-danger mt-1">{{ i }}</small>
 								{% endfor %}
-								<div id="loadmaps" class="w-100 add-event-map mb-3"></div>
+								<!-- <div id="loadmaps" class="w-100 add-event-map mb-3"></div> -->
+								
 
 							</div>
 							<div class="form-group getcontent col-sm-12">
 								<label>Google Address*</label>
-								<input value="{% if form.location.value %}{{ form.location.value }}{% endif %}"  type="text" required class="form-control bg-light" placeholder="Enter full address" title="Please enter location and verify on the maps" name="location">
+								<input id="searchInput" value="{% if form.location.value %}{{ form.location.value }}{% endif %}"  type="text" required class="form-control bg-light" placeholder="Enter full address" title="Please enter location and verify on the maps" name="location">
 								{% for i in form.location.errors %}
 								<small class="text-danger mt-1">{{ i }}</small>
 								{% endfor %}
+
+								<div id="map" class="w-100 add-event-map mb-3"></div>
 							</div>
 							<div class="form-group getcontent col-sm-12">
 								<label>Website URL</label>
