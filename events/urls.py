@@ -13,4 +13,7 @@ urlpatterns = [
     path('add-calendar/<str:uid>/', views.add_event_to_calendar, name='add-calendar'),
     path('events/organizer/<str:uid>/', views.OrganizerEvents.as_view(), name='organizer-events'),
     path('events/my_tickets/', views.UserEventTickets.as_view(), name='my-tickets'),
+
+    path('events/save/<str:uid>/', views.add_event_to_saved, name='save-event'),
+    path('events/saved/', views.SavedEvents.as_view(), name='saved-events'),
 ]

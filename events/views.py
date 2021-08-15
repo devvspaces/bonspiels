@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models.query_utils import Q
 from django.forms import formset_factory
 from django.contrib import messages
+from django.http.response import Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import TemplateView, FormView, DetailView, ListView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
@@ -18,7 +19,7 @@ from django.utils.http import urlsafe_base64_encode,urlsafe_base64_decode
 
 from account.models import Profile, User
 
-from .models import (Amenity, Event, EventReview, EventSchedule, EventView, Feature,
+from .models import (Amenity, Event, EventReview, EventSave, EventSchedule, EventView, Feature,
 Ticket, Gallery, EventSpeaker, Category, ReviewImage, EventCalendar, UserTicket)
 from .forms import EventForm, EventScheduleForm, EventSpeakerForm, ReviewForm, EventTicketForm, UserTicketForm
 from .utils import convert_str_date, get_valid_ip
@@ -125,7 +126,7 @@ class EventDetail(DetailView):
         context['reviews'] = self.object.eventreview_set.all()
         context['event_views'] = self.object.eventview_set.count()
 
-        valid_events_id_list = Event.objects.values_list('id', flat=True)
+        valid_events_id_list = Event.objects.filter(published=True, user__active=True).values_list('id', flat=True)
         random_event_id_list = random.sample(list(valid_events_id_list), min(len(valid_events_id_list), 10))
         context['related_events'] = Event.objects.filter(id__in=random_event_id_list)
 
@@ -140,10 +141,14 @@ class EventDetail(DetailView):
         return context
     
     def get(self, request, *args, **kwargs):
+        obj = self.get_object()
+        # Check if the organizer is active
+        if (obj.user.is_active == False) or (obj.published == False):
+            return redirect('mainapp:home')
+        
         # Count unique ip views
         ip = get_valid_ip(request)
         if ip:
-            obj = self.get_object()
             if obj.eventview_set.filter(ip__exact=ip).exists() == False:
                 EventView.objects.create(ip=ip, event=obj)
         self.get_object()
@@ -198,7 +203,6 @@ class EventDetail(DetailView):
 
         return render(request, self.template_name, context)
     
-
 class CreateEvent(LoginRequiredMixin, TemplateView):
     template_name = 'events/add-event.html'
     extra_context = {
@@ -353,6 +357,26 @@ class OrganizerEvents(LoginRequiredMixin, ListView):
         context['custom_title'] = f'{user.full_name()} events'
         return context
     
+    def get(self, request, *args, **kwargs):
+        # Check if the organizer is active
+        if self.get_object().is_active == False:
+            return redirect('mainapp:home')
+        
+        return super().get(request, *args, **kwargs)
+
+
+class SavedEvents(LoginRequiredMixin, ListView):
+    template_name = 'events/my_events.html'
+    extra_context = {
+        'title': 'My saved events',
+        'custom_title': 'Saved events'
+    }
+    model = EventSave
+    paginate_by = 10
+    context_object_name = 'events'
+
+    def get_queryset(self):
+        return [i.event for i in super().get_queryset().filter(user=self.request.user).filter(event__user__active=True, event__published=True,)]
 
 
 @login_required
@@ -361,3 +385,14 @@ def add_event_to_calendar(request, uid):
     relation = EventCalendar.objects.get_or_create(user=request.user, event=event)
     messages.success(request, f'Event is added to you calendar')
     return redirect('events:event-calendar')
+
+
+
+@login_required
+def add_event_to_saved(request, uid):
+    event = get_object_or_404(Event, uid=uid)
+    relation = EventSave.objects.get_or_create(user=request.user, event=event)
+    messages.success(request, f'Event has been saved, go to My Saved events')
+
+    # Redirect back to previous view
+    return redirect(request.META.get('HTTP_REFERER', '/'))

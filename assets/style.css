@@ -790,6 +790,12 @@ body.home .hc-nav-trigger span::after{
   width: 100%;
   color: #fff;
 }
+.grid-categories{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
 .grid-categories a{
   width: 120px;
   height: 110px;
@@ -803,6 +809,10 @@ body.home .hc-nav-trigger span::after{
   text-align: center;
   border-radius: 4px;
   border: 1px solid rgba(255,255,255,0.3);
+  overflow: hidden;
+}
+.grid-categories a img{
+  width: 50%;
 }
 .grid-categories a i{
   vertical-align: middle;
@@ -1863,6 +1873,15 @@ section#et-notfound{
 }
 
 /*** Ticket Table ***/
+.ticket-box .actions{
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+.ticket-box .submit-btn{
+  /* margin-left: .4rem; */
+}
 .ticket-table{
   border: 1px solid #ccc;
 }

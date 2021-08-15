@@ -20,7 +20,7 @@ class Category(models.Model):
         return self.name
     
     def get_first_event(self):
-        return self.event_set.first()
+        return self.event_set.filter(user__active=True, published=True).first()
 
 class Amenity(models.Model):
     name = models.CharField(max_length=30)
@@ -47,7 +47,7 @@ class Event(models.Model):
     digg = models.URLField(blank=True)
     youtube = models.URLField(blank=True)
     google_plus = models.URLField(blank=True)
-    amenities = models.ManyToManyField(Amenity)
+    amenities = models.ManyToManyField(Amenity, blank=True)
     featured_image = models.ImageField(upload_to='events')
     seats = models.IntegerField()
     uid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
@@ -55,6 +55,7 @@ class Event(models.Model):
     s_time = models.DateTimeField(null=True)
     e_time = models.DateTimeField(null=True)
     featured = models.BooleanField(default=False)
+    published = models.BooleanField(default=False)
 
     objects = EventManager()
 
@@ -165,9 +166,13 @@ class Event(models.Model):
             return '$$$'
         
         return 'Free'
+    
+    @property
+    def organizer(self):
+        return self.user.profile.full_name
 
     class Meta:
-        ordering = ['-created']
+        ordering = ['s_time']
 
 class EventSchedule(models.Model):
     title = models.CharField(max_length=50)
@@ -232,6 +237,16 @@ class EventCalendar(models.Model):
 
     def __str__(self):
         return str(self.uid)
+    
+
+class EventSave(models.Model):
+    event = models.ForeignKey(Event, on_delete=models.CASCADE)
+    user = models.ForeignKey('account.User', on_delete=models.CASCADE)
+    created = models.DateTimeField(auto_now_add=True)
+    uid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+
+    def __str__(self):
+        return str(self.uid)
 
 
 class EventView(models.Model):
@@ -282,7 +297,7 @@ class FeaturedLocation(models.Model):
     image = models.ImageField(upload_to='events/locations')
 
     def get_events(self):
-        return Event.objects.filter(location__icontains=self.name)[:2]
+        return Event.objects.filter(location__icontains=self.name, user__active=True, published=True)[:2]
     
     def count_listings(self):
         return Event.objects.filter(location__icontains=self.name).count()
