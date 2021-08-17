@@ -35,17 +35,24 @@
 				<div class="col-md-5 my-5 mt-md-0">
 					<div class=" scrollbar-inner bg-white shadow overflow-auto">
 						
-						<a href="{% url 'events:event-detail' i.uid %}" class="event p-3 d-block text-decoration-none text-reset">
-							<h4 class="d-inline-block">{{ i.ticket.event.title }}</h4>
-							<span class="pl-3"><i class="icon-clock text-primary"></i> {{ i.ticket.event.start_date|date:"d M, Y"}}</span>
-							<span class="badge badge-primary pointer float-right"><i class="icon-heart"></i></span>
-							<p class="mt-2 mb-0">{{ i.ticket.event.description|truncatechars:30}}</p>
-							<p class="mt-3 mb-0">Name: {{ i.name }}</p>
-							<p class="mt-2 mb-0">Email: {{ i.email }}</p>
-							<p class="mt-2 mb-0">Phone: {{ i.phone }}</p>
-							<p class="mt-2 mb-0">Attendees: {{ i.attendees }}</p>
-							<p class="mt-2 mb-0">Amount: ${{ i.get_amount }}</p>
-						</a>
+						<div class="event ticket-box p-3 d-block text-decoration-none text-reset">
+							<h4 class="d-inline-block"><a href="{% url 'events:event-detail' i.uid %}" class="text-dark">{{ i.ticket.event.title.capitalize }}</a></h4>
+							<span class="pl-3"><i class="icon-clock text-primary"></i> Starts {{ i.ticket.event.start_date|date:"d M, Y"}}</span>
+							<p class="mt-4 mb-0"><strong class="mr-3">Name:</strong> {{ i.name }}</p>
+							<p class="mt-2 mb-0"><strong class="mr-3">Email:</strong> {{ i.email }}</p>
+							<p class="mt-2 mb-0"><strong class="mr-3">Attendees:</strong> {{ i.attendees }}</p>
+							<p class="mt-2 mb-0"><strong class="mr-3">Amount:</strong> ${{ i.get_amount }}</p>
+							<p class="mt-2 mb-0"><strong class="mr-3">Status:</strong> <span class="badge badge-primary">Pending</span></p>
+
+							<div class="actions">
+								<a href="" class="position-relative border-0 mt-3 btn btn-primary btn-small submit-btn pr-3">
+									<i class="icon-download btn-icon input-icon"></i> Download Reciept
+								</a>
+								<a href="" class="position-relative border-0 mt-3 btn btn-danger btn-small submit-btn pr-3">
+									<i class="fas fa-trash-alt btn-icon input-icon"></i> Remove
+								</a>
+							</div>
+						</div>
 						
 					</div>
 				</div>

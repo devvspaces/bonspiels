@@ -6,7 +6,9 @@
 	<section id="et-masthead-3" class="container-fluid">
 		<div class="container position-relative h-100 pt-5">
 			<div class="masthead-caption text-center">
-				<div class="driv">
+				<h2 class="text-white d-lg-block d-none position-relative z-index-2">Explore on-going and upcoming</h2>
+				<h1 class="mb-3 text-white"><span class="text-primary text-white">Events</span> Around you...</h1>
+				<div class="grid-categories mb-3 mb-md-0">
 					<a href="{% url 'events:event-search' %}?location=alberta&search=Submit"><img src="{% static 'img/regions/alberta.png' %}" alt=""></a>
 					<a href="{% url 'events:event-search' %}?location=british-columbia&search=Submit"><img src="{% static 'img/regions/british-columbia.png' %}" alt=""></a>
 					<a href="{% url 'events:event-search' %}?location=Manitoba&search=Submit"><img src="{% static 'img/regions/Manitoba.png' %}" alt=""></a>
@@ -14,20 +16,16 @@
 					<a href="{% url 'events:event-search' %}?location=Newfoundland and Labrador&search=Submit"><img src="{% static 'img/regions/fff.png' %}" alt=""></a>
 					<a href="{% url 'events:event-search' %}?location=Northwest Territories&search=Submit"><img src="{% static 'img/regions/ggg.png' %}" alt=""></a>
 				</div>
-				<h2 class="text-white d-lg-block d-none position-relative z-index-2">Explore on-going and upcoming</h2>
-				<h1 class="mb-3 text-white"><span class="text-primary text-white">Events</span> Around you...</h1>
-				<div class="grid-categories mb-3 mb-md-0">
-					<a href="#"><i class="icon-cheer"></i></a>
-					<a href="#"><i class="icon-children"></i></a>
-					<a href="#"><i class="icon-car"></i></a>
-					<a href="#"><i class="icon-graphic-design"></i></a>
-					<a href="#"><i class="icon-music"></i></a>
-					<a href="#"><i class="icon-testing"></i></a>
-				</div>
 				<form action="{% url 'events:event-search' %}" autocomplete="off" class="d-md-flex align-items-center justify-content-center mt-4">
 					<div class="form-group m-1 position-relative">
-						<input name='description' type="text" class="form-control" placeholder="I'm looking for...">
+						<input list="descriptions" name='description' type="text" class="form-control" placeholder="I'm looking for...">
 						<i class="icon-search-2 input-icon"></i>
+
+						<datalist id="descriptions">
+							{% for i in suggestions %}
+							<option value="{{i}}"></option>
+							{% endfor %}
+						</datalist>
 					</div>
 					<div class="form-group m-1 position-relative">
 						<input name='start_time' size="16" type="text" value="2012-06-15 14:45" readonly class="form-control form_datetime">
@@ -60,7 +58,7 @@
 			<div class="item pt-25 pb-25">
 				<div class="event-grid shadow">
 					<div class="image-wrap img-overlay">
-						<span class="badge badge-primary like pointer position-absolute"><i class="icon-heart"></i></span>
+						<a href="{% url 'events:save-event' event.uid %}" class="badge badge-primary like pointer position-absolute"><i class="icon-heart"></i></a>
 						<span class="badge badge-secondary photocount position-absolute"><i class="icon-photo"></i> {{ event.gallery_set.count }}</span>
 						<img src="{{ event.featured_image.url }}" alt="img" class="img-fluid">
 					</div>
@@ -242,13 +240,13 @@
 					<img src="{{ category.image.url }}" alt="Popular event">
 					<a href="{% url 'events:event-detail' category.get_first_event.uid %}" class="overlay transition text-decoration-none">
 						<span class="badge-green category badge-secondary">{{ category.event_set.count }} Listings</span>
-						<span class="badge badge-secondary float-right"><i class="icon-heart"></i></span>
 						<div class="hidden-data transition">
 							<h3 class="title text-white">{{ category.get_first_event.title }}</h3>
 							<p class="transition mb-2">{{ category.get_first_event.description|truncatechars:30 }}</p>
 							<p class="transition"><i class="fas fa-map-marker-alt"></i> {{ category.get_first_event.location }}</p>
 						</div>
-						<div class="timing bg-primary position-absolute w-100 transition"><i class="icon-clock"></i> Starts 12AM | Feb, 20 - Ends 06PM | Feb, 24</div>
+						<!--  Starts 12AM | Feb, 20 - Ends 06PM | Feb, 24 -->
+						<div class="timing bg-primary position-absolute w-100 transition"><i class="icon-clock"></i> Starts {{ category.get_first_event.start_date|date:"h:ma | M, d"}} - Ends {{ category.get_first_event.end_date|date:"h:ma | M, d"}}</div>
 					</a>
 				</div>
 				{% endfor %}
@@ -272,7 +270,7 @@
 								<div class="col-sm-4 pr-md-0">
 									<div class="img-wrapper position-relative">
 										<img src="{{ i.featured_image.url }}" alt="img">
-										<span class="badge badge-secondary photocount pointer position-absolute"><i class="icon-heart"></i></span>
+										<a href="{% url 'events:save-event' i.uid %}" class="badge badge-secondary photocount pointer position-absolute"><i class="icon-heart"></i></a>
 									</div>
 								</div>
 								<div class="col-sm-8 pl-md-0">
@@ -315,7 +313,7 @@
 								<div class="col-sm-4 pr-md-0">
 									<div class="img-wrapper position-relative">
 										<img src="{{ i.featured_image.url }}" alt="img">
-										<span class="badge badge-secondary photocount pointer position-absolute"><i class="icon-heart"></i></span>
+										<a href="{% url 'events:save-event' i.uid %}" class="badge badge-secondary photocount pointer position-absolute"><i class="icon-heart"></i></a>
 									</div>
 								</div>
 								<div class="col-sm-8 pl-md-0">

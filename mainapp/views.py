@@ -55,7 +55,7 @@ class Home(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        queryset = Event.objects.all()
+        queryset = Event.objects.filter(user__active=True, published=True)
         
 
         # Sending the form to the template
@@ -70,9 +70,9 @@ class Home(TemplateView):
         context['upcoming_events'] = queryset.get_upcoming()[:2]
         
         # Get the gallery events
-        valid_events_id_list = Event.objects.values_list('id', flat=True)
+        valid_events_id_list = queryset.values_list('id', flat=True)
         random_event_id_list = random.sample(list(valid_events_id_list), min(len(valid_events_id_list), 6))
-        context['gallery_events'] = Event.objects.filter(id__in=random_event_id_list)
+        context['gallery_events'] = queryset.filter(id__in=random_event_id_list)
 
         # Get the events by location
         locations = FeaturedLocation.objects.all()[:4]
@@ -81,6 +81,9 @@ class Home(TemplateView):
         # Get the categories to context
         categories = Category.objects.all()[:4]
         context['categories'] = categories
+
+        # Add the suggestions
+        context['suggestions'] = [i.name for i in categories]
 
         return context
     

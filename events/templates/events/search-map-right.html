@@ -38,19 +38,26 @@
 							<div class="col-md-6">
 								<div class="form-group">
 									<div class="input-group">
-										<input name="description" placeholder="What are you looking for?" class="form-control bg-light" type="text">
+										<input list="descriptions" name="description" placeholder="What are you looking for?" class="form-control bg-light" type="text">
 										<div class="input-group-append">
 											<a href="#" class="input-group-text text-decoration-none transition bg-primary border-0 text-white">
 												<i class="icon-search-2"></i>
 											</a>
 										</div>
+
+										<datalist id="descriptions">
+											{% for i in category %}
+											<option value="{{i.name}}"></option>
+											{% endfor %}
+										</datalist>
+
 									</div>
 								</div>
 							</div>
 							<div class="col-md-6">
 								<div class="form-group">
 									<div class="input-group">
-										<input name='location' placeholder="Location" class="form-control bg-light" type="text">
+										<input id="searchInput" name='location' placeholder="Location" class="form-control bg-light" type="text">
 										<div class="input-group-append">
 											<a href="#" class="input-group-text text-decoration-none transition bg-primary border-0 text-white">
 												<i class="icon-maps-and-location"></i>
@@ -189,7 +196,7 @@
 			<!-- Map Division -->
 			<div class="col-lg-4 p-0">
 				<div class="search-map h-100">
-					<div id="loadmaps" class="w-100 h-100"></div>
+					<div id="map" class="w-100 h-100"></div>
 				</div>
 			</div>
 		</div>
