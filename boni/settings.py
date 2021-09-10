@@ -72,8 +72,8 @@ WSGI_APPLICATION = 'boni.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'bonspy',
-        'USER': 'demo',
+        'NAME': 'bonspy2',
+        'USER': 'myprojectuser',
         'PASSWORD': 'password',
         'HOST': 'localhost',
         'PORT': '',
