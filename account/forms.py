@@ -8,6 +8,10 @@ from django.shortcuts import get_object_or_404
 from .models import User, Profile
 
 
+
+class NewsletterForm(forms.Form):
+    email=forms.EmailField(help_text="Enter your email")
+
 class ResetPasswordValidateEmailForm(forms.Form):
     email=forms.CharField(help_text="Enter your account email")
 

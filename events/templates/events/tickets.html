@@ -36,11 +36,9 @@
 					<div class=" scrollbar-inner bg-white shadow overflow-auto">
 						
 						<div class="event ticket-box p-3 d-block text-decoration-none text-reset">
-							<h4 class="d-inline-block"><a href="{% url 'events:event-detail' i.uid %}" class="text-dark">{{ i.ticket.event.title.capitalize }}</a></h4>
-							<span class="pl-3"><i class="icon-clock text-primary"></i> Starts {{ i.ticket.event.start_date|date:"d M, Y"}}</span>
-							<p class="mt-4 mb-0"><strong class="mr-3">Name:</strong> {{ i.name }}</p>
-							<p class="mt-2 mb-0"><strong class="mr-3">Email:</strong> {{ i.email }}</p>
-							<p class="mt-2 mb-0"><strong class="mr-3">Attendees:</strong> {{ i.attendees }}</p>
+							<h4 class="d-inline-block"><a href="{% url 'events:event-detail' i.uid %}" class="text-dark">{{ i.event.title.capitalize }}</a></h4>
+							<span class="pl-3"><i class="icon-clock text-primary"></i> Starts {{ i.event.start_date|date:"d M, Y"}}</span>
+							
 							<p class="mt-2 mb-0"><strong class="mr-3">Amount:</strong> ${{ i.get_amount }}</p>
 							<p class="mt-2 mb-0"><strong class="mr-3">Status:</strong> <span class="badge badge-primary">Pending</span></p>
 

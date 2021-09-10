@@ -35,16 +35,8 @@
 								<small class="text-danger mt-1">{{ i }}</small>
 								{% endfor %}
 							</div>
-							<div class="form-group getcontent col-sm-12">
-								<label>City*</label>
-								<input value="{% if form.city.value %}{{ form.city.value }}{% endif %}"  type="text" required class="form-control bg-light" placeholder="Enter city name" title="Please enter city" name="city">
-								{% for i in form.city.errors %}
-								<small class="text-danger mt-1">{{ i }}</small>
-								{% endfor %}
-								<!-- <div id="loadmaps" class="w-100 add-event-map mb-3"></div> -->
-								
-
-							</div>
+							<input type="hidden" name="lat" id="lat">
+							<input type="hidden" name="lat" id="lon">
 							<div class="form-group getcontent col-sm-12">
 								<label>Google Address*</label>
 								<input id="searchInput" value="{% if form.location.value %}{{ form.location.value }}{% endif %}"  type="text" required class="form-control bg-light" placeholder="Enter full address" title="Please enter location and verify on the maps" name="location">
@@ -54,6 +46,23 @@
 
 								<div id="map" class="w-100 add-event-map mb-3"></div>
 							</div>
+							
+							<div class="form-group col-sm-6">
+								<label>Start time*</label>
+								<div class='position-relative'>
+									<input name="start_date" required size="16" type="text" readonly class="form-control bg-light form_datetime">
+									<i class="icon-clock input-icon"></i>
+								</div>
+								
+							</div>
+							<div class="form-group col-sm-6">
+								<label>End time*</label>
+								<div class='position-relative'>
+									<input name="end_date" required size="16" type="text" readonly class="form-control bg-light form_datetime">
+									<i class="icon-clock input-icon"></i>
+								</div>
+							</div>
+							
 							<div class="form-group getcontent col-sm-12">
 								<label>Website URL</label>
 								<input value="{% if form.website.value %}{{ form.website.value }}{% endif %}"  type="text" class="form-control bg-light" placeholder="Enter comma separated URL" title="Please enter website URL" name="website">
@@ -79,6 +88,13 @@
 								<label>Email address*</label>
 								<input value="{% if form.email.value %}{{ form.email.value }}{% endif %}"  type="text" required class="form-control bg-light" placeholder="Your email address" title="Please enter your email address for the customers to reach you" name="email">
 								{% for i in form.email.errors %}
+								<small class="text-danger mt-1">{{ i }}</small>
+								{% endfor %}
+							</div>
+							<div class="form-group col-sm-12">
+								<label>Available Seats*</label>
+								<input value="{% if form.seats.value %}{{ form.seats.value }}{% endif %}" type="number" required class="form-control bg-light" placeholder="Enter number of seats available" name="seats">
+								{% for i in form.seats.errors %}
 								<small class="text-danger mt-1">{{ i }}</small>
 								{% endfor %}
 							</div>
@@ -210,41 +226,49 @@
 							<div class="cleardiv"></div>
 							<div class="form-group amenities m-0 getcontent col-sm-12" data-title="Event Information" data-content="Please enter general information
 							about this event. All fields are necessary">
-							<label>Amenities</label>
-							<ul class="p-0 m-0 nostyle">
-								{% for i in amenities  %}
-									<li class="mb-4 mt-2"><i class="fas fa-{{i.icon}} text-primary"></i>&nbsp;&nbsp; {{ i.name }}
-										<div class="float-right">
-											<div class="text-center check-types">
-												<label for="cbk{{ i.id }}">
-													<input type="checkbox" id="cbk{{ i.id }}" name='amenities-{{ i.id }}'>
-													<span class="cbx rounded-pill float-none d-inline-block align-middle">
-														<svg width="12px" height="11px" viewBox="0 0 12 11">
-															<polyline points="1 6.29411765 4.5 10 11 1"></polyline>
-														</svg>
-													</span>
-												</label>
+								<label>Amenities</label>
+								<ul class="p-0 m-0 nostyle">
+									{% for i in amenities  %}
+										<li class="mb-4 mt-2"><i class="fas fa-{{i.icon}} text-primary"></i>&nbsp;&nbsp; {{ i.name }}
+											<div class="float-right">
+												<div class="text-center check-types">
+													<label for="cbk{{ i.id }}">
+														<input type="checkbox" id="cbk{{ i.id }}" name='amenities-{{ i.id }}'>
+														<span class="cbx rounded-pill float-none d-inline-block align-middle">
+															<svg width="12px" height="11px" viewBox="0 0 12 11">
+																<polyline points="1 6.29411765 4.5 10 11 1"></polyline>
+															</svg>
+														</span>
+													</label>
+												</div>
 											</div>
-										</div>
-									</li>
-								{% endfor %}
-							</ul>
-						</div>
+										</li>
+									{% endfor %}
+								</ul>
+							</div>
 						<div class="cleardiv"></div>
 						<div class="form-group getcontent col-sm-12">
 							<label>Featured image *</label>
-							<div class="fake-file-upload rounded-pill transition-1 d-flex align-items-center justify-content-center p-3 text-center text-muted position-relative">
+							<div image_view='#featured_imagex' class="image_bringer fake-file-upload rounded-pill transition-1 d-flex align-items-center justify-content-center p-3 text-center text-muted position-relative">
 								<input type="file" required name="featured_image" class="position-absolute pointer" multiple>
 								<i class="fas fa-cloud-upload-alt h3 m-0"></i>&nbsp; Choose images
 							</div>
 							{% for i in form.featured_image.errors %}
 							<small class="text-danger mt-1">{{ i }}</small>
 							{% endfor %}
+
+							<!-- Gallery -->
+							<div class="gallery-mason content-box mt-5">
+								<i class="icon-download prev pointer"></i>
+								<i class="icon-download next pointer"></i>
+								<div id="featured_imagex" class="mason-container create-gallery">
+								</div>
+							</div>
 						</div>
 						<div class="cleardiv"></div>
 						<div class="form-group add-gallery col-sm-12">
 							<label>Image Gallery</label>
-							<div id="gallery_img_upload" class="fake-file-upload rounded-pill transition-1 d-flex align-items-center justify-content-center p-3 text-center text-muted position-relative">
+							<div image_view='#multiple_images' id="gallery_img_upload" class="image_bringer fake-file-upload rounded-pill transition-1 d-flex align-items-center justify-content-center p-3 text-center text-muted position-relative">
 								<input type="file" name="gallery" class="position-absolute pointer" multiple>
 								<i class="fas fa-cloud-upload-alt h3 m-0"></i>&nbsp; Choose images to create gallery
 							</div>
@@ -253,198 +277,85 @@
 							<div class="gallery-mason content-box mt-5">
 								<i class="icon-download prev pointer"></i>
 								<i class="icon-download next pointer"></i>
-								<div class="mason-container create-gallery">
-									<!-- <div class="image-box no-hover position-relative">
-										<img src="https://picsum.photos/id/21/800" alt="img">
-										<span class="badge badge-primary ml-auto mt-3 pointer border-0 font-weight-normal remove-image position-absolute"><i class="fas fa-trash"></i></span>
-									</div>
-									<div class="vertical image-box">
-										<img src="https://picsum.photos/id/22/800/1000" alt="img">
-										<span class="badge badge-primary ml-auto mt-3 pointer border-0 font-weight-normal remove-image position-absolute"><i class="fas fa-trash"></i></span>
-									</div>
-									<div class="horizontal image-box">
-										<img src="https://picsum.photos/id/23/1400/800" alt="img">
-										<span class="badge badge-primary ml-auto mt-3 pointer border-0 font-weight-normal remove-image position-absolute"><i class="fas fa-trash"></i></span>
-									</div>
-									<div class="big image-box">
-										<img src="https://picsum.photos/id/26/800" alt="img">
-										<span class="badge badge-primary ml-auto mt-3 pointer border-0 font-weight-normal remove-image position-absolute"><i class="fas fa-trash"></i></span>
-									</div>
-									<div class="image-box">
-										<img src="https://picsum.photos/id/25/800" alt="img">
-										<span class="badge badge-primary ml-auto mt-3 pointer border-0 font-weight-normal remove-image position-absolute"><i class="fas fa-trash"></i></span>
-									</div> -->
+								<div id="multiple_images" class="mason-container create-gallery">
 								</div>
 							</div>
 						</div>
 						<div class="cleardiv"></div>
 						<div class="form-group col-sm-12">
 							<div class="d-flex align-items-center justify-content-between">
-								<label>Ticket Types</label>
-								<div class="form-group check-types showOption selecter" selection='#ticket-board'>
-									<label for="use-ticket">
-										<span class="mr-1">Paid:</span>
-										<input type="checkbox" checked id="use-ticket" name='use-ticket'>
-										<span class="cbx rounded-pill float-none d-inline-block align-middle">
-											<svg width="12px" height="11px" viewBox="0 0 12 11">
-												<polyline points="1 6.29411765 4.5 10 11 1"></polyline>
-											</svg>
-										</span>
-									</label>
-								</div>
+								<label>Ticket (optional)</label>
 							</div>
 							<div class="row" id="ticket-board">
-								<!-- {{ ticket_form }} -->
-								{{ ticket_form.management_form }}
-								{% for t_form in ticket_form %}
-								<div class="col-md-4">
-									{% for key, value in t_form.errors.items %}
-										<small class="text-danger mb-1">{{ key }}: {{ value }}</small>
-									{% endfor %}
+								<div class="col-md-6">
 									<div class="ticket-table p-3 rounded">
-										<input type="text" name="ticket-{{ forloop.counter|add:-1 }}-title" placeholder="Enter title e.g. Silver" class="border-bottom ticket-title rounded-0 form-control w-100 mb-2">
+										<input type="text" name="ticket_name" placeholder="Enter title e.g. Silver" class="border-bottom ticket-title rounded-0 form-control w-100 mb-2">
 										<ul class="nostyle p-0">
 											<li class="input-coming">
-												<span>Price ($):</span>
-												<input type="number" name="ticket-{{ forloop.counter|add:-1 }}-price" placeholder="Enter a price" class="border-bottom ticket-title form-control">
+												<span>Price:</span>
+												<input type="number" name="ticket_price" placeholder="Enter a price" class="border-bottom ticket-title form-control">
 											</li>
 											<li class="input-coming">
-												<span>Row no:</span>
-												<input type="number" name="ticket-{{ forloop.counter|add:-1 }}-row" placeholder="Enter the row" class="border-bottom ticket-title form-control">
+												<span>Currency:</span>
+												{{ form.ticket_currency }}
 											</li>
-											{% for i in features %}
-											<li>
-												<span>{{ i.name }}:</span>
-												<div class="form-group ml-auto m-0 text-center check-types">
-													<label for="ref-{{forloop.parentloop.counter|add:-1}}-{{ i.id }}">
-														<input value="{{ i.id }}" type="checkbox" id="ref-{{forloop.parentloop.counter|add:-1}}-{{ i.id }}" name='ticket-{{forloop.parentloop.counter|add:-1}}-featuring'>
-														<span class="cbx rounded-pill float-none d-inline-block align-middle">
-															<svg width="12px" height="11px" viewBox="0 0 12 11">
-																<polyline points="1 6.29411765 4.5 10 11 1"></polyline>
-															</svg>
-														</span>
-													</label>
-												</div>
-											</li>
-											{% endfor %}
 										</ul>
 									</div>
 								</div>
-								{% endfor %}
 							</div>
 						</div>
-						<div class="cleardiv"></div>
-						<div class="form-group col-sm-12">
-							<label>Available Seats*</label>
-							<input value="{% if form.seats.value %}{{ form.seats.value }}{% endif %}" type="number" required class="form-control bg-light" placeholder="Enter number of seats available" name="seats">
-							{% for i in form.seats.errors %}
-							<small class="text-danger mt-1">{{ i }}</small>
-							{% endfor %}
-						</div>
-						<div class="cleardiv"></div>
 
-						<div class="form-group col-sm-12">
-							<label>Event Schedule *</label>
-							<div id="event-schedule">
-								{{ event_form.management_form }}
-								<div id="event-schedules">
-									{% for e_form in event_form %}
-										<div class="row">
-											<div class="schedule-head col-sm-12">
-												<h3>Day {{ forloop.counter }}</h3>
-												<span class="badge badge-primary pointer border-0 font-weight-normal remove-schedule"><i class="fas fa-trash"></i></span>
-											</div>
-											<div class="col-sm-12">
-												{% for key, value in e_form.errors.items %}
-													<small class="text-danger mb-1">{{ value }}</small>
-												{% endfor %}
-											</div>
-											<div class="form-group col-sm-6">
-												<label>Start time*</label>
-												<div class='position-relative'>
-													<input name="form-{{ forloop.counter|add:-1 }}-start_time" required size="16" type="text" value="2012-06-15 14:45" readonly class="form-control bg-light form_datetime">
-													<i class="icon-clock input-icon"></i>
-												</div>
-												
-											</div>
-											<div class="form-group col-sm-6">
-												<label>End time*</label>
-												<div class='position-relative'>
-													<input name="form-{{ forloop.counter|add:-1 }}-end_time" required size="16" type="text" value="2012-06-15 14:45" readonly class="form-control bg-light form_datetime">
-													<i class="icon-clock input-icon"></i>
-												</div>
-											</div>
-											<div class="form-group getcontent col-sm-12">
-												<label>Event title*</label>
-												<input name="form-{{ forloop.counter|add:-1 }}-title" required type="text" class="form-control bg-light" title="Please enter the title for the event happening this day. All fields are necessary" placeholder="Event title" name="event_title">
-											</div>
-											<div class="form-group getcontent col-sm-12">
-												<label>Description*</label>
-												<textarea name="form-{{ forloop.counter|add:-1 }}-description" required rows="6" class="form-control resize-none bg-light" placeholder="Add description about this day" title="Please enter full description about this event" name="event_description"></textarea>
-											</div>
-										</div>
-									{% endfor %}
-								</div>
-								<div class="box-bottom">
-									<a href="#" id="add_schedule" class="float-right text-primary">+ Add more</a>
-								</div>
-							</div>
-						</div>
 						<div class="cleardiv"></div>
-						<div class="form-group speakers-list col-sm-12">
+						<div class="form-group col-sm-12">
 							<div class="d-flex align-items-center justify-content-between">
-								<label>Event Speakers</label>
-								<div class="form-group check-types showOption selecter" selection='#speaker-board'>
-									<label for="use-speaker">
-										<input type="checkbox" checked id="use-speaker" name='use-speaker'>
-										<span class="cbx rounded-pill float-none d-inline-block align-middle">
-											<svg width="12px" height="11px" viewBox="0 0 12 11">
-												<polyline points="1 6.29411765 4.5 10 11 1"></polyline>
-											</svg>
-										</span>
-									</label>
+								<label>Information Collect Tools (optional)</label>
+							</div>
+							<div class="row" id="ticket-board">
+								<div class="col-md-6">
+									<table class="table">
+										<thead>
+											<th>Field name</th>
+											<th>Included</th>
+											<th>Required</th>
+										</thead>
+										<tbody>
+											{% for obj in inform_tools %}
+											<tr>
+												<td>{{ obj.name }}</td>
+												<td>
+													<div class="text-center check-types">
+														<label for="{{ obj.form_name }}">
+															<input class="included_tool_box" req_id='{{ obj.form_name }}{{ r_suffix  }}' type="checkbox" id="{{ obj.form_name }}" name='{{ obj.form_name }}'>
+
+															<span class="cbx rounded-pill float-none d-inline-block align-middle">
+																<svg width="12px" height="11px" viewBox="0 0 12 11">
+																	<polyline points="1 6.29411765 4.5 10 11 1"></polyline>
+																</svg>
+															</span>
+														</label>
+													</div>
+												</td>
+												<td>
+													<div class="text-center check-types">
+														<label for="{{ obj.form_name }}{{ r_suffix  }}">
+															<input disabled type="checkbox" id="{{ obj.form_name }}{{ r_suffix  }}" name='{{ obj.form_name }}{{ r_suffix  }}'>
+															<span class="cbx rounded-pill float-none d-inline-block align-middle">
+																<svg width="12px" height="11px" viewBox="0 0 12 11">
+																	<polyline points="1 6.29411765 4.5 10 11 1"></polyline>
+																</svg>
+															</span>
+														</label>
+													</div>
+												</td>
+											</tr>
+											{% endfor %}
+										</tbody>
+									</table>
 								</div>
 							</div>
-
-							{{ speaker_form.management_form }}
-							<table class="table table-bordered" id="speaker-board">
-								<thead>
-									<tr>
-										<th>Name</th>
-										<th>Designation</th>
-										<th>Picture</th>
-										<th>Action</th>
-									</tr>
-								</thead>
-								<tbody>
-									{% for s_form in speaker_form %}
-									<tr>
-										{{ s_form.errors }}
-										<td class="speaker_name" contenteditable="true"><input name="speaker-{{ forloop.counter|add:-1 }}-name" hidden></td>
-										<td>
-											<input class="form-control border" type="text" name="speaker-{{ forloop.counter|add:-1 }}-designation" placeholder="e.g Show Stopper">
-										</td>
-										<td>
-											<div class="position-relative text-center change-speaker-avatar">
-												<input type="file" name="speaker-{{ forloop.counter|add:-1 }}-image">
-												<img src="{% static 'img/author-1.jpg' %}" class="img-fluid" alt="img">
-											</div>
-										</td>
-										<td>
-											<span class="badge badge-primary remove-speaker ml-3 mt-3 pointer border-0 font-weight-normal position-absolute"><i class="fas fa-trash"></i></span>
-										</td>
-									</tr>
-									{% endfor %}
-								</tbody>
-								<tfoot>
-									<tr>
-										<td colspan="4">
-											<a href="#" id="add_speaker" class="float-right text-primary">+ Add more</a>
-										</td>
-									</tr>
-								</tfoot>
-							</table>
 						</div>
+
+
 						<div class="cleardiv"></div>
 						<div class="form-group col-sm-12 check-types">
 							<label for="agreement">

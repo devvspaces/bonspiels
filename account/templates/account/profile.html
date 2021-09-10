@@ -35,10 +35,11 @@
 					<p class="details">23</p>
 					<p class="key-det">Events created</p>
 					<p class="details">45</p>
-					<div class="d-flex">
+					<div class="profile-menu-btns">
+						<a href="{% url 'events:saved-events' %}" class="btn btn-primary">Saved Events</a>
 						<a href="{% url 'events:event-calendar' %}" class="btn btn-primary">Events Calendar</a>
-						<a href="{% url 'events:my-event' %}" class="btn btn-primary ml-3">My Events</a>
-						<a href="{% url 'events:my-tickets' %}" class="btn btn-primary ml-3">Tickets</a>
+						<a href="{% url 'events:my-event' %}" class="btn btn-primary">My Events</a>
+						<a href="{% url 'events:my-tickets' %}" class="btn btn-primary">Tickets</a>
 					</div>
 				</div>
 			</div>

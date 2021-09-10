@@ -7,8 +7,9 @@ from django.contrib.auth import logout
 from django.utils.encoding import force_text
 from django.utils.http import urlsafe_base64_decode
 
-from .models import Profile, User
-from .forms import (ChangePasswordForm, ForgetPasswordForm, ProfileForm, UserForm,)
+from .models import Profile, User, NewsletterSubscriber
+from .forms import (ChangePasswordForm, ForgetPasswordForm,
+    ProfileForm, UserForm, NewsletterForm)
 from .tokens import acount_confirm_token
 
 def activate_email(request, uidb64, token):
@@ -138,6 +139,19 @@ class ResetPasswordVerify(FormView):
         context['form'] = form
 
         return render(request, self.template_name, context)
+
+
+def newletter_submit(request):
+    # Validate form and save email
+    form = NewsletterForm(data=request.POST)
+    if form.is_valid():
+        email = form.cleaned_data.get('email')
+        obj = NewsletterSubscriber.objects.get_or_create(email=email)
+        messages.success(request, 'You have successfully subscribed to our newsletter')
+    else:
+        messages.warning(request, 'Invalid email provided, please correct your email to receive our newletters')
+    return redirect('mainapp:home')
+
 
 def Logout(request):
     logout(request)

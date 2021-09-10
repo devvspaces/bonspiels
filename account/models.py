@@ -114,6 +114,14 @@ class Profile(models.Model):
     #     return reverse('profile', args=[self.first_name])
 
 
+class NewsletterSubscriber(models.Model):
+    email = models.EmailField()
+    created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.email
+
+
 @receiver(post_save, sender=User)
 def create_profile(sender, instance, created, **kwargs):
     profile = Profile.objects.get_or_create(user=instance)

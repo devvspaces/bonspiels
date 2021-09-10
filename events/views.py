@@ -1,4 +1,5 @@
 import random
+import json
 from typing import List
 
 from django.conf import settings
@@ -19,9 +20,10 @@ from django.utils.http import urlsafe_base64_encode,urlsafe_base64_decode
 
 from account.models import Profile, User
 
-from .models import (Amenity, Event, EventReview, EventSave, EventSchedule, EventView, Feature,
-Ticket, Gallery, EventSpeaker, Category, ReviewImage, EventCalendar, UserTicket)
-from .forms import EventForm, EventScheduleForm, EventSpeakerForm, ReviewForm, EventTicketForm, UserTicketForm
+from .models import (Amenity, Event, EventReview, EventSave,
+    EventView, Gallery, Category, ReviewImage, EventCalendar,
+    UserTicket, EventReport, EventLike)
+from .forms import EventForm, ReviewForm, UserTicketForm
 from .utils import convert_str_date, get_valid_ip
 
 
@@ -49,29 +51,43 @@ class EventSearch(ListView):
         search = request.GET.get('search')
         if search:
             queryset = self.get_queryset()
-            description = request.GET.get('description')
-            if description:
-                queryset = queryset.filter(description__icontains=description)
-            
-            location = request.GET.get('location')
-            if location:
-                queryset = queryset.filter(location__icontains=location)
+            search_input = request.GET.get('search-input')
+            if search_input:
+                # Search decription, location and title
+                queryset = queryset.filter(
+                    Q(title__icontains=search_input) | Q(description__icontains=search_input) | Q(location__icontains=search_input)
+                )
+                context['searchInput'] = search_input
             
             category = request.GET.get('category')
             if category:
                 queryset = queryset.filter(category__id=category)
-            
+                context['searchCategory'] = int(category)
+
             start_time = request.GET.get('start_time')
             if start_time:
+                context['start_time'] = start_time
                 # Convert to datetime
                 start_time = convert_str_date(start_time)
-                queryset = queryset.filter(s_time__gte = start_time)
+                queryset = queryset.filter(start_date__gte = start_time)
             
             end_time = request.GET.get('end_time')
             if end_time:
+                context['end_time'] = end_time
                 # Convert to datetime
                 end_time = convert_str_date(end_time)
-                queryset = queryset.filter(e_time__lte = end_time)
+                queryset = queryset.filter(end_date__lte = end_time)
+
+            # Sort the queryset
+            sort = request.GET.get('sort')
+            if sort:
+                if sort == 'most_viewed':
+                    queryset = queryset.order_by('-views')
+                elif sort == 'most_recent':
+                    queryset = queryset.order_by('-created')
+                elif sort == 'most_liked':
+                    queryset = queryset.order_by('-likes')
+
             
             context[self.context_object_name] = queryset
 
@@ -102,6 +118,7 @@ class UserEventTickets(LoginRequiredMixin, ListView):
     def get_queryset(self):
         return super().get_queryset().filter(user=self.request.user)
 
+
 class EventDetail(DetailView):
     template_name = 'events/event-detail.html'
     extra_context = {
@@ -120,8 +137,6 @@ class EventDetail(DetailView):
         context = super().get_context_data(**kwargs)
         context["title"] = self.object.title
 
-        context['schedules'] = self.object.eventschedule_set.all()
-        context['eventspeakers'] = self.object.eventspeaker_set.all()
         context['gallery'] = self.object.gallery_set.all()
         context['reviews'] = self.object.eventreview_set.all()
         context['event_views'] = self.object.eventview_set.count()
@@ -132,11 +147,11 @@ class EventDetail(DetailView):
 
         context['review_form'] = ReviewForm()
         
-        user = self.request.user
-        user_data = {}
-        if user.is_authenticated:
-            user_data = {'name': user.profile.full_name, 'email': user.email, 'phone': user.profile.phone, 'attendees': 1}
-        context['ticket_form'] = UserTicketForm(initial=user_data)
+        # user = self.request.user
+        # user_data = {}
+        # if user.is_authenticated:
+        #     user_data = {'name': user.profile.full_name, 'email': user.email, 'phone': user.profile.phone, 'attendees': 1}
+        # context['ticket_form'] = UserTicketForm(initial=user_data)
 
         return context
     
@@ -151,6 +166,8 @@ class EventDetail(DetailView):
         if ip:
             if obj.eventview_set.filter(ip__exact=ip).exists() == False:
                 EventView.objects.create(ip=ip, event=obj)
+                obj.views = obj.eventview_set.count()
+                obj.save()
         self.get_object()
         context = self.get_context_data()
 
@@ -169,19 +186,43 @@ class EventDetail(DetailView):
         submit = request.POST.get('submit')
 
         if submit == 'buy_ticket':
-            cloned = request.POST.copy()
-            cloned['user'] = request.user.id
-            ticket_form = UserTicketForm(cloned)
+            ticket_errors = []
+            ticket_infomation = []
+            # Validate submited form
+            event = self.get_object()
 
-            if ticket_form.is_valid():
-                ticket_form.save()
+            info_tools = event.get_tools_dict()
+
+            for fobj in info_tools:
+                # Get the field
+                label = fobj['name']
+                name = fobj['form_name']
+                info = request.POST.get(name)
+
+                if fobj['included_required'] == '11':
+                    if not info:
+                        ticket_errors.append(f'{label} is required')
+                        continue
+
+                # Add information to ticket information
+                ticket_infomation.append(
+                    {
+                        label:info
+                    }
+                )
+
+            if len(ticket_errors) == 0:
+                # Create ticket
+                ticket = UserTicket(event=event, user=request.user, information=json.dumps(ticket_infomation))
+                ticket.save()
+                
                 messages.success(request, 'Ticket is created succesfully')
                 return redirect('events:my-tickets')
-            
-            print(ticket_form.errors)
+
+
             messages.warning(request, 'Please fill your ticket form correctly')
 
-            context['ticket_form'] = ticket_form
+            context['ticket_errors'] = ticket_errors
 
         else:
             review_form = ReviewForm(request.POST, request.FILES)
@@ -203,33 +244,27 @@ class EventDetail(DetailView):
 
         return render(request, self.template_name, context)
     
+
 class CreateEvent(LoginRequiredMixin, TemplateView):
     template_name = 'events/add-event.html'
     extra_context = {
         'title': 'Add event'
     }
     form_class = EventForm
-    event_schedule_form = formset_factory(EventScheduleForm)
-    event_speaker_form = formset_factory(EventSpeakerForm)
-    event_ticket_form = formset_factory(EventTicketForm, extra=3)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
         # Add the forms to the context
         context['form'] = self.form_class()
-        context['event_form'] = self.event_schedule_form(error_messages={'missing_management_form': 'Sorry, something went wrong.'})
-        context['speaker_form'] = self.event_speaker_form(prefix='speaker', error_messages={'missing_management_form': 'Sorry, something went wrong.'})
-        context['ticket_form'] = self.event_ticket_form(prefix='ticket', error_messages={'missing_management_form': 'Sorry, something went wrong.'})
-        
+
         # Get the amenities and put to context
         context['amenities'] = Amenity.objects.all()
 
-        # Get the features and put to context
-        context['features'] = Feature.objects.all()
+        inform_tools = settings.INFORMATION_TOOLS
+        context['inform_tools'] = inform_tools
 
-        # Tickets types
-        context['tickets'] = range(3)
+        context['r_suffix'] = settings.INFORMATION_TOOLS_REQUIRED_SUFFIX
 
         return context
     
@@ -253,48 +288,10 @@ class CreateEvent(LoginRequiredMixin, TemplateView):
                     amenity_id = k.split('-')[1]
                     amenities.append(get_object_or_404(Amenity, id=int(amenity_id)))
 
-        # Validating the event schedules
-        event_form = self.event_schedule_form(cloned, error_messages={'missing_management_form': 'Sorry, something went wrong.'})
-
-        # Validating the event speakers
-        speaker_form = self.event_speaker_form(cloned, request.FILES, prefix='speaker',  error_messages={'missing_management_form': 'Sorry, something went wrong.'})
-
-        # Validating the event tickets
-        ticket_form = self.event_ticket_form(cloned, prefix='ticket',  error_messages={'missing_management_form': 'Sorry, something went wrong.'})
-
         form = self.form_class(cloned, request.FILES)
-        if form.is_valid() and event_form.is_valid() and speaker_form.is_valid() and ticket_form.is_valid():
+        if form.is_valid():
             event = form.save()
 
-            # Create event schedules
-            for i in event_form:
-                EventSchedule.objects.create(
-                    event=event,
-                    start_date=i.cleaned_data.get('start_time'),
-                    end_date=i.cleaned_data.get('end_time'),
-                    title=i.cleaned_data.get('title'),
-                    description=i.cleaned_data.get('description')
-                )
-            
-            # Create speakers
-            for i in speaker_form:
-                EventSpeaker.objects.create(
-                    event=event,
-                    name=i.cleaned_data.get('name'),
-                    image=i.cleaned_data.get('image'),
-                    designation=i.cleaned_data.get('designation')
-                )
-            
-            # Create tickets
-            for i in ticket_form:
-                ticket_m = Ticket.objects.create(
-                    event=event,
-                    title=i.cleaned_data.get('title'),
-                    price=i.cleaned_data.get('price'),
-                    row=i.cleaned_data.get('row'),
-                )
-                ticket_m.featuring.set(i.cleaned_data.get('featuring'))
-            
             # Add amenities to event
             event.amenities.set(amenities)
 
@@ -303,21 +300,36 @@ class CreateEvent(LoginRequiredMixin, TemplateView):
             if gallery:
                 for i in gallery:
                     Gallery.objects.create(image=i, event=event)
-            
 
+            infofields = []
+
+            # Get the appropriate information tools
+            for fobj in context['inform_tools']:
+                if request.POST.get(fobj['form_name']) == 'on':
+                    val = '10'
+                    if request.POST.get(fobj['form_name']+settings.INFORMATION_TOOLS_REQUIRED_SUFFIX)=='on':
+                        val = '11'
+                    # Copy the demo obj and add a key
+                    demo = fobj.copy()
+                    demo['included_required'] = val
+                    infofields.append(demo)
+
+            # compile infofields dict in to json string
+            json_str = json.dumps(infofields)
+
+            event.inform_tools_conf = json_str
+
+            event.published = True
+
+            event.save()
+            
             messages.success(request, 'Event has been successfully created')
             return redirect(reverse('events:event-detail', kwargs={'uid': str(event.uid)}))
         
         context['form'] = form
-        context['event_form'] = event_form
-        context['speaker_form'] = speaker_form
-        context['ticket_form'] = ticket_form
         messages.warning(request, 'Please make sure you correct the errors on the form')
         
         print(form.errors)
-        print(event_form.errors)
-        print(speaker_form.errors)
-        print(ticket_form.errors)
         
         return render(request, self.template_name, context)
 
@@ -396,3 +408,21 @@ def add_event_to_saved(request, uid):
 
     # Redirect back to previous view
     return redirect(request.META.get('HTTP_REFERER', '/'))
+
+
+@login_required
+def report_event_now(request, uid):
+    event = get_object_or_404(Event, uid=uid)
+    report = EventReport.objects.get_or_create(reporter=request.user, event=event)
+    messages.success(request, f'Event has been reported')
+    return redirect(reverse('events:event-detail', kwargs={'uid': str(event.uid)}))
+
+
+@login_required
+def like_event_now(request, uid):
+    event = get_object_or_404(Event, uid=uid)
+    like = EventLike.objects.get_or_create(user=request.user, event=event)
+    event.likes = event.eventlike_set.count()
+    event.save()
+    return redirect(reverse('events:event-detail', kwargs={'uid': str(event.uid)}))
+

@@ -83,7 +83,7 @@ class Home(TemplateView):
         context['categories'] = categories
 
         # Add the suggestions
-        context['suggestions'] = [i.name for i in categories]
+        # context['suggestions'] = [i.name for i in categories]
 
         return context
     

@@ -1,12 +1,21 @@
 import uuid
+import json
 
 from django.db import models
 from django.utils import timezone
+from django.utils.safestring import mark_safe
 
 from account.models import User
 
 from .managers import EventManager
 from .utils import strDate, ordinal
+
+CURRENCY = (
+    ('NGN', 'Nigerian naira',),
+    ('USD', 'United States Dollar',),
+    ('GBR', 'British Pounds',),
+    ('EUR', 'Euro',),
+)
 
 
 class Category(models.Model):
@@ -20,7 +29,10 @@ class Category(models.Model):
         return self.name
     
     def get_first_event(self):
-        return self.event_set.filter(user__active=True, published=True).first()
+        sets = self.event_set.filter(user__active=True, published=True)
+        if sets.exists():
+            return sets.first()
+        return None
 
 class Amenity(models.Model):
     name = models.CharField(max_length=30)
@@ -29,16 +41,22 @@ class Amenity(models.Model):
     def __str__(self):
         return self.name
 
+
 class Event(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    title = models.CharField(max_length=50)
-    category = models.ManyToManyField(Category)
-    city = models.CharField(max_length=200)
-    location = models.CharField(max_length=200)
-    website = models.URLField(blank=True)
-    description = models.TextField()
     phone = models.CharField(max_length=25)
     email = models.EmailField()
+
+    title = models.CharField(max_length=50)
+    category = models.ForeignKey(Category, on_delete=models.DO_NOTHING)
+    
+    location = models.CharField(max_length=200)
+    lat = models.FloatField(default=10, blank=True)
+    lon = models.FloatField(default=10, blank=True)
+    
+    website = models.URLField(blank=True)
+    description = models.TextField()
+
     facebook = models.URLField(blank=True)
     twitter = models.URLField(blank=True)
     instagram = models.URLField(blank=True)
@@ -47,17 +65,73 @@ class Event(models.Model):
     digg = models.URLField(blank=True)
     youtube = models.URLField(blank=True)
     google_plus = models.URLField(blank=True)
+
     amenities = models.ManyToManyField(Amenity, blank=True)
     featured_image = models.ImageField(upload_to='events')
     seats = models.IntegerField()
     uid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     created = models.DateTimeField(auto_now_add=True)
-    s_time = models.DateTimeField(null=True)
-    e_time = models.DateTimeField(null=True)
+    start_date = models.DateTimeField()
+    end_date = models.DateTimeField()
     featured = models.BooleanField(default=False)
-    published = models.BooleanField(default=False)
+    published = models.BooleanField(default=True)
+
+    ticket_name = models.CharField(max_length=30, blank=True)
+    ticket_price = models.FloatField(default=0, blank=True, null=True)
+    ticket_currency = models.CharField(choices=CURRENCY, max_length=200, blank=True)
+
+    # Information collect tools
+    inform_tools_conf = models.CharField(max_length=700, blank=True, editable=False)
+
+    likes = models.IntegerField(default=0, blank=True)
+    views = models.IntegerField(default=0, blank=True)
 
     objects = EventManager()
+
+    def get_website(self):
+        return self.website if self.website else 'No website provided'
+
+    def get_website_link(self):
+        return self.website if self.website else '#'
+
+    def get_tools_dict(self):
+        try:
+            return json.loads(self.inform_tools_conf)
+        except Exception as e:
+            pass
+
+        return []
+
+    def populate_information_fields(self):
+        html = ''
+        if self.inform_tools_conf:
+            # convert json to dict
+            try:
+                json_dict = self.get_tools_dict()
+
+                # loop to create form htmls with format strings
+                for field in json_dict:
+                    required=''
+                    required2=''
+                    if field['included_required'] == '11':
+                        required='*'
+                        required2='required'
+
+                    name = field['name']
+                    form_name = field['form_name']
+                    _type = field['type']
+
+                    html += f'''
+                        <div class="form-group">
+                            <label>{name}{required}</label>
+                            <input {required2} type="{_type}" class="form-control bg-light" placeholder="Enter your {name}" name="{form_name}">
+                        </div>
+                    '''
+            except Exception as e:
+                print(e)
+        
+        return mark_safe(html)
+        
 
     def __str__(self):
         return self.title
@@ -107,44 +181,16 @@ class Event(models.Model):
             li.append(ne)
         return li
 
-    def start_date(self):
-        queryset = self.eventschedule_set.all()
-        start_date = queryset[0].start_date
-
-        for i in queryset:
-            if i.start_date < start_date:
-                start_date = i.start_date
-        
-        if self.s_time != start_date:
-            self.s_time = start_date
-            self.save()
-        
-        return start_date
-    
-    def end_date(self):
-        queryset = self.eventschedule_set.all()
-        end_date = queryset.last().end_date
-
-        for i in queryset:
-            if i.end_date > end_date:
-                end_date = i.end_date
-        
-        if self.e_time != end_date:
-            self.e_time = end_date
-            self.save()
-        
-        return end_date
-    
     # This function is for the javascript time countdown function 
     # Datetime is returned in this format 29 July 2020 9:56:00 GMT+01:00
     def end_date_js_format(self):
-        end_date = self.end_date()
+        end_date = self.end_date
         return end_date.strftime("%d %b %Y %H:%M:%S %Z%z")
 
     def status(self):
         now = timezone.now()
-        start_date = self.start_date()
-        end_date = self.end_date()
+        start_date = self.start_date
+        end_date = self.end_date
 
         if (now >= start_date) and (end_date > now):
             return 'Running'
@@ -154,61 +200,19 @@ class Event(models.Model):
             return 'Completed'
     
     def price_text(self):
-        queryset = self.ticket_set.all()
-        if queryset.count() > 0:
-            return 'Prices are high'
-        
-        return 'No fee'
+        return 'Prices are high' if self.ticket_price and (self.ticket_price > 0) else 'No fee'
     
     def price_val(self):
-        queryset = self.ticket_set.all()
-        if queryset:
-            return '$$$'
-        
-        return 'Free'
+        return '$$$' if self.ticket_price else 'Free'
     
     @property
     def organizer(self):
         return self.user.profile.full_name
 
     class Meta:
-        ordering = ['s_time']
-
-class EventSchedule(models.Model):
-    title = models.CharField(max_length=50)
-    description = models.TextField()
-    start_date = models.DateTimeField()
-    end_date = models.DateTimeField()
-    event = models.ForeignKey(Event, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.title
+        ordering = ['start_date']
 
 
-
-class Feature(models.Model):
-    name = models.CharField(max_length=30)
-
-    def __str__(self):
-        return self.name 
-
-class Ticket(models.Model):
-    title = models.CharField(max_length=30)
-    price = models.FloatField()
-    row = models.IntegerField()
-    featuring = models.ManyToManyField(Feature)
-    event = models.ForeignKey(Event, on_delete=models.CASCADE)
-    uid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-
-
-    def get_featured(self):
-        row = ordinal(self.row) + ' row'
-        features = [i.name for i in self.featuring.all()]
-        features.insert(0, row)
-        return ', '.join(features)
-
-    def __str__(self):
-        return self.title
 
 class Gallery(models.Model):
     uid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
@@ -217,16 +221,6 @@ class Gallery(models.Model):
 
     def __str__(self):
         return str(self.uid)
-
-
-class EventSpeaker(models.Model):
-    name = models.CharField(max_length=20)
-    image = models.ImageField(upload_to='events/speakers')
-    designation = models.CharField(max_length=30)
-    event = models.ForeignKey(Event, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.name
 
 
 class EventCalendar(models.Model):
@@ -307,17 +301,23 @@ class FeaturedLocation(models.Model):
 
 
 class UserTicket(models.Model):
-    name = models.CharField(max_length=50)
-    email = models.EmailField()
-    phone = models.CharField(max_length=20)
-    attendees = models.IntegerField(default=1)
-    ticket = models.ForeignKey(Ticket, on_delete=models.DO_NOTHING)
+    information = models.CharField(max_length=700, blank=True)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE)
     user = models.ForeignKey('account.User', on_delete=models.CASCADE)
     uid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     created = models.DateTimeField(auto_now_add=True)
 
     def get_amount(self):
-        return self.attendees * self.ticket.price
+        return self.event.ticket_price
 
     def __str__(self):
         return str(self.uid)
+
+
+class EventReport(models.Model):
+    reporter = models.ForeignKey('account.User', on_delete=models.CASCADE)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE)
+    created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.event.title
