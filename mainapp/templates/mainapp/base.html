@@ -68,11 +68,15 @@
 				<a href="{% url 'mainapp:home' %}">Home</a>
 			</li>
 			
-			<li class="dropdown">
+			<!-- <li class="dropdown">
 				<a href="{% url 'account:profile' %}">Profile</a>
-			
-			</li>
+			</li> -->
+
 			<li class="dropdown">
+				<a href="{% url 'events:event-search' %}">Search</a>
+			</li>
+
+			<!-- <li class="dropdown">
 				<a href="#">Events</a>
 				<ul class="submenu shadow">
 					<li><a href="{% url 'events:add-event' %}">Add Events</a></li>
@@ -80,7 +84,7 @@
 					<li><a href="{% url 'events:saved-events' %}">My Saved Events</a></li>
 					<li><a href="{% url 'events:event-calendar' %}">Event Calendar</a></li>
 				</ul>
-			</li>
+			</li> -->
 
 
 			<li><a href="{% url 'mainapp:about' %}">About</a></li>
@@ -90,7 +94,7 @@
 
 		</ul>
 		<div class="nav-actions ml-auto">
-			<a href="{% url 'events:event-search' %}"><i class="icon-search-2"></i> Search</a>
+			<a href="{% url 'account:profile' %}"><i class="icon-user"></i> {{ request.user.email }}</a>
 			{% if request.user.is_authenticated %}
 				<a href="{% url 'account:logout' %}" style="color: red;"><i class="icon-login"></i> Logout</a>
 			{% else %}
@@ -133,14 +137,16 @@
     {% endblock contents %}
         
 
+    {% if not request.user.is_authenticated %}
 	<!-- Subscribe -->
 	<section id="et-subscribe-form">
 		<div class="box-wrap img-overlay no-hover position-relative rounded shadow p-5 text-white">
 			<div class="container position-relative">
 				<h4 class="text-white">Get The Best Of All Hands Delivered To Your Inbox</h4>
 				<p>Subscribe to our newsletter and stay updated.</p>
-				<form class="d-md-flex">
-					<input type="text" class="form-control text-white mr-3 bg-transparent border-bottom d-inline-block subinput rounded-0" placeholder="Enter your email">
+				<form method="POST" action="{% url 'account:newsletter-submit' %}" class="d-md-flex">
+					{% csrf_token %}
+					<input name="email" type="email" class="form-control text-white mr-3 bg-transparent border-bottom d-inline-block subinput rounded-0" placeholder="Enter your email">
 					<div class="position-relative border-0 mt-md-0 mt-3 btn bg-white submit-btn">
 						<i class="icon-login btn-icon input-icon"></i> Subscribe
 						<input type="submit" class="h-100 w-100 position-absolute" value="Discover Now">
@@ -149,6 +155,7 @@
 			</div>
 		</div>
 	</section>
+	{% endif %}
 
 	<footer id="et-site-footer" class="container-fluid position-relative bg-footer text-white pt-5 pb-2">
 		<div class="container">
@@ -167,7 +174,7 @@
 				</div>
 				<!--Contact-->
 				<div class="col-md-3 contact widget">
-					<h5>Contact Us</h5>
+					<h5 class="text-white">Contact Us</h5>
 					<ul class="nostyle text-white p-0">
 						<li class="mt-4 d-block"><i class="fas fa-envelope"></i>&nbsp; info@bonspiels.com</li>
 						<li class="mt-4 d-block"><i class="fas fa-phone-alt"></i>&nbsp; (888)000-000 - 000</li>
@@ -176,7 +183,7 @@
 				</div>
 				<!--Navigation-->
 				<div class="col-md-3 navigation widget">
-					<h5>Navigation</h5>
+					<h5 class="text-white">Navigation</h5>
 					<ul class="nostyle text-white p-0">
 						<li class="mt-4 d-block"><a href="{% url 'mainapp:home' %}">Home</a></li>
 						<li class="mt-4 d-block"><a href="{% url 'mainapp:about' %}">About us</a></li>
@@ -187,7 +194,7 @@
 
 				<!--Navigation-->
 				<div class="col-md-3 navigation widget">
-					<h5>Navigation</h5>
+					<h5 class="text-white">Navigation</h5>
 					<ul class="nostyle text-white p-0">
 						<li class="mt-4 d-block"><a href="#">Terms & conditions</a></li>
 						<li class="mt-4 d-block"><a href="#">Privacy policy</a></li>
@@ -232,11 +239,13 @@
 	<script src="{% static 'js/jquery.scrollbar.min.js' %}"></script>
 
 	<script src="{% static 'js/jquery.fancybox.min.js' %}"></script>
-
 	<script src="{% static 'js/custom.js' %}"></script>
 
+	
+
 	<!-- <script src='https://maps.googleapis.com/maps/api/js?key=AIzaSyB8AWIQyXO0kFl4_zD3dEk21BPaz08WBmA&libraries=places&ver=1.1'></script> -->
-	<script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyB8AWIQyXO0kFl4_zD3dEk21BPaz08WBmA&callback=initMap" async defer></script>
+	<script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyB8AWIQyXO0kFl4_zD3dEk21BPaz08WBmA&callback=initMap"></script>
+
 </body>
 
 

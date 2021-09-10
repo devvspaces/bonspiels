@@ -26,7 +26,11 @@ $(document).ready(function(){
 		if($('#loadmaps').hasClass('single-map')) {
 			singleMap   =   true;
 		}
-		loadMap(singleMap);
+		try{
+			loadMap(singleMap);
+		} catch(e){
+
+		}
 	}
 
 
@@ -69,7 +73,7 @@ $(document).ready(function(){
 	//-------------------------------
 	// Gallery Images Upload
 	//-------------------------------
-	$('#gallery_img_upload').change(function(event){
+	$('.image_bringer').change(function(event){
 		var imageHTML = '';
 
 		$(event.target.files).each(function(index){
@@ -77,10 +81,17 @@ $(document).ready(function(){
 			imageHTML += '<div class="image-box no-hover position-relative"><img src="'+tmppath+'" alt="img"><span class="badge badge-primary ml-auto mt-3 pointer border-0 font-weight-normal remove-image position-absolute" data-targetimg="'+ index +'"><i class="fas fa-trash"></i></span></div>';
 		});
 
-		$('.create-gallery').html(imageHTML);
+		console.log(imageHTML)
+
+		$(this.getAttribute('image_view')).html(imageHTML);
 		event.preventDefault();
 
 	});
+
+	// Submits form on change sort_selector
+	$('#sort_selector').on('change', function(event){
+		$('#filterFormSubmit').click()
+	})
 
 	//-------------------------------
 	// Gallery Images Upload
@@ -98,64 +109,6 @@ $(document).ready(function(){
 			tot_form[0].value = num - 1
 		})
 	}
-	if($("#event-schedules").length) {
-		$('#add_schedule').on("click", function(){
-			let num = $("#event-schedules").children().length + 1
-
-			$("#event-schedules").append(`
-			<div class="row">
-				<div class="schedule-head col-sm-12">
-					<h3>Day `+ num +`</h3>
-					<span class="badge badge-primary pointer border-0 font-weight-normal remove-schedule"><i class="fas fa-trash"></i></span>
-				</div>
-				<div class="form-group col-sm-6">
-						<label>Start time*</label>
-						<div class='position-relative'>
-							<input required size="16" name="form-`+ (num - 1) +`-start_time" type="text" value="2021-06-15 14:45" readonly class="form-control bg-light form_datetime">
-							<i class="icon-clock input-icon"></i>
-						</div>
-				</div>
-				<div class="form-group col-sm-6">
-						<label>End time*</label>
-						<div class='position-relative'>
-							<input required size="16" name="form-`+ (num - 1) +`-end_time" type="text" value="2012-06-15 14:45" readonly class="form-control bg-light form_datetime">
-							<i class="icon-clock input-icon"></i>
-						</div>
-				</div>
-				<div class="form-group getcontent col-sm-12">
-					<label>Event title*</label>
-					<input required type="text"name="form-`+ (num - 1) +`-title" class="form-control bg-light" title="Please enter the title for the event happening this day. All fields are necessary" placeholder="Event title" name="event_title">
-				</div>
-				<div class="form-group getcontent col-sm-12">
-					<label>Description*</label>
-					<textarea required rows="6" name="form-`+ (num - 1) +`-description" class="form-control resize-none bg-light" placeholder="Add description about this day" title="Please enter full description about this event" name="event_description"></textarea>
-				</div>
-			</div>
-			`)
-
-			listenRemoveSchedules()
-
-			refreshDatepickers()
-
-			// Update form-TOTAL_FORMS
-			let tot_form = $("input[name='form-TOTAL_FORMS']")
-			tot_form[0].value = num
-		});
-
-		listenRemoveSchedules()
-	}
-
-
-	// -------------------------------
-	// Add event form validation
-	// -------------------------------
-	// let addEventForm = document.getElementById('addEventForm')
-
-	// function submitForm(e) {
-	// 	// Add some validations here
-	// }
-
-	// addEventForm.addEventListener('submit', submitForm)
 
 	//-------------------------------
 	// Toggle Event Filter
@@ -164,73 +117,6 @@ $(document).ready(function(){
 		$('#toggle-filter').on("click", function(){
 			$( ".search-filter" ).slideToggle("slow");
 		});
-	}
-
-	//-------------------------------
-	// Append/Remove Event Speakers
-	//-------------------------------
-	function setRemoveSpeakerEvent() {
-		$(".remove-speaker").on("click", function(){
-			$(this).parents("tr").remove();
-
-			// Update form-TOTAL_FORMS
-			let tot_form = $("input[name='speaker-TOTAL_FORMS']")
-			let num = $(".speakers-list table tbody").children().length 
-			tot_form[0].value = num
-		})
-	}
-	function setSpeakerInput() {
-		// Code to update the name fields of the speakers
-		$('.speaker_name').on('keyup', function(){
-			this.lastElementChild.value = this.innerText;
-		})
-	}
-	if($(".speakers-list").length) {
-		$("#add_speaker").on("click", function(){
-			let num = $(".speakers-list table tbody").children().length 
-			
-			$(".speakers-list table tbody").append(`
-			<tr>
-				<td class="speaker_name" contenteditable="true"><input name="speaker-`+num+`-name" hidden></td>
-				<td>
-					<input class="form-control border" type="text" name="speaker-`+num+`-designation" placeholder="e.g Show Stopper">
-				</td>
-				<td>
-					<div class="position-relative text-center change-speaker-avatar">
-						<input type="file" name="speaker-`+num+`-image">
-						<img src="/" class="img-fluid" alt="img">
-					</div>
-				</td>
-				<td>
-					<span class="badge badge-primary remove-speaker ml-3 mt-3 pointer border-0 font-weight-normal position-absolute"><i class="fas fa-trash"></i></span>
-				</td>
-			</tr>
-			`);
-			setRemoveSpeakerEvent()
-			setSpeakerInput()
-
-			// Update form-TOTAL_FORMS
-			let tot_form = $("input[name='speaker-TOTAL_FORMS']")
-			tot_form[0].value = num + 1
-
-		});
-		
-		setRemoveSpeakerEvent()
-
-		// // Code to display and remove views
-		// $('.selecter').on("click", function() {
-		// 	let board = $(this).attr('selection')
-		// 	let checked = this.querySelector('input').checked
-		// 	if (checked){
-		// 		$(board).fadeIn()
-		// 		$(board[0].querySelectorAll('input')).attr('disabled', true)
-		// 	} else {
-		// 		$(board).fadeOut()
-		// 		$(board[0].querySelectorAll('input')).removeAttr('disabled')
-		// 	}
-		// })
-
-		setSpeakerInput()
 	}
 
 
@@ -723,35 +609,6 @@ $(document).ready(function(){
 	}
 
 	//-------------------------------
-	// Choose Package Plan
-	//-------------------------------
-	function calculateTicketPrice(priceText){
-		// Calculate total and display
-		let attendees = parseInt($('#attendees').val())
-		let total = parseInt(priceText.getAttribute('price'))*attendees
-		$('#ticket-total').text('$'+total)
-	}
-	if($(".price-plans").length) {
-		$(".price-plans .price-plan").on('click', function(){
-			$(this).addClass("active").siblings().removeClass("active");
-			let priceText = this.querySelector('.price-text');
-			let val = priceText.getAttribute('ticket');
-			let ticket_plan = document.querySelector('#ticket-plan-id')
-			ticket_plan.value = val
-
-			calculateTicketPrice(priceText)
-		})
-
-		$('#attendees').on('keyup', function(){
-			let price = $('.price-plan.active')[0]
-			if (price){
-				let priceText = price.querySelector('.price-text')
-				calculateTicketPrice(priceText)
-			}
-		})
-	}
-
-	//-------------------------------
 	// Initiliaze Tooltip
 	//-------------------------------
 	if($('[data-toggle="tooltip"]').length) {
@@ -803,7 +660,12 @@ $(document).ready(function(){
 		
 	}
 
-	signupcheck.addEventListener('click', setSignupbtn)
+	try{
+		signupcheck.addEventListener('click', setSignupbtn)
+	} catch(e){
+		console.log(e)
+	}
+	
 
 
 	// Review submission
@@ -817,6 +679,18 @@ $(document).ready(function(){
 		$("#review_form").submit()
 	})
 
+
+	// Code for information tools
+	$('.included_tool_box').on('change', function(event){
+		let req_el = document.getElementById(this.getAttribute('req_id'))
+		if (this.checked){
+			req_el.removeAttribute('disabled')
+		} else {
+			req_el.setAttribute('disabled', true)
+			req_el.checked = false
+		}
+	})
+
 });
 
 //-------------------------------
@@ -824,11 +698,13 @@ $(document).ready(function(){
 //-------------------------------
 function loadMap(singleMap) {
 	var docWidth    =   $(document).width();
+	let loadmaps = document.getElementById('loadmaps')
+
 	if(singleMap) {
 		var mapZoom     =   13,
-		mapCenter   =   [-33.9169667, 151.2345321]
+		mapCenter   =   [loadmaps.getAttribute('lat'), loadmaps.getAttribute('lon')]
 		var lsitingLocations = [
-			['Maroubra Beach', -33.9169667, 151.2345321, 1]
+			['Maroubra Beach', loadmaps.getAttribute('lat'), loadmaps.getAttribute('lon'), 1]
 		];
 
 		var listingContents =   [
@@ -855,12 +731,12 @@ function loadMap(singleMap) {
 		if(docWidth > 319 && docWidth < 980) {
 			mapZoom =   14
 		}
-		var mapCenter   =   [-33.91722, 151.23064];
+		var mapCenter   =   [-33.91722, 110.23064];
 		var lsitingLocations = [
-			['Bondi Beach', -33.9148339, 151.2404048, 4],
-			['new beach', -33.9169667, 151.2345321, 3],
-			['new beach', -33.9158827, 151.2314457, 2],
-			['new beach', -33.9175679, 151.2255712, 1],
+			['Bondi Beach', -33.9148339, 110.2404048, 4],
+			['new beach', -33.9169667, 110.2345321, 3],
+			['new beach', -33.9158827, 110.2314457, 2],
+			['new beach', -33.9175679, 110.2255712, 1],
 		];
 
 		var listingContents =   [
@@ -870,7 +746,7 @@ function loadMap(singleMap) {
 
 
 	var icons = ['hotel', 'shopping', 'auto', 'hospital'];
-	var map = new google.maps.Map(document.getElementById('loadmaps'), {
+	var map = new google.maps.Map(loadmaps, {
 		zoom: mapZoom,
 		center: new google.maps.LatLng(mapCenter[0], mapCenter[1]),
 		mapTypeId: google.maps.MapTypeId.TERRAIN
@@ -920,7 +796,7 @@ function initMap() {
 		marker.setVisible(false);
 		var place = autocomplete.getPlace();
 		if (!place.geometry) {
-			window.alert("Autocomplete's returned place contains no geometry");
+			// window.alert("Autocomplete's returned place contains no geometry");
 			return;
 		}
   
@@ -954,16 +830,17 @@ function initMap() {
 		infowindow.open(map, marker);
 	  
 		// Location details
-		for (var i = 0; i < place.address_components.length; i++) {
-			if(place.address_components[i].types[0] == 'postal_code'){
-				document.getElementById('postal_code').innerHTML = place.address_components[i].long_name;
-			}
-			if(place.address_components[i].types[0] == 'country'){
-				document.getElementById('country').innerHTML = place.address_components[i].long_name;
-			}
-		}
-		document.getElementById('location').innerHTML = place.formatted_address;
-		document.getElementById('lat').innerHTML = place.geometry.location.lat();
-		document.getElementById('lon').innerHTML = place.geometry.location.lng();
+		// for (var i = 0; i < place.address_components.length; i++) {
+		// 	if(place.address_components[i].types[0] == 'postal_code'){
+		// 		document.getElementById('postal_code').innerHTML = place.address_components[i].long_name;
+		// 	}
+		// 	if(place.address_components[i].types[0] == 'country'){
+		// 		document.getElementById('country').innerHTML = place.address_components[i].long_name;
+		// 	}
+		// }
+		// document.getElementById('location').innerHTML = place.formatted_address;
+		
+		document.getElementById('lat').value = place.geometry.location.lat();
+		document.getElementById('lon').value = place.geometry.location.lng();
 	});
 }

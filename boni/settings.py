@@ -144,3 +144,24 @@ EMAIL_HOST_PASSWORD = "wpcgtxfwmiqnlbwv"
 # Custom user defined mail username
 DEFAULT_FROM_EMAIL = "bonspiels@gmail.com"
 DEFAULT_COMPANY_EMAIL = "bonspiels@gmail.com"
+
+
+# Field conf
+INFORMATION_TOOLS_REQUIRED_SUFFIX = '-R1'
+INFORMATION_TOOLS = [
+    {
+        'name': 'Team name',
+        'form_name': 'team_name',
+        'type': 'text',
+    },
+    {
+        'name': 'Team phone',
+        'form_name': 'team_phone',
+        'type': 'text',
+    },
+    {
+        'name': 'Team id card',
+        'form_name': 'team_id_card',
+        'type': 'file',
+    },
+]
