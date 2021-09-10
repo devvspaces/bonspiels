@@ -88,6 +88,9 @@ class Event(models.Model):
 
     objects = EventManager()
 
+    def get_price(self):
+        return self.ticket_price if self.ticket_price else 0
+
     def get_website(self):
         return self.website if self.website else 'No website provided'
 
