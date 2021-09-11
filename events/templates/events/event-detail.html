@@ -43,12 +43,11 @@
 							<div><span class="circle-icon text-primary bg-white"><i class="icon-quote"></i></span>{{ reviews.count }} Reviews</div>
 							<div><span class="circle-icon text-primary bg-white"><i class="icon-eye"></i></span>{{event_views}} views</div>
 							<div><span class="circle-icon text-primary bg-white"><i class="fas fa-ticket-alt"></i></span>Tickets left: {{ event.seats }}</div>
-							<div><span class="circle-icon text-primary bg-white"><i class="fas fa-heart"></i></span>Likes: {{ event.eventlike_set.count }}</div>
 							<div><span class="circle-icon bg-green"><i class="fas fa-check text-white"></i></span>{{ event.status }}</div>
 						</div>
 						<div class="event-actions ml-auto">
 							<a id="reportEvent" href="{% url 'events:report-events' event.uid %}" class="badge badge-primary pointer" data-toggle="tooltip" data-placement="top" title="Report"><i class="icon-maps-and-location"></i></a>
-							<a href="{% url 'events:like-event' event.uid %}" class="badge badge-green pointer" data-toggle="tooltip" data-placement="top" title="Like"><i class="icon-heart"></i></a>
+							<a href="{% url 'events:save-event' event.uid %}" class="badge badge-green pointer" data-toggle="tooltip" data-placement="top" title="Save event"><i class="icon-heart"></i></a>
 						</div>
 					</div>
 					<div class="mt-5 w-100 d-none d-md-block">
@@ -261,7 +260,7 @@
 								{{ event.populate_information_fields }}
 
 								<div class="form-group text-center">
-									<p><strong>Total:</strong> <span class="text-primary" id="ticket-total">${{event.get_price}}</span></p>
+									<p><strong>Total:</strong> <span class="text-primary" id="ticket-total">{{ event.get_currency_symbol }}{{event.get_price}}</span></p>
 								</div>
 								<div class="text-center">
 									<div class="position-relative border-0 mt-md-0 mt-3 btn btn-primary submit-btn">
