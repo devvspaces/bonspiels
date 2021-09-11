@@ -40,10 +40,10 @@
 							<span class="pl-3"><i class="icon-clock text-primary"></i> Starts {{ i.event.start_date|date:"d M, Y"}}</span>
 							
 							<p class="mt-2 mb-0"><strong class="mr-3">Amount:</strong> ${{ i.get_amount }}</p>
-							<p class="mt-2 mb-0"><strong class="mr-3">Status:</strong> <span class="badge badge-primary">Pending</span></p>
+							<p class="mt-2 mb-0"><strong class="mr-3">Status:</strong> <span class="badge badge-primary">{{ i.get_status }}</span></p>
 
 							<div class="actions">
-								<a href="" class="position-relative border-0 mt-3 btn btn-primary btn-small submit-btn pr-3">
+								<a href="{% url 'events:order-ticket' i.uid %}" class="position-relative border-0 mt-3 btn btn-primary btn-small submit-btn pr-3">
 									<i class="icon-download btn-icon input-icon"></i> Download Reciept
 								</a>
 								<a href="" class="position-relative border-0 mt-3 btn btn-danger btn-small submit-btn pr-3">

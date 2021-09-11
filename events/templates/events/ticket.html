@@ -1,0 +1,94 @@
+{% load qr_code %}
+{% load static %}
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<title>Ticket order</title>
+
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content="">
+	<meta name="author" content="Bonspiels.net">
+
+	<style type="text/css">
+		@page {
+            size: {{ pagesize }};
+            margin: 1cm;
+            @frame footer {
+                -pdf-frame-content: footerContent;
+                bottom: 0cm;
+                margin-left: 9cm;
+                margin-right: 9cm;
+                height: 1cm;
+            }
+        }
+		body{
+			display: grid;
+			place-items: center;
+		}
+		#main{
+			min-height: 400px;
+			width: 650px;
+			padding: .5rem 1rem;
+			border-radius: .3rem;
+			border: 1px solid black;
+			display: flex;
+			align-items: stretch;
+		}
+		.details{
+			width: 500px;
+		}
+		.details h4{
+			margin-bottom: 0;
+		}
+		.details p{
+			margin-top: 0;
+		}
+		.station_image{
+			background-image: url("{% static 'img/ticket_order.jpeg' %}");
+			background-size: cover;
+			width: 100%;
+			background-position: center;
+		}
+
+		img{
+			max-width: 50px;
+		}
+	</style>
+</head>
+<body>
+
+	<div id="main">
+		<div class="details">
+			<h4>Event title</h4>
+			<p>{{ ticket.event.title }}</p>
+
+			<h4>Name</h4>
+			<p>{{ ticket.get_name }}</p>
+
+			<h4>Phone</h4>
+			<p>{{ ticket.get_phone }}</p>
+
+			<h4>Status</h4>
+			<p>{{ ticket.get_status }}</p>
+
+			<h4>QR Code</h4>
+			{% qr_from_text ticket.uid size='t' image_format='png' %}
+
+		</div>
+
+		<div class="station_image">
+			
+		</div>
+	</div>
+
+	<div id="footerContent">
+        {%block page_foot%}
+            Page <pdf:pagenumber>
+        {%endblock%}
+    </div>
+
+</body>
+</html>
+

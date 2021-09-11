@@ -36,18 +36,41 @@
 					<!-- <form class="form" method="get" autocomplete="off"> -->
 						<div class="row mt-3">
 							<div class="col-md-6">
-								<div class="form-group">
-									<div class="input-group">
-										<input id="searchInput" name='search-input' placeholder="Search by Title / Location / Description" class="form-control bg-light" type="text" value="{% if searchInput %}{{ searchInput }}{% endif %}">
-										<div class="input-group-append">
-											<a href="#" class="input-group-text text-decoration-none transition bg-primary border-0 text-white">
-												<i class="icon-search-2"></i>
-											</a>
+
+								<div class="row">
+									<div class="col-md-6">
+										<div class="form-group">
+											<div class="input-group">
+												<input list='title_list' id="search-tcd" name='search-tcd' placeholder="Search by Title / Description" class="form-control bg-light" type="text" value="{% if search_tcd %}{{ search_tcd }}{% endif %}">
+												<div class="input-group-append">
+													<a href="#" class="input-group-text text-decoration-none transition bg-primary border-0 text-white">
+														<i class="icon-search-2"></i>
+													</a>
+												</div>
+											</div>
+
+											<datalist id='title_list'>
+												
+											</datalist>
+
 										</div>
 									</div>
 
-									<div id="map"></div>
+									<div class="col-md-6">
+										<div class="form-group">
+											<div class="input-group">
+												<input id="searchInput" name='search-input' placeholder="Search by Location" class="form-control bg-light" type="text" value="{% if searchInput %}{{ searchInput }}{% endif %}">
+												<div class="input-group-append">
+													<a href="#" class="input-group-text text-decoration-none transition bg-primary border-0 text-white">
+														<i class="icon-compass"></i>
+													</a>
+												</div>
+											</div>
 
+											<div id="map"></div>
+
+										</div>
+									</div>
 								</div>
 							</div>
 							<div class="col-md-6">
@@ -143,7 +166,7 @@
 									<hr>
 									<div class="time-left mt-4 d-inline-block pt-2 pt-md-0" end_date = "{{ i.end_date_js_format }}">
 										<div class="timer search">
-											<div class="days d-none"></div>
+											<div class="days"></div>
 											<div class="hours text-primary-flat"></div>
 											<div class="minutes text-secondary-flat"></div>
 											<div class="seconds"></div>
@@ -174,7 +197,7 @@
 								<hr>
 								<div class="time-left mt-2 d-inline-block pt-2 pt-md-0">
 									<div class="timer search">
-										<div class="days d-none">124<span>Days</span></div>
+										<div class="days">124<span>Days</span></div>
 										<div class="hours text-primary-flat">15<span>Hr</span></div>
 										<div class="minutes text-secondary-flat">53<span>Min</span></div>
 										<div class="seconds">58<span>Sec</span></div>
