@@ -330,7 +330,7 @@ class UserTicket(models.Model):
         if self.get_amount() <= 0:
             return 'No payment required'
 
-        return self.get_status_display
+        return self.get_status_display()
 
     def get_key(self, key):
         dic = self.get_info_dict()
