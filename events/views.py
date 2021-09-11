@@ -23,7 +23,7 @@ from mainapp.mixins import ajax_autocomplete
 
 from .models import (Amenity, Event, EventReview, EventSave,
     EventView, Gallery, Category, ReviewImage, EventCalendar,
-    UserTicket, EventReport, EventLike)
+    UserTicket, EventReport)
 from .forms import EventForm, ReviewForm, UserTicketForm
 from .utils import convert_str_date, get_valid_ip
 
@@ -372,6 +372,118 @@ class CreateEvent(LoginRequiredMixin, TemplateView):
         return render(request, self.template_name, context)
 
 
+
+class UpdateEvent(LoginRequiredMixin, TemplateView):
+    template_name = 'events/update_event.html'
+    extra_context = {
+        'title': 'Update event'
+    }
+    form_class = EventForm
+
+    def get_object(self):
+        return get_object_or_404(Event, uid=self.kwargs.get('uid'))
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        event = self.get_object()
+
+        # Get the amenities and put to context
+        context['amenities'] = Amenity.objects.all()
+
+        inform_tools = settings.INFORMATION_TOOLS
+        event_tools = event.get_tools_dict()
+
+        # Merge event tools and inform-tools
+        for a in inform_tools:
+            for b in event_tools:
+                if a['form_name'] == b['form_name']:
+                    a['included_required'] = b['included_required']
+                    break
+
+        context['inform_tools'] = inform_tools
+
+        context['r_suffix'] = settings.INFORMATION_TOOLS_REQUIRED_SUFFIX
+
+        context['event'] = event
+        context['form'] = self.form_class(instance=event, initial={
+            'start_date': event.start_date_web_format(),
+            'end_date': event.end_date_web_format(),
+        })
+
+        return context
+    
+    def post(self, request, *args, **kwargs):
+        request = self.request
+        context = self.get_context_data()
+
+        cloned = request.POST.copy()
+        cloned['user'] = request.user
+        
+        event = context['event']
+
+        queryDict = dict(cloned.lists())
+        queryImages = dict(request.FILES.lists())
+
+        # Getting the added amenities
+        amenities = []
+        for k,v in queryDict.items():
+            if not k.find('amenities-'):
+                if v[0] == 'on':
+                    amenity_id = k.split('-')[1]
+                    amenities.append(get_object_or_404(Amenity, id=int(amenity_id)))
+
+        form = self.form_class(cloned, request.FILES, instance=event)
+        if form.is_valid():
+            event = form.save()
+
+            # Add amenities to event
+            event.amenities.set(amenities)
+
+            # Getting and creating gallery images
+            gallery = queryImages.get('gallery')
+            if gallery:
+                # Clear the current gallery set
+                for i in event.gallery_set.all():
+                    i.delete()
+
+                # Add the new images
+                for i in gallery:
+                    Gallery.objects.create(image=i, event=event)
+
+            infofields = []
+
+            # Get the appropriate information tools
+            for fobj in context['inform_tools']:
+                if request.POST.get(fobj['form_name']) == 'on':
+                    val = '10'
+                    if request.POST.get(fobj['form_name']+settings.INFORMATION_TOOLS_REQUIRED_SUFFIX)=='on':
+                        val = '11'
+                    # Copy the demo obj and add a key
+                    demo = fobj.copy()
+                    demo['included_required'] = val
+                    infofields.append(demo)
+
+            # compile infofields dict in to json string
+            json_str = json.dumps(infofields)
+
+            event.inform_tools_conf = json_str
+
+            event.published = True
+
+            event.save()
+            
+            messages.success(request, 'Event has been successfully updated')
+            return redirect(reverse('events:event-detail', kwargs={'uid': str(event.uid)}))
+        
+        context['form'] = form
+        messages.warning(request, 'Please make sure you correct the errors on the form')
+        
+        print(form.errors)
+        
+        return render(request, self.template_name, context)
+
+
+
 class MyEvent(LoginRequiredMixin, ListView):
     template_name = 'events/my_events.html'
     extra_context = {
@@ -453,14 +565,5 @@ def report_event_now(request, uid):
     event = get_object_or_404(Event, uid=uid)
     report = EventReport.objects.get_or_create(reporter=request.user, event=event)
     messages.success(request, f'Event has been reported')
-    return redirect(reverse('events:event-detail', kwargs={'uid': str(event.uid)}))
-
-
-@login_required
-def like_event_now(request, uid):
-    event = get_object_or_404(Event, uid=uid)
-    like = EventLike.objects.get_or_create(user=request.user, event=event)
-    event.likes = event.eventlike_set.count()
-    event.save()
     return redirect(reverse('events:event-detail', kwargs={'uid': str(event.uid)}))
 

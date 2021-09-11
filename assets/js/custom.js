@@ -161,8 +161,6 @@ $(document).ready(function(){
 			imageHTML += '<div class="image-box no-hover position-relative"><img src="'+tmppath+'" alt="img"><span class="badge badge-primary ml-auto mt-3 pointer border-0 font-weight-normal remove-image position-absolute" data-targetimg="'+ index +'"><i class="fas fa-trash"></i></span></div>';
 		});
 
-		console.log(imageHTML)
-
 		$(this.getAttribute('image_view')).html(imageHTML);
 		event.preventDefault();
 
@@ -761,9 +759,21 @@ $(document).ready(function(){
 
 
 	// Code for information tools
+	let included_tool_box = document.querySelectorAll('.included_tool_box')
+	
 	$('.included_tool_box').on('change', function(event){
 		let req_el = document.getElementById(this.getAttribute('req_id'))
 		if (this.checked){
+			req_el.removeAttribute('disabled')
+		} else {
+			req_el.setAttribute('disabled', true)
+			req_el.checked = false
+		}
+	})
+
+	included_tool_box.forEach(i=>{
+		let req_el = document.getElementById(i.getAttribute('req_id'))
+		if (i.checked){
 			req_el.removeAttribute('disabled')
 		} else {
 			req_el.setAttribute('disabled', true)
@@ -776,14 +786,14 @@ $(document).ready(function(){
 		event.preventDefault()
 		swal({
 		  title: "Save and Publish Event?",
-		  text: "Are you ready to publish this event?",
+		  text: "Are you ready to save and publish this event?",
 		  icon: "success",
 		  buttons: true,
 		  dangerMode: false,
 		})
 		.then((willDelete) => {
 		  if (willDelete) {
-		    swal("Creating Event ...", {
+		    swal($('#addEventForm').attr('message'), {
 		      icon: "success",
 		      button: false
 		    });

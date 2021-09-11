@@ -1,16 +1,17 @@
 {% extends "mainapp/base.html" %}
 {% load static %}
+{% load mytags %}
 
 {% block contents %}
 
 	<!-- Page Header -->
 	<section id="et-pagehead" class="container-fluid text-center text-white img-overlay no-hover position-relative pt-5 pb-5">
 		<div class="container position-relative pt-5 pb-5 mt-5 mb-5">
-			<h1 class="box-heading mb-5 position-relative mb-0 text-white">Add Event</h1>
+			<h1 class="box-heading mb-5 position-relative mb-0 text-white">Update Event</h1>
 		</div>
 		<div class="breadcrumb position-absolute text-center m-0 justify-content-center bg-transparent text-white">
 			<a href="#" class="text-white d-inline-block p-2">Home</a>
-			<a href="#" class="text-white d-inline-block p-2">Add event</a>
+			<a href="#" class="text-white d-inline-block p-2">Update event</a>
 		</div>
 	</section>
 
@@ -18,7 +19,7 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-9">
-					<form id="addEventForm" autocomplete="off" method='POST' enctype="multipart/form-data" message='Creating Event ...'>
+					<form id="addEventForm" autocomplete="off" method='POST' enctype="multipart/form-data" message='Updating Event ...'>
 						{% csrf_token %}
 						<div class="row">
 							<div class="form-group getcontent col-sm-12">
@@ -35,8 +36,11 @@
 								<small class="text-danger mt-1">{{ i }}</small>
 								{% endfor %}
 							</div>
-							<input type="hidden" name="lat" id="lat">
-							<input type="hidden" name="lon" id="lon">
+
+							<input type="hidden" name="lat" id="lat" value="{% if form.lat.value %}{{ form.lat.value }}{% endif %}">
+
+							<input type="hidden" name="lon" id="lon" value="{% if form.lon.value %}{{ form.lon.value }}{% endif %}">
+
 							<div class="form-group getcontent col-sm-12">
 								<label>Google Address*</label>
 								<input id="searchInput" value="{% if form.location.value %}{{ form.location.value }}{% endif %}"  type="text" required class="form-control bg-light" placeholder="Enter full address" title="Please enter location and verify on the maps" name="location">
@@ -50,7 +54,7 @@
 							<div class="form-group col-sm-6">
 								<label>Start time*</label>
 								<div class='position-relative'>
-									<input name="start_date" required size="16" type="text" readonly class="form-control bg-light form_datetime">
+									<input name="start_date" required size="16" type="text" readonly class="form-control bg-light form_datetime" value="{% if form.start_date.value %}{{ form.start_date.value }}{% endif %}">
 									<i class="icon-clock input-icon"></i>
 								</div>
 								
@@ -58,7 +62,7 @@
 							<div class="form-group col-sm-6">
 								<label>End time*</label>
 								<div class='position-relative'>
-									<input name="end_date" required size="16" type="text" readonly class="form-control bg-light form_datetime">
+									<input name="end_date" required size="16" type="text" readonly class="form-control bg-light form_datetime" value="{% if form.end_date.value %}{{ form.end_date.value }}{% endif %}">
 									<i class="icon-clock input-icon"></i>
 								</div>
 							</div>
@@ -233,7 +237,7 @@
 											<div class="float-right">
 												<div class="text-center check-types">
 													<label for="cbk{{ i.id }}">
-														<input type="checkbox" id="cbk{{ i.id }}" name='amenities-{{ i.id }}'>
+														<input type="checkbox" id="cbk{{ i.id }}" name='amenities-{{ i.id }}' {% is_checked event.id i.id %}>
 														<span class="cbx rounded-pill float-none d-inline-block align-middle">
 															<svg width="12px" height="11px" viewBox="0 0 12 11">
 																<polyline points="1 6.29411765 4.5 10 11 1"></polyline>
@@ -250,7 +254,7 @@
 						<div class="form-group getcontent col-sm-12">
 							<label>Featured image *</label>
 							<div image_view='#featured_imagex' class="image_bringer fake-file-upload rounded-pill transition-1 d-flex align-items-center justify-content-center p-3 text-center text-muted position-relative">
-								<input type="file" required name="featured_image" class="position-absolute pointer" multiple>
+								<input type="file" name="featured_image" class="position-absolute pointer" multiple>
 								<i class="fas fa-cloud-upload-alt h3 m-0"></i>&nbsp; Choose images
 							</div>
 							{% for i in form.featured_image.errors %}
@@ -262,6 +266,11 @@
 								<i class="icon-download prev pointer"></i>
 								<i class="icon-download next pointer"></i>
 								<div id="featured_imagex" class="mason-container create-gallery">
+
+									{% if event.featured_image.url %}
+									<div class="image-box no-hover position-relative"><img src="{{ event.featured_image.url }}" alt="img"></div>
+									{% endif %}
+
 								</div>
 							</div>
 						</div>
@@ -278,6 +287,10 @@
 								<i class="icon-download prev pointer"></i>
 								<i class="icon-download next pointer"></i>
 								<div id="multiple_images" class="mason-container create-gallery">
+
+									{% for i in event.gallery_set.all %}
+									<div class="image-box no-hover position-relative"><img src="{{ i.image.url }}" alt="img"></div>
+									{% endfor %}
 								</div>
 							</div>
 						</div>
@@ -289,11 +302,11 @@
 							<div class="row" id="ticket-board">
 								<div class="col-md-6">
 									<div class="ticket-table p-3 rounded">
-										<input type="text" name="ticket_name" placeholder="Enter title e.g. Silver" class="border-bottom ticket-title rounded-0 form-control w-100 mb-2">
+										<input type="text" name="ticket_name" placeholder="Enter title e.g. Silver" class="border-bottom ticket-title rounded-0 form-control w-100 mb-2" value="{% if form.ticket_name.value %}{{ form.ticket_name.value }}{% endif %}">
 										<ul class="nostyle p-0">
 											<li class="input-coming">
 												<span>Price:</span>
-												<input type="number" name="ticket_price" placeholder="Enter a price" class="border-bottom ticket-title form-control">
+												<input type="number" name="ticket_price" placeholder="Enter a price" class="border-bottom ticket-title form-control" value="{% if form.ticket_price.value %}{{ form.ticket_price.value }}{% endif %}">
 											</li>
 											<li class="input-coming">
 												<span>Currency:</span>
@@ -325,7 +338,7 @@
 												<td>
 													<div class="text-center check-types">
 														<label for="{{ obj.form_name }}">
-															<input class="included_tool_box" req_id='{{ obj.form_name }}{{ r_suffix  }}' type="checkbox" id="{{ obj.form_name }}" name='{{ obj.form_name }}'>
+															<input class="included_tool_box" req_id='{{ obj.form_name }}{{ r_suffix  }}' type="checkbox" id="{{ obj.form_name }}" name='{{ obj.form_name }}' {% check_included_tool obj.included_required %}>
 
 															<span class="cbx rounded-pill float-none d-inline-block align-middle">
 																<svg width="12px" height="11px" viewBox="0 0 12 11">
@@ -338,7 +351,7 @@
 												<td>
 													<div class="text-center check-types">
 														<label for="{{ obj.form_name }}{{ r_suffix  }}">
-															<input disabled type="checkbox" id="{{ obj.form_name }}{{ r_suffix  }}" name='{{ obj.form_name }}{{ r_suffix  }}'>
+															<input disabled type="checkbox" id="{{ obj.form_name }}{{ r_suffix  }}" name='{{ obj.form_name }}{{ r_suffix  }}' {% check_required_tool obj.included_required %}>
 															<span class="cbx rounded-pill float-none d-inline-block align-middle">
 																<svg width="12px" height="11px" viewBox="0 0 12 11">
 																	<polyline points="1 6.29411765 4.5 10 11 1"></polyline>

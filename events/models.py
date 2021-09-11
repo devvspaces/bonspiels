@@ -14,9 +14,16 @@ from .utils import strDate, ordinal
 CURRENCY = (
     ('NGN', 'Nigerian naira',),
     ('USD', 'United States Dollar',),
-    ('GBR', 'British Pounds',),
+    ('GBP', 'British Pounds',),
     ('EUR', 'Euro',),
 )
+
+SYMBOLS = {
+    'NGN': '₦',
+    'USD': '$',
+    'GBP': '£',
+    'EUR': '€',
+}
 
 
 class Category(models.Model):
@@ -42,6 +49,7 @@ class Amenity(models.Model):
     def __str__(self):
         return self.name
 
+WEB_FORMAT = "%Y-%m-%d %H:%M"
 
 class Event(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -88,6 +96,15 @@ class Event(models.Model):
     views = models.IntegerField(default=0, blank=True)
 
     objects = EventManager()
+
+    def get_currency_symbol(self):
+        if self.ticket_currency:
+            try:
+                return SYMBOLS[self.ticket_currency]
+            except KeyError:
+                pass
+
+        return '$'
 
     def get_price(self):
         return self.ticket_price if self.ticket_price else 0
@@ -191,6 +208,12 @@ class Event(models.Model):
         end_date = self.end_date
         return end_date.strftime("%d %b %Y %H:%M:%S %Z%z")
 
+    def start_date_web_format(self):
+        return self.start_date.strftime(WEB_FORMAT)
+
+    def end_date_web_format(self):
+        return self.end_date.strftime(WEB_FORMAT)
+
     def status(self):
         now = timezone.now()
         start_date = self.start_date
@@ -255,13 +278,6 @@ class EventView(models.Model):
     def __str__(self):
         return self.ip
 
-
-class EventLike(models.Model):
-    user = models.ForeignKey('account.User', on_delete=models.CASCADE)
-    event = models.ForeignKey(Event, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.ip
 
 class EventReview(models.Model):
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
