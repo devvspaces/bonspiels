@@ -18,7 +18,7 @@
 							</div>
 							<div class="time-left pt-2 pt-md-0" end_date = "{{ event.end_date_js_format }}">
 								<div class="timer">
-									<div class="days d-none"></div>
+									<div class="days"></div>
 									<div class="hours"></div>
 									<div class="minutes"></div>
 									<div class="seconds"></div>
@@ -47,7 +47,7 @@
 							<div><span class="circle-icon bg-green"><i class="fas fa-check text-white"></i></span>{{ event.status }}</div>
 						</div>
 						<div class="event-actions ml-auto">
-							<a href="{% url 'events:report-events' event.uid %}" class="badge badge-primary pointer" data-toggle="tooltip" data-placement="top" title="Report"><i class="icon-maps-and-location"></i></a>
+							<a id="reportEvent" href="{% url 'events:report-events' event.uid %}" class="badge badge-primary pointer" data-toggle="tooltip" data-placement="top" title="Report"><i class="icon-maps-and-location"></i></a>
 							<a href="{% url 'events:like-event' event.uid %}" class="badge badge-green pointer" data-toggle="tooltip" data-placement="top" title="Like"><i class="icon-heart"></i></a>
 						</div>
 					</div>
@@ -199,7 +199,7 @@
 						<!-- Map -->
 						<div class="side-widget w-100 map shadow rounded p-4">
 							<h4 id="map_direction" class="box-heading mb-5 position-relative mb-0">Event location</h4>
-							<div lat="{{ event.lat }}" lon="{{ event.lon }}" id="loadmaps" class="w-100 mb-3 single-map"></div>
+							<div lat="{{ event.lat }}" lon="{{ event.lon }}" id="loadmaps" class="w-100 mb-3 single-map" featured_image='{{ event.featured_image.url }}' title="{{ event.title }}" description='{{ event.description|truncatechars:50}}' status='{{ event.status }}' detail_link=''></div>
 
 							<label>Social media: </label>
 							<ul class="social d-inline-block m-0 nostyle inline p-0">

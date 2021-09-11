@@ -18,6 +18,86 @@ $(document).ready(function(){
 		});
 	}
 
+	// Ajax settings
+	// Adding the format attr to strings
+	String.prototype.format = function () {
+	    var i = 0, args = arguments;
+	    return this.replace(/{}/g, function () {
+	      return typeof args[i] != 'undefined' ? args[i++] : '';
+	    });
+	  };
+
+	// Codes for ajax setup for get and post requests to backend
+	function getCookie(name) {
+	    let cookieValue = null;
+	    if (document.cookie && document.cookie !== '') {
+	        let cookies = document.cookie.split(';');
+	        for (let i = 0; i < cookies.length; i++) {
+	            let cookie = jQuery.trim(cookies[i]);
+	            // Does this cookie string begin with the name we want?
+	            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+	                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+	                break;
+	            }
+	        }
+	    }
+	    return cookieValue;
+	}
+
+
+	let csrftoken = getCookie('csrftoken');
+
+
+	function csrfSafeMethod(method) {
+	    // these HTTP methods do not require CSRF protection
+	    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+	}
+
+
+
+	try{
+		$.ajaxSetup({
+		    beforeSend: function(xhr, settings) {
+		        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+		            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+		        }
+		    }
+		});
+	} catch(e){
+		console.log(e)
+	}
+
+	// Autocomplete for title suggestions
+	$('#search-tcd').on('keyup', function(event){
+		// Get the value for the input
+		let input = document.querySelector('#search-tcd')
+		let value = input.value
+
+		// Create a string in serializable format and send with ajax
+	    let serverLink = 'search-tcd={}'.format(value)
+
+	    let thisURL = window.location.href // or set your own url
+
+	    $.ajax({
+	        method: "GET",
+	        url: thisURL,
+	        data: serverLink,
+	        success: function (data){
+	            let results = data['results']
+
+	            // Change the datalist
+	            let inHtml = ''
+	            results.forEach(i=>{
+	            	inHtml += '<option>{}</option>'.format(i)
+	            })
+	            $('#title_list').html(inHtml)
+	        },
+	        error: function (jqXHR) {
+	            console.log(jqxHR)
+	        },
+	    })
+	})
+
 	//-------------------------------
 	// Google Maps Initialization
 	//-------------------------------
@@ -691,6 +771,51 @@ $(document).ready(function(){
 		}
 	})
 
+	// Code to submit event form
+	$('#addEventForm').on('submit', function(event){
+		event.preventDefault()
+		swal({
+		  title: "Save and Publish Event?",
+		  text: "Are you ready to publish this event?",
+		  icon: "success",
+		  buttons: true,
+		  dangerMode: false,
+		})
+		.then((willDelete) => {
+		  if (willDelete) {
+		    swal("Creating Event ...", {
+		      icon: "success",
+		      button: false
+		    });
+
+		    document.querySelector('#addEventForm').submit()
+		  }
+		});
+
+	});
+
+
+	// Code to report event form
+	$('#reportEvent').on('click', function(event){
+		event.preventDefault()
+		swal({
+		  title: "Report event?",
+		  text: "Are you sure you want to report this event?",
+		  icon: "error",
+		  buttons: true,
+		  dangerMode: true,
+		})
+		.then((willDelete) => {
+		  if (willDelete) {
+		    swal("Reporting event ...", {
+		      icon: "error",
+		      button: false
+		    });
+		    window.location.href = $('#reportEvent').attr('href')
+		  }
+		});
+
+	});
 });
 
 //-------------------------------
@@ -700,15 +825,30 @@ function loadMap(singleMap) {
 	var docWidth    =   $(document).width();
 	let loadmaps = document.getElementById('loadmaps')
 
+	featured_image = loadmaps.getAttribute('featured_image')
+	title = loadmaps.getAttribute('title')
+	description = loadmaps.getAttribute('description')
+	status = loadmaps.getAttribute('status')
+	// detail_link = loadmaps.getAttribute('detail_link')
+	detail_link = window.location.href
+
 	if(singleMap) {
-		var mapZoom     =   13,
+		var mapZoom     =   25,
 		mapCenter   =   [loadmaps.getAttribute('lat'), loadmaps.getAttribute('lon')]
 		var lsitingLocations = [
 			['Maroubra Beach', loadmaps.getAttribute('lat'), loadmaps.getAttribute('lon'), 1]
 		];
 
 		var listingContents =   [
-			'<div class="listing-map-window"><img src="img/popular-event-1.jpg" class="mb-3 w-100" alt="img"><div class="pl-1"><h6>Annual Food Festival</h6><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p><span class="badge badge-primary mr-3">Running</span><a class="w-100 text-primary" href="#">View Details <i class="fas fa-angle-double-right"></i></a></div></div>',
+			`<div class="listing-map-window">
+				<img width='30px' class='rounded-circle' src="{}" class="mb-3" alt="{}">
+				<div class="pl-1">
+					<h6>{}</h6>
+					<p>{}</p>
+					<span class="badge badge-primary mr-3">{}</span>
+					<a class="w-100 text-primary" href="{}">View Details <i class="fas fa-angle-double-right"></i></a>
+				</div>
+			</div>`.format(featured_image, title, title, description, status, detail_link),
 		]
 	} else {
 
@@ -740,7 +880,15 @@ function loadMap(singleMap) {
 		];
 
 		var listingContents =   [
-			'<div class="listing-map-window"><img src="img/popular-event-1.jpg" class="mb-3 w-100" alt="img"><div class="pl-1"><h6>Annual Food Festival</h6><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p><span class="badge badge-primary mr-3">Running</span><a class="w-100 text-primary" href="#">View Details <i class="fas fa-angle-double-right"></i></a></div></div>',
+			`<div class="listing-map-window">
+				<img src="{}" class="mb-3 w-100" alt="{}">
+				<div class="pl-1">
+					<h6>{}</h6>
+					<p>{}</p>
+					<span class="badge badge-primary mr-3">{}</span>
+					<a class="w-100 text-primary" href="{}">View Details <i class="fas fa-angle-double-right"></i></a>
+				</div>
+			</div>`.format(featured_image, title, description, status, detail_link),
 		]
 	}
 

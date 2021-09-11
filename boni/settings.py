@@ -30,7 +30,8 @@ INSTALLED_APPS = [
     # CUstom apps
     'account',
     'events',
-    'mainapp'
+    'mainapp',
+    'qr_code',
 ]
 
 AUTH_USER_MODEL = 'account.User'

@@ -1,6 +1,7 @@
 import uuid
 import json
 
+from django.conf import settings
 from django.db import models
 from django.utils import timezone
 from django.utils.safestring import mark_safe
@@ -304,14 +305,55 @@ class FeaturedLocation(models.Model):
 
 
 class UserTicket(models.Model):
+
+    STATUS = (
+        ('1', 'Pending',),
+        ('2', 'Paid',),
+    )
+
     information = models.CharField(max_length=700, blank=True)
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
     user = models.ForeignKey('account.User', on_delete=models.CASCADE)
     uid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     created = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(choices=STATUS, max_length=1, default='1')
+
+    def get_info_dict(self):
+        try:
+            return json.loads(self.information)
+        except Exception as e:
+            pass
+
+        return []
+    
+    def get_status(self):
+        if self.get_amount() <= 0:
+            return 'No payment required'
+
+        return self.get_status_display
+
+    def get_key(self, key):
+        dic = self.get_info_dict()
+
+        if dic:
+            for i in settings.INFORMATION_TOOLS:
+                if i['form_name'] == key:
+                    for a in dic:
+                        try:
+                            return a[i['name']]
+                        except KeyError:
+                            pass
+
+        return 'nil'
+
+    def get_name(self):
+        return self.get_key('team_name')
+
+    def get_phone(self):
+        return self.get_key('team_phone')
 
     def get_amount(self):
-        return self.event.ticket_price
+        return self.event.get_price()
 
     def __str__(self):
         return str(self.uid)

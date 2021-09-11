@@ -19,6 +19,7 @@ from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_encode,urlsafe_base64_decode
 
 from account.models import Profile, User
+from mainapp.mixins import ajax_autocomplete
 
 from .models import (Amenity, Event, EventReview, EventSave,
     EventView, Gallery, Category, ReviewImage, EventCalendar,
@@ -40,12 +41,24 @@ class EventSearch(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["events"] = self.model.objects.all()[:10]
-        context["category"] = Category.objects.all()
+        categories_set = Category.objects.all()
+        queryset = self.model.objects.all()
+
+        context["events"] = queryset[:10]
+        context["category"] = categories_set
+
+        # Send sets to context
+        context['all_events'] = queryset
+        context['all_categories'] = categories_set
+        
         return context
     
     def get(self, request, *args, **kwargs):
         context = self.get_context_data()
+
+        response = ajax_autocomplete(request, context)
+        if response is not None:
+            return response
 
         # Check for query strings
         search = request.GET.get('search')
@@ -53,16 +66,26 @@ class EventSearch(ListView):
             queryset = self.get_queryset()
             search_input = request.GET.get('search-input')
             if search_input:
-                # Search decription, location and title
-                queryset = queryset.filter(
-                    Q(title__icontains=search_input) | Q(description__icontains=search_input) | Q(location__icontains=search_input)
-                )
+                # Search location
+                queryset = queryset.filter(location__icontains=search_input)
                 context['searchInput'] = search_input
+
+            search_tcd = request.GET.get('search-tcd')
+            if search_tcd:
+                # Search decription and title
+                queryset = queryset.filter(
+                    Q(title__icontains=search_tcd) | Q(description__icontains=search_tcd) | Q(category__name__iexact=search_tcd)
+                )
+                context['search_tcd'] = search_tcd
             
             category = request.GET.get('category')
             if category:
                 queryset = queryset.filter(category__id=category)
                 context['searchCategory'] = int(category)
+            # else:
+            #     # Search for category
+            #     if search_tcd:
+            #         queryset = queryset.filter(category__name__iexact=search_tcd)
 
             start_time = request.GET.get('start_time')
             if start_time:
@@ -119,6 +142,27 @@ class UserEventTickets(LoginRequiredMixin, ListView):
         return super().get_queryset().filter(user=self.request.user)
 
 
+
+from django.http import HttpResponse
+
+
+from django_xhtml2pdf.utils import generate_pdf
+
+def order_ticket(request, uid):
+    resp = HttpResponse(content_type='application/pdf')
+    
+    ticket = get_object_or_404(UserTicket, uid=uid)
+
+    context = {
+        'ticket': ticket,
+        'pagesize':'A4'
+    }
+
+    result = generate_pdf('events/ticket.html', file_object=resp, context=context)
+    return result
+
+
+
 class EventDetail(DetailView):
     template_name = 'events/event-detail.html'
     extra_context = {
@@ -146,12 +190,6 @@ class EventDetail(DetailView):
         context['related_events'] = Event.objects.filter(id__in=random_event_id_list)
 
         context['review_form'] = ReviewForm()
-        
-        # user = self.request.user
-        # user_data = {}
-        # if user.is_authenticated:
-        #     user_data = {'name': user.profile.full_name, 'email': user.email, 'phone': user.profile.phone, 'attendees': 1}
-        # context['ticket_form'] = UserTicketForm(initial=user_data)
 
         return context
     

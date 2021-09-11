@@ -36,7 +36,7 @@
 								{% endfor %}
 							</div>
 							<input type="hidden" name="lat" id="lat">
-							<input type="hidden" name="lat" id="lon">
+							<input type="hidden" name="lon" id="lon">
 							<div class="form-group getcontent col-sm-12">
 								<label>Google Address*</label>
 								<input id="searchInput" value="{% if form.location.value %}{{ form.location.value }}{% endif %}"  type="text" required class="form-control bg-light" placeholder="Enter full address" title="Please enter location and verify on the maps" name="location">

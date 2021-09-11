@@ -11,6 +11,7 @@ from django.urls import reverse
 from django.utils.encoding import force_text,force_bytes
 from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_encode,urlsafe_base64_decode
+from django.http import JsonResponse
 
 from account.models import User
 from account.forms import (UserRegisterForm, LoginForm, ChangePasswordForm,
@@ -18,6 +19,8 @@ from account.forms import (UserRegisterForm, LoginForm, ChangePasswordForm,
 from account.tokens import acount_confirm_token
 
 from events.models import Category, Event, FeaturedLocation, Gallery
+
+from .mixins import ajax_autocomplete
 
 
 def verification_message(request, user, template):
@@ -56,6 +59,7 @@ class Home(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         queryset = Event.objects.filter(user__active=True, published=True)
+        categories_set = Category.objects.all()
         
 
         # Sending the form to the template
@@ -64,6 +68,15 @@ class Home(TemplateView):
         context['reg_form'] = self.reset_form()
 
         context['events'] = queryset[:5]
+
+        # Get the event titles
+        # titles = [i.title for i in queryset[:2]]
+        # titles += [i.name for i in categories_set[:2]]
+        # context['titles'] = titles
+
+        # Send sets to context
+        context['all_events'] = queryset
+        context['all_categories'] = categories_set
 
         # Get featured and upcoming events (4)
         context['featured_events'] = queryset.filter(featured=True)[:2]
@@ -79,7 +92,7 @@ class Home(TemplateView):
         context['locations'] = locations
 
         # Get the categories to context
-        categories = Category.objects.all()[:4]
+        categories = categories_set[:4]
         context['categories'] = categories
 
         # Add the suggestions
@@ -90,6 +103,10 @@ class Home(TemplateView):
 
     def get(self, request, *args, **kwargs):
         context = self.get_context_data()
+
+        response = ajax_autocomplete(request, context)
+        if response is not None:
+            return response
 
         return render(request, self.template_name, context)
     

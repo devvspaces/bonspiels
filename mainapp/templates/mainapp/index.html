@@ -17,8 +17,14 @@
 					<a href="{% url 'events:event-search' %}?location=Northwest Territories&search=Submit"><img src="{% static 'img/regions/ggg.png' %}" alt=""></a>
 				</div>
 				<form action="{% url 'events:event-search' %}" autocomplete="off" class="d-md-flex align-items-center justify-content-center mt-4">
-					<div class="form-group m-1 position-relative" style="width: 350px;">
-						<input id="searchInput" name='search-input' type="text" class="form-control" placeholder="Title / Category / Location / Description">
+					<div class="form-group m-1 position-relative">
+						<input id="search-tcd" list='title_list' name='search-tcd' type="text" class="form-control" placeholder="Title / Category / Description">
+
+						<datalist id='title_list'>
+						</datalist>
+					</div>
+					<div class="form-group m-1 position-relative">
+						<input id="searchInput" name='search-input' type="text" class="form-control" placeholder="Location">
 						<!-- <i class="icon-maps-and-location input-icon"></i> -->
 					</div>
 					<div id="map"></div>
@@ -104,7 +110,7 @@
 										<hr>
 										<div class="time-left mt-4 d-inline-block pt-2 pt-md-0" end_date="{{ i.end_date_js_format }}">
 											<div class="timer search">
-												<div class="days d-none"></div>
+												<div class="days"></div>
 												<div class="hours text-primary-flat"></div>
 												<div class="minutes text-secondary-flat"></div>
 												<div class="seconds"></div>
@@ -270,7 +276,7 @@
 										<hr>
 										<div class="time-left mt-2 d-inline-block pt-2 pt-md-0" end_date="{{ i.end_date_js_format }}">
 											<div class="timer search">
-												<div class="days d-none"></div>
+												<div class="days"></div>
 												<div class="hours text-primary-flat"></div>
 												<div class="minutes text-secondary-flat"></div>
 												<div class="seconds"></div>
@@ -313,7 +319,7 @@
 										<hr>
 										<div class="time-left mt-2 d-inline-block pt-2 pt-md-0" end_date="{{ i.end_date_js_format }}">
 											<div class="timer search">
-												<div class="days d-none"></div>
+												<div class="days"></div>
 												<div class="hours text-primary-flat"></div>
 												<div class="minutes text-secondary-flat"></div>
 												<div class="seconds"></div>
