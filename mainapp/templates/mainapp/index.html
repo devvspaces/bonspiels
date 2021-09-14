@@ -58,7 +58,7 @@
 						<h4 class="mb-3"><a href="{% url 'events:event-detail' event.uid %}" class="text-decoration-none text-reset">{{ event.title }}</a></h4>
 						<p><i class="icon-clock align-middle text-primary"></i>&nbsp; {{ event.start_date|date:"d M" }} - {{ event.end_date|date:"d M" }}</p>
 						<div class="d-flex event-actions">
-							<span class="event-action pointer" data-toggle="tooltip" data-placement="bottom" title="{{ event.email }}"><i class="icon-contact"></i></span>
+							<!-- <span class="event-action pointer" data-toggle="tooltip" data-placement="bottom" title="{{ event.email }}"><i class="icon-contact"></i></span> -->
 							<span class="event-action pointer" data-toggle="tooltip" data-placement="bottom" title="{{ event.phone }}"><i class="icon-phone"></i></span>
 							<span class="event-action pointer" data-toggle="tooltip" data-placement="bottom" title="{{ event.location }}"><i class="icon-compass"></i></span>
 							<span class="event-action pointer" data-toggle="tooltip" data-placement="bottom" title="{{ event.price_text }}">{{ event.price_val }}</span>
@@ -96,7 +96,7 @@
 									{% for i in l_events %}
 									<div class="content w-100 item p-4">
 										<span class="text-muted"><i class="icon-clock text-primary"></i> &nbsp;Posted {{ i.days_since_created }}</span>
-										<span class="text-primary float-right" data-toggle="tooltip" data-placement="bottom" title="Prices are high">$$$</span>
+										<span class="text-primary float-right" data-toggle="tooltip" data-placement="bottom" title="{{ i.price_text }}">{{ i.price_val }}</span>
 										<hr>
 										<h4 class="mb-3"><a href="{% url 'events:event-detail' i.uid %}" class="text-decoration-none text-reset">{{ i.title }}</h4></a>
 										<p class="description">

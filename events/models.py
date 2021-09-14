@@ -53,7 +53,8 @@ WEB_FORMAT = "%Y-%m-%d %H:%M"
 
 class Event(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    phone = models.CharField(max_length=25)
+    phone = models.CharField(max_length=25, blank=True)
+    organizer = models.CharField(max_length=225)
     email = models.EmailField()
 
     title = models.CharField(max_length=50)
@@ -69,11 +70,6 @@ class Event(models.Model):
     facebook = models.URLField(blank=True)
     twitter = models.URLField(blank=True)
     instagram = models.URLField(blank=True)
-    linkedin = models.URLField(blank=True)
-    dribble = models.URLField(blank=True)
-    digg = models.URLField(blank=True)
-    youtube = models.URLField(blank=True)
-    google_plus = models.URLField(blank=True)
 
     amenities = models.ManyToManyField(Amenity, blank=True)
     featured_image = models.ImageField(upload_to='events')
@@ -230,7 +226,7 @@ class Event(models.Model):
         return 'Prices are high' if self.ticket_price and (self.ticket_price > 0) else 'No fee'
     
     def price_val(self):
-        return '$$$' if self.ticket_price else 'Free'
+        return f'{self.get_currency_symbol()}{self.get_price()}' if self.ticket_price else 'Free'
     
     @property
     def organizer(self):

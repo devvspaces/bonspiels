@@ -2388,3 +2388,7 @@ section#et-notfound{
 .profile-menu-btns .btn{
   margin: 0 .7rem .7rem 0;
 }
+
+.list_times{
+  background-color: #f5f6f7 !important;
+}

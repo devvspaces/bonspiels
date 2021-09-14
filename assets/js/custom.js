@@ -27,6 +27,96 @@ $(document).ready(function(){
 	    });
 	  };
 
+
+	// Code to generate time list
+	let time_list = []
+	let lhour = 12
+	let lmin = 0
+	let meridian = 'PM'
+
+	for (var i=0; i < 96; i++){
+		
+
+		if (lmin == 60){
+			lhour ++;
+			lmin = 0;
+
+			if (lhour == 13){
+				lhour = 1
+			}
+		}
+
+		if ((meridian == 'AM') && (lhour == 12) && (lmin == 0)){
+			meridian = 'PM'
+		} else if ((meridian == 'PM') && (lhour == 12) && (lmin == 0)){
+			meridian = 'AM'
+		}
+
+		// Save time
+		// Zero padd the lmin
+		let lminz = lmin
+		if (lmin == 0){
+			lminz = '00'
+		}
+		time_list.push('{}:{} {}'.format(lhour, lminz, meridian))
+
+		lmin += 15
+	}
+
+	// Setting the list times
+	let list_times = document.querySelectorAll('.list_times')
+
+	if ($('.list_times').length){
+		let time_list_html = ''
+
+		time_list.forEach(i=>{
+			time_list_html += '<option>{}</option>'.format(i)
+		})
+
+		list_times.forEach(i=>{
+			i.innerHTML = time_list_html
+		})
+	}
+
+	function convert_to_24(val){
+		let sp = val.split(' ')
+
+		let main = sp[0]
+		let meridian = sp[1]
+
+		let sp2 = main.split(':')
+		let hour = sp2[0]
+		let min = sp2[1]
+
+		if (meridian == 'PM'){
+			if (hour != '12'){
+				hour = parseInt(hour) + 12
+			}
+
+		} else if (meridian == 'AM'){
+			if (hour == '12'){
+				hour = 0
+			}
+		}
+
+		return '{}:{}'.format(hour, min)
+	}
+
+
+	// Setting the dynamic options for select els
+	let dy_selects = document.querySelectorAll('.dy_select')
+	dy_selects.forEach(i=>{
+		let text = i.getAttribute('select_text')
+
+		// Get the select el
+		let select_el = i.querySelector('select')
+
+		if (select_el){
+			select_el.firstElementChild.innerText = text
+		}
+	})
+
+
 	// Codes for ajax setup for get and post requests to backend
 	function getCookie(name) {
 	    let cookieValue = null;
@@ -127,6 +217,121 @@ $(document).ready(function(){
 		$('select').niceSelect();
 	}
 
+
+	function setDateRel(input_el, this_el){
+		// Update the start date rel input
+		let el = document.querySelector("input[name='{}']".format(input_el))
+
+		if (el){
+			let sdate = this_el.value
+
+			let parent = this_el.parentElement.parentElement
+
+			let stime = parent.querySelector('.option.selected').innerText
+
+			// Convert the stime into 24 hours time
+			stime = convert_to_24(stime)
+
+			el.value = '{} {}'.format(sdate, stime)
+		}
+	}
+
+
+
+	if ($('#start_date_picker').length){
+		$('#start_date_picker').on('change', function(e){
+			if ($('#end_date_picker').length){
+				$('#end_date_picker')[0].value = $('#start_date_picker')[0].value
+			}
+
+			setDateRel('start_date', this)
+		})
+	}
+
+	if ($('#end_date_picker').length){
+		$('#end_date_picker').on('change', function(e){
+			setDateRel('end_date', this)
+		})
+	}
+
+
+
+	// Updating anytime list times changes
+	function setListTimeEvent(){
+		list_times = document.querySelectorAll('.list_times')
+		list_times.forEach(i=>{
+			i.addEventListener('click', function(e){
+				let target = e.target
+
+				if ($(target).hasClass('option')){
+					let input = target.parentElement.parentElement.parentElement.querySelector('input.form_datetime')
+					// let picker = document.querySelector("input[list_times_id='#{}']".format())
+					
+					setTimeout(function(){
+						$(input).change();
+						
+					}, 1000)
+				}
+			})
+		})
+	}
+	setListTimeEvent()
+
+	// Function to convert 24 hour time to 12 hour
+	function tConvert (time) {
+	  // Check correct time format and split into components
+	  time = time.toString ().match (/^([01]\d|2[0-3])(:)([0-5]\d)(:[0-5]\d)?$/) || [time];
+
+	  if (time.length > 1) { // If time format correct
+	    time = time.slice (1);  // Remove full string match value
+	    time[5] = +time[0] < 12 ? ' AM' : ' PM'; // Set AM/PM
+	    time[0] = +time[0] % 12 || 12; // Adjust hours
+	  }
+	  return time.join (''); // return adjusted time or original string
+	}
+
+
+
+	// Code to update the start date when default data is added
+	if ($('.default_time_data').length){
+		let default_time_data = document.querySelectorAll('.default_time_data')
+
+		default_time_data.forEach(i=>{
+			let val = i.value
+
+			if (val){
+				let sp = val.split(' ')
+				let input = i.parentElement.querySelector('.form_datetime')
+				input.value = sp[0]
+
+				let reTime = sp[1]
+				if (reTime.length == 4){
+					reTime = '0' + reTime
+				}
+
+				let lh = tConvert(reTime)
+				let time_select = i.parentElement.querySelector('.list_times')
+
+				console.log(lh)
+
+				time_select.childNodes.forEach(i=>{
+					if (i.innerText == lh){
+						console.log('Found')
+						i.setAttribute('selected', true)
+						$(i).siblings().removeAttr('selected')
+					}
+				})
+
+				$('select').niceSelect('update');
+				setListTimeEvent()
+			}
+		})
+
+
+	}
+
+
+
 	//-------------------------------
 	// Custom Scrollbar
 	//-------------------------------
@@ -161,7 +366,19 @@ $(document).ready(function(){
 			imageHTML += '<div class="image-box no-hover position-relative"><img src="'+tmppath+'" alt="img"><span class="badge badge-primary ml-auto mt-3 pointer border-0 font-weight-normal remove-image position-absolute" data-targetimg="'+ index +'"><i class="fas fa-trash"></i></span></div>';
 		});
 
-		$(this.getAttribute('image_view')).html(imageHTML);
+		let image_view = this.getAttribute('image_view')
+
+		if (image_view == '#multiple_images'){
+			$(image_view).html($(image_view).html() + imageHTML);
+		} else {
+			$(image_view).html(imageHTML);
+		}
+
+		$('.remove-image').on('click', function(e){
+			this.parentElement.remove()
+		})
+
+		
 		event.preventDefault();
 
 	});
@@ -680,7 +897,11 @@ $(document).ready(function(){
 	// Bootstrap DateTimePicker
 	//-------------------------------
 	function refreshDatepickers(){
-		$(".form_datetime").datetimepicker({format: 'yyyy-mm-dd hh:ii'});
+		// $(".form_datetime").datetimepicker({format: 'yyyy-mm-dd hh:ii'});
+		$(".form_datetime").datetimepicker({
+			format: 'yyyy-mm-dd',
+			minView:'month'
+		});
 	}
 	if($(".form_datetime").length) {
 		refreshDatepickers()

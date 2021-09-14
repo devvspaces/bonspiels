@@ -9,20 +9,19 @@
 				<div class="col-lg-5 col-md-6 col-sm-12">
 					<div class="event-intro shadow bg-white">
 						<h1 class="mb-4">{{ event.title }} &nbsp;<i class="fas fa-check-circle text-green"></i></h1>
-						<p class="description mb-4">{{ event.description|truncatechars:50 }}</p>
-						<div class="d-md-flex justify-content-between">
-							<div class="info">
-								<div class="h6"><i class="icon-clock text-primary"></i>&nbsp; {{ event.start_date }}</div>
-								<div class="mb-2"><i class="icon-contact"></i>&nbsp; {{ event.email }}</div>
-								<div class="text-primary"><i class="icon-phone"></i>&nbsp; {{ event.phone }}</div>
-							</div>
-							<div class="time-left pt-2 pt-md-0" end_date = "{{ event.end_date_js_format }}">
-								<div class="timer">
-									<div class="days"></div>
-									<div class="hours"></div>
-									<div class="minutes"></div>
-									<div class="seconds"></div>
-								</div>
+
+						<div class="info">
+							<div class="h6"><i class="icon-clock text-primary"></i>&nbsp; {{ event.start_date }}</div>
+							<div class="mb-2"><i class="icon-contact"></i>&nbsp; {{ event.email }}</div>
+							<div class="text-primary"><i class="icon-phone"></i>&nbsp; {{ event.phone }}</div>
+						</div>
+
+						<div class="time-left my-3 pt-2 pt-md-0" end_date = "{{ event.end_date_js_format }}">
+							<div class="timer">
+								<div class="days"></div>
+								<div class="hours"></div>
+								<div class="minutes"></div>
+								<div class="seconds"></div>
 							</div>
 						</div>
 
@@ -40,19 +39,18 @@
 				<div class="col-lg-7 col-md-6 col-sm-12 d-flex mb-2 flex-wrap pt-md-0 pt-3 align-items-end">
 					<div class="align-items-md-end align-items-center flex-fill text-center d-sm-flex">
 						<div class="event-features text-white">
-							<div><span class="circle-icon text-primary bg-white"><i class="icon-quote"></i></span>{{ reviews.count }} Reviews</div>
+
 							<div><span class="circle-icon text-primary bg-white"><i class="icon-eye"></i></span>{{event_views}} views</div>
-							<div><span class="circle-icon text-primary bg-white"><i class="fas fa-ticket-alt"></i></span>Tickets left: {{ event.seats }}</div>
+							<div><span class="circle-icon text-primary bg-white"><i class="fas fa-ticket-alt"></i></span>Remaining spots: {{ event.seats }}</div>
 							<div><span class="circle-icon bg-green"><i class="fas fa-check text-white"></i></span>{{ event.status }}</div>
 						</div>
 						<div class="event-actions ml-auto">
-							<a id="reportEvent" href="{% url 'events:report-events' event.uid %}" class="badge badge-primary pointer" data-toggle="tooltip" data-placement="top" title="Report"><i class="icon-maps-and-location"></i></a>
 							<a href="{% url 'events:save-event' event.uid %}" class="badge badge-green pointer" data-toggle="tooltip" data-placement="top" title="Save event"><i class="icon-heart"></i></a>
 						</div>
 					</div>
 					<div class="mt-5 w-100 d-none d-md-block">
-						<p class="event-location d-inline-block m-0"><i class="icon-compass h3 align-middle"></i>&nbsp; {{ event.location }}</p>
-						<a href="#map_direction" class="float-right text-decoration-none text-primary">Get Directions <i class="fas fa-external-link-alt"></i></a>
+						<p class="event-location d-inline-block m-0 bg-white p-2"><i class="icon-compass h3 align-middle"></i>&nbsp; {{ event.location }}</p>
+						<a target="_blank" href="https://www.google.com/maps/place/{{ event.location }}/" class="float-right text-decoration-none text-primary">Get Directions <i class="fas fa-external-link-alt"></i></a>
 					</div>
 				</div>
 			</div>
@@ -195,18 +193,26 @@
 
 				<div class="col-lg-4">
 					<div class="et-sidebar">
-						<!-- Map -->
+
 						<div class="side-widget w-100 map shadow rounded p-4">
-							<h4 id="map_direction" class="box-heading mb-5 position-relative mb-0">Event location</h4>
-							<div lat="{{ event.lat }}" lon="{{ event.lon }}" id="loadmaps" class="w-100 mb-3 single-map" featured_image='{{ event.featured_image.url }}' title="{{ event.title }}" description='{{ event.description|truncatechars:50}}' status='{{ event.status }}' detail_link=''></div>
+							<h4 id="map_direction" class="box-heading mb-5 position-relative mb-0">Organizer</h4>
+
+							<div class="mb-3">
+								<img src="{% static 'img/author-1.jpg' %}" class="rounded-pill shadow d-inline-block" alt="author">
+								<div class="d-inline-block position-relative align-middle pl-2">
+									<a href="{% url 'events:organizer-events' event.user.profile.uid %}"><span>{{ event.organizer }}</span></a>
+
+									<p>{{ event.email }}</p>
+									<p>{{ event.phone }}</p>
+
+								</div>
+							</div>
 
 							<label>Social media: </label>
 							<ul class="social d-inline-block m-0 nostyle inline p-0">
 								<li><a href="{{ event.facebook }}" class="d-flex align-items-center justify-content-center border text-decoration-none transition"><i class="fab fa-facebook" aria-hidden="true"></i></a></li>
-								<li><a href="{{ event.google }}" class="d-flex align-items-center justify-content-center border text-decoration-none transition"><i class="fab fa-google" aria-hidden="true"></i></a></li>
+								<li><a href="{{ event.twitter }}" class="d-flex align-items-center justify-content-center border text-decoration-none transition"><i class="fab fa-twitter" aria-hidden="true"></i></a></li>
 								<li><a href="{{ event.instagram }}" class="d-flex align-items-center justify-content-center border text-decoration-none transition"><i class="fab fa-instagram" aria-hidden="true"></i></a></li>
-								<li><a href="{{ event.youtube }}" class="d-flex align-items-center justify-content-center border text-decoration-none transition"><i class="fab fa-youtube" aria-hidden="true"></i></a></li>
-								<li><a href="{{ event.linkedin }}" class="d-flex align-items-center justify-content-center border text-decoration-none transition"><i class="fab fa-linkedin" aria-hidden="true"></i></a></li>
 							</ul>
 							<hr>
 							<label>Website: </label> <a href="{{ event.get_website_link }}" class="text-primary text-decoration-none">{{ event.get_website }} <i class="fas fa-external-link-alt"></i></a>
@@ -226,29 +232,11 @@
 							</ul>
 						</div>
 
-						<!-- Hosted by -->
-						<div class="side-widget w-100 hosted-by shadow rounded p-4 mt-5">
-							<h4 class="box-heading mb-5 position-relative mb-0">Hosted By</h4>
-							<img src="{% static 'img/author-1.jpg' %}" class="rounded-pill shadow d-inline-block" alt="author">
-							<div class="d-inline-block position-relative align-middle pl-2">
-								<a href="{% url 'events:organizer-events' event.user.profile.uid %}"><span>{{ event.user.profile.full_name }}</span></a>
-								<p class="description position-relative small mb-2">Organizer</p>
-								<a href="#" class="badge badge-primary host-contact position-absolute show-host-info border-0 font-weight-normal">Contact</a>
-								<div class="position-absolute custom-tooltip host-info shadow bg-white p-3 rounded">
-									<span class="d-flex align-items-center">
-										<i class="icon-contact text-primary pr-2"></i> {{ event.email }}
-									</span>
-									<hr>
-									<span class="d-flex align-items-center">
-										<i class="icon-phone text-primary pr-2"></i> {{ event.phone }}
-									</span>
-								</div>
-							</div>
-						</div>
+
 
 						<!-- Get a seat -->
 						<div class="side-widget w-100 reservation shadow rounded p-4 mt-5">
-							<h4 class="box-heading mb-5 position-relative mb-0">Get a Seat</h4>
+							<h4 class="box-heading mb-5 position-relative mb-0">Register to event</h4>
 							<p class="text-primary"> <i class="fas fa-exclamation-triangle"></i> Only <span class="text-secondary">{{ event.seats }}</span> seats left</p>
 							<form autocomplete="off" method="POST">
 								{% csrf_token %}
@@ -300,6 +288,11 @@
 			</div>
 		</div>
 	</section>
+
+	<section class="container-fluid pt-0 position-relative">
+		<iframe src="https://www.stay22.com/embed/gm?aid=bonspielsnet&lat={{ event.lat }}&lng={{ event.lon }}" id="stay22-widget" width="100%" height="460" frameborder="0"></iframe>
+	</section>
+	
 
 	<!-- Related Events -->
 	<section id="et-related-events" class="container-fluid pt-0 position-relative">
