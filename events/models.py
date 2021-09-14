@@ -227,10 +227,6 @@ class Event(models.Model):
     
     def price_val(self):
         return f'{self.get_currency_symbol()}{self.get_price()}' if self.ticket_price else 'Free'
-    
-    @property
-    def organizer(self):
-        return self.user.profile.full_name
 
     class Meta:
         ordering = ['start_date']
