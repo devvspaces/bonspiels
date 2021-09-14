@@ -57,7 +57,7 @@
 
 								<div class="d-flex">
 									<div class='position-relative'>
-										<input list_times_id='#start_times' id="start_date_picker" required size="16" type="text" readonly class="form-control bg-light form_datetime" value="{% if form.start_date.value %}{{ form.start_date.value }}{% endif %}">
+										<input list_times_id='#start_times' id="start_date_picker" required size="16" type="text" readonly class="form-control bg-light form_datetime">
 										<i class="icon-clock input-icon"></i>
 									</div>
 
@@ -65,21 +65,15 @@
 
 								</div>
 
-								<input type="hidden" id="start_date_value" value="{{form.start_date.value}}">
+								<input id="start_date" class="default_time_data" type="hidden" name="start_date" value="{{form.start_date.value}}">
 
-								{% for i in form.start_date.errors %}
-								<small class="text-danger mt-1">{{ i }}</small>
-								{% endfor %}
-
-								<input id="start_date" type="hidden" name="start_date">
-								
 							</div>
 							<div class="form-group col-sm-6">
 								<label>End time*</label>
 
 								<div class="d-flex">
 									<div class='position-relative'>
-										<input id="end_date_picker" required size="16" type="text" readonly class="form-control bg-light form_datetime" value="{% if form.end_date.value %}{{ form.end_date.value }}{% endif %}">
+										<input id="end_date_picker" required size="16" type="text" readonly class="form-control bg-light form_datetime">
 										<i class="icon-clock input-icon"></i>
 									</div>
 
@@ -87,13 +81,7 @@
 
 								</div>
 
-								<input type="hidden" id="end_date_value" value="{{form.start_date.value}}">
-
-								{% for i in form.end_date.errors %}
-								<small class="text-danger mt-1">{{ i }}</small>
-								{% endfor %}
-
-								<input type="hidden" name="end_date">
+								<input class="default_time_data" type="hidden" name="end_date" value="{{form.end_date.value}}">
 
 							</div>
 							
