@@ -28,17 +28,21 @@
 								<small class="text-danger mt-1">{{ i }}</small>
 								{% endfor %}
 							</div>
-							<div class="form-group getcontent col-sm-12">
-								<label class="d-block">Category*</label>
+
+							<div class="form-group getcontent col-sm-12 dy_select" select_text='Please select a region'>
+								<label class="d-block">Region*</label>
 								{{ form.category }}
 								{% for i in form.category.errors %}
 								<small class="text-danger mt-1">{{ i }}</small>
 								{% endfor %}
 							</div>
-							<input type="hidden" name="lat" id="lat">
-							<input type="hidden" name="lon" id="lon">
+
+							<input type="hidden" name="lat" id="lat" value="{% if form.lat.value %}{{ form.lat.value }}{% endif %}">
+
+							<input type="hidden" name="lon" id="lon" value="{% if form.lon.value %}{{ form.lon.value }}{% endif %}">
+
 							<div class="form-group getcontent col-sm-12">
-								<label>Google Address*</label>
+								<label>Event address*</label>
 								<input id="searchInput" value="{% if form.location.value %}{{ form.location.value }}{% endif %}"  type="text" required class="form-control bg-light" placeholder="Enter full address" title="Please enter location and verify on the maps" name="location">
 								{% for i in form.location.errors %}
 								<small class="text-danger mt-1">{{ i }}</small>
@@ -49,41 +53,68 @@
 							
 							<div class="form-group col-sm-6">
 								<label>Start time*</label>
-								<div class='position-relative'>
-									<input name="start_date" required size="16" type="text" readonly class="form-control bg-light form_datetime">
-									<i class="icon-clock input-icon"></i>
+
+								<div class="d-flex">
+									<div class='position-relative'>
+										<input list_times_id='#start_times' id="start_date_picker" required size="16" type="text" readonly class="form-control bg-light form_datetime">
+										<i class="icon-clock input-icon"></i>
+									</div>
+
+									<select id="start_times" class="form-control ml-2 list_times"></select>
+
 								</div>
-								
+
+								<input id="start_date" class="default_time_data" type="hidden" name="start_date" value="{{form.start_date.value}}">
+
 							</div>
 							<div class="form-group col-sm-6">
 								<label>End time*</label>
-								<div class='position-relative'>
-									<input name="end_date" required size="16" type="text" readonly class="form-control bg-light form_datetime">
-									<i class="icon-clock input-icon"></i>
+
+								<div class="d-flex">
+									<div class='position-relative'>
+										<input id="end_date_picker" required size="16" type="text" readonly class="form-control bg-light form_datetime">
+										<i class="icon-clock input-icon"></i>
+									</div>
+
+									<select class="form-control ml-2 list_times"></select>
+
 								</div>
+
+								<input class="default_time_data" type="hidden" name="end_date" value="{{form.end_date.value}}">
+
 							</div>
 							
 							<div class="form-group getcontent col-sm-12">
 								<label>Website URL</label>
-								<input value="{% if form.website.value %}{{ form.website.value }}{% endif %}"  type="text" class="form-control bg-light" placeholder="Enter comma separated URL" title="Please enter website URL" name="website">
+								<input value="{% if form.website.value %}{{ form.website.value }}{% endif %}"  type="text" class="form-control bg-light" placeholder="Please enter website URL" title="Please enter website URL" name="website">
 								{% for i in form.website.errors %}
 								<small class="text-danger mt-1">{{ i }}</small>
 								{% endfor %}
 							</div>
 							<div class="form-group getcontent col-sm-12">
-								<label>Description*</label>
+								<label>Event description*</label>
 								<textarea rows="6" required class="form-control resize-none bg-light" placeholder="Add description about this event" title="Please enter full description about this event" name="description">{% if form.description.value %}{{ form.description.value }}{% endif %}</textarea>
 								{% for i in form.description.errors %}
 								<small class="text-danger mt-1">{{ i }}</small>
 								{% endfor %}
 							</div>
+
 							<div class="form-group getcontent col-sm-12">
-								<label>Phone*</label>
-								<input value="{% if form.phone.value %}{{ form.phone.value }}{% endif %}"  type="text" required class="form-control bg-light" placeholder="Add contact number" title="Please enter your contact number" name="phone">
+								<label>Organizer*</label>
+								<input value="{% if form.organizer.value %}{{ form.organizer.value }}{% endif %}"  type="text" class="form-control bg-light" placeholder="Enter Organizer name" title="Please enter Organizer name" name="organizer">
+								{% for i in form.organizer.errors %}
+								<small class="text-danger mt-1">{{ i }}</small>
+								{% endfor %}
+							</div>
+
+							<div class="form-group getcontent col-sm-12">
+								<label>Phone</label>
+								<input value="{% if form.phone.value %}{{ form.phone.value }}{% endif %}" type="text" class="form-control bg-light" placeholder="Add contact number" title="Please enter your contact number" name="phone">
 								{% for i in form.phone.errors %}
 								<small class="text-danger mt-1">{{ i }}</small>
 								{% endfor %}
 							</div>
+
 							<div class="form-group getcontent col-sm-12">
 								<label>Email address*</label>
 								<input value="{% if form.email.value %}{{ form.email.value }}{% endif %}"  type="text" required class="form-control bg-light" placeholder="Your email address" title="Please enter your email address for the customers to reach you" name="email">
@@ -92,8 +123,8 @@
 								{% endfor %}
 							</div>
 							<div class="form-group col-sm-12">
-								<label>Available Seats*</label>
-								<input value="{% if form.seats.value %}{{ form.seats.value }}{% endif %}" type="number" required class="form-control bg-light" placeholder="Enter number of seats available" name="seats">
+								<label>Avaliable spots*</label>
+								<input value="{% if form.seats.value %}{{ form.seats.value }}{% endif %}" type="number" required class="form-control bg-light" placeholder="Enter number of spots available" name="seats">
 								{% for i in form.seats.errors %}
 								<small class="text-danger mt-1">{{ i }}</small>
 								{% endfor %}
@@ -112,21 +143,6 @@
 										</div>
 										<div class="error-social">
 											{% for i in form.facebook.errors %}
-											<small class="text-danger mt-1">{{ i }}</small>
-											{% endfor %}
-										</div>
-									</div>
-									<div class="col-sm-6">
-										<div class="input-group form-group">
-											<input value="{% if form.youtube.value %}{{ form.youtube.value }}{% endif %}"  name='youtube' placeholder="Enter URL" class="form-control bg-light" type="text">
-											<div class="input-group-append">
-												<span class="input-group-text border-0">
-													<i class="fab fa-youtube yt-icon"></i>
-												</span>
-											</div>
-										</div>
-										<div class="error-social">
-											{% for i in form.youtube.errors %}
 											<small class="text-danger mt-1">{{ i }}</small>
 											{% endfor %}
 										</div>
@@ -157,66 +173,6 @@
 										</div>
 										<div class="error-social">
 											{% for i in form.instagram.errors %}
-											<small class="text-danger mt-1">{{ i }}</small>
-											{% endfor %}
-										</div>
-									</div>
-									<div class="col-sm-6">
-										<div class="input-group form-group">
-											<input value="{% if form.google_plus.value %}{{ form.google_plus.value }}{% endif %}"  name='google_plus' placeholder="Enter URL" class="form-control bg-light" type="text">
-											<div class="input-group-append">
-												<span class="input-group-text border-0">
-													<i class="fab fa-google-plus-g gp-icon"></i>
-												</span>
-											</div>
-										</div>
-										<div class="error-social">
-											{% for i in form.google_plus.errors %}
-											<small class="text-danger mt-1">{{ i }}</small>
-											{% endfor %}
-										</div>
-									</div>
-									<div class="col-sm-6">
-										<div class="input-group form-group">
-											<input value="{% if form.digg.value %}{{ form.digg.value }}{% endif %}"  name='digg' placeholder="Enter URL" class="form-control bg-light" type="text">
-											<div class="input-group-append">
-												<span class="input-group-text border-0">
-													<i class="fab fa-digg dg-icon"></i>
-												</span>
-											</div>
-										</div>
-										<div class="error-social">
-											{% for i in form.digg.errors %}
-											<small class="text-danger mt-1">{{ i }}</small>
-											{% endfor %}
-										</div>
-									</div>
-									<div class="col-sm-6">
-										<div class="input-group m-0 form-group">
-											<input value="{% if form.dribble.value %}{{ form.dribble.value }}{% endif %}"  name='dribble' placeholder="Enter URL" class="form-control bg-light" type="text">
-											<div class="input-group-append">
-												<span class="input-group-text border-0">
-													<i class="fab fa-dribbble db-icon"></i>
-												</span>
-											</div>
-										</div>
-										<div class="error-social">
-											{% for i in form.dribble.errors %}
-											<small class="text-danger mt-1">{{ i }}</small>
-											{% endfor %}
-										</div>
-									</div>
-									<div class="col-sm-6">
-										<div name='linkedin' class="input-group m-0 form-group">
-											<input value="{% if form.linkedin.value %}{{ form.linkedin.value }}{% endif %}"  placeholder="Enter URL" class="form-control bg-light" type="text">
-											<div class="input-group-append">
-												<span class="input-group-text border-0">
-													<i class="fab fa-linkedin-in li-icon"></i>
-												</span>
-											</div>
-										</div>
-										<div class="error-social">
-											{% for i in form.linkedin.errors %}
 											<small class="text-danger mt-1">{{ i }}</small>
 											{% endfor %}
 										</div>
@@ -284,18 +240,17 @@
 						<div class="cleardiv"></div>
 						<div class="form-group col-sm-12">
 							<div class="d-flex align-items-center justify-content-between">
-								<label>Ticket (optional)</label>
+								<label>Entry fee</label>
 							</div>
 							<div class="row" id="ticket-board">
 								<div class="col-md-6">
 									<div class="ticket-table p-3 rounded">
-										<input type="text" name="ticket_name" placeholder="Enter title e.g. Silver" class="border-bottom ticket-title rounded-0 form-control w-100 mb-2">
 										<ul class="nostyle p-0">
 											<li class="input-coming">
 												<span>Price:</span>
 												<input type="number" name="ticket_price" placeholder="Enter a price" class="border-bottom ticket-title form-control">
 											</li>
-											<li class="input-coming">
+											<li class="input-coming dy_select" select_text='Please select a currency'>
 												<span>Currency:</span>
 												{{ form.ticket_currency }}
 											</li>
@@ -379,7 +334,7 @@
 			</div>
 			<div class="col-lg-3">
 				<div class="info-box shadow p-4 position-relative text-center rounded">
-					<h4>Sample Title</h4>
+					<h4>Info Title</h4>
 					<p class="description m-0">Sample description goes here...</p>
 				</div>
 			</div>

@@ -521,7 +521,7 @@ class OrganizerEvents(LoginRequiredMixin, ListView):
     
     def get(self, request, *args, **kwargs):
         # Check if the organizer is active
-        if self.get_object().is_active == False:
+        if self.get_object().user.is_active == False:
             return redirect('mainapp:home')
         
         return super().get(request, *args, **kwargs)
