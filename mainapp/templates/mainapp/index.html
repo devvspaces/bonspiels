@@ -55,7 +55,7 @@
 						<img src="{{ event.featured_image.url }}" alt="img" class="img-fluid">
 					</div>
 					<div class="content p-4">
-						<h4 class="mb-3"><a href="{% url 'events:event-detail' event.uid %}" class="text-decoration-none text-reset">{{ event.title }}</a></h4>
+						<h4 class="mb-3"><a href="{% url 'events:event-detail' event.slug %}" class="text-decoration-none text-reset">{{ event.title }}</a></h4>
 						<p><i class="icon-clock align-middle text-primary"></i>&nbsp; {{ event.start_date|date:"d" }} - {{ event.end_date|date:"d M" }}</p>
 						<div class="d-flex event-actions">
 							<!-- <span class="event-action pointer" data-toggle="tooltip" data-placement="bottom" title="{{ event.email }}"><i class="icon-contact"></i></span> -->
