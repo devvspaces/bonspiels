@@ -125,7 +125,7 @@
 							</div>
 							<div class="form-group col-sm-12">
 								<label>Avaliable spots*</label>
-								<input value="{% if form.seats.value %}{{ form.seats.value }}{% endif %}" type="number" required class="form-control bg-light" placeholder="Enter number of spots available" name="seats">
+								<input min=0 value="{% if form.seats.value %}{{ form.seats.value }}{% endif %}" type="number" required class="form-control bg-light" placeholder="Enter number of spots available" name="seats">
 								{% for i in form.seats.errors %}
 								<small class="text-danger mt-1">{{ i }}</small>
 								{% endfor %}
@@ -258,7 +258,7 @@
 										<ul class="nostyle p-0">
 											<li class="input-coming">
 												<span>Price:</span>
-												<input type="number" name="ticket_price" placeholder="Enter a price" class="border-bottom ticket-title form-control" value="{% if form.ticket_price.value %}{{ form.ticket_price.value }}{% endif %}">
+												<input min=0 type="number" name="ticket_price" placeholder="Enter a price" class="border-bottom ticket-title form-control" value="{% if form.ticket_price.value %}{{ form.ticket_price.value }}{% endif %}">
 											</li>
 											<li class="input-coming dy_select" select_text='Please select a currency'>
 												<span>Currency:</span>
@@ -273,7 +273,7 @@
 						<div class="cleardiv"></div>
 						<div class="form-group col-sm-12">
 							<div class="d-flex align-items-center justify-content-between">
-								<label>Information Collect Tools (optional)</label>
+								<label>Please select which fields will appear at event registration form (optional)</label>
 							</div>
 							<div class="row" id="ticket-board">
 								<div class="col-md-6">

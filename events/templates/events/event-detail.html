@@ -11,7 +11,7 @@
 						<h1 class="mb-4">{{ event.title }} &nbsp;<i class="fas fa-check-circle text-green"></i></h1>
 
 						<div class="info">
-							<div class="h6"><i class="icon-clock text-primary"></i>&nbsp; {{ event.start_date }}</div>
+							<div class="h6"><i class="icon-clock text-primary"></i>&nbsp; {{ event.start_date|date:"M d" }} - {{ event.end_date|date:"M d" }}</div>
 							<div class="mb-2"><i class="icon-contact"></i>&nbsp; {{ event.email }}</div>
 							<div class="text-primary"><i class="icon-phone"></i>&nbsp; {{ event.phone }}</div>
 						</div>
@@ -41,7 +41,7 @@
 						<div class="event-features text-white">
 
 							<div><span class="circle-icon text-primary bg-white"><i class="icon-eye"></i></span>{{event_views}} views</div>
-							<div><span class="circle-icon text-primary bg-white"><i class="fas fa-ticket-alt"></i></span>Remaining spots: {{ event.seats }}</div>
+							<div><span class="circle-icon text-primary bg-white"><i class="fas fa-ticket-alt"></i></span>Spots Left: {{ event.seats }}</div>
 							<div><span class="circle-icon bg-green"><i class="fas fa-check text-white"></i></span>{{ event.status }}</div>
 						</div>
 						<div class="event-actions ml-auto">
@@ -215,7 +215,7 @@
 								<li><a href="{{ event.instagram }}" class="d-flex align-items-center justify-content-center border text-decoration-none transition"><i class="fab fa-instagram" aria-hidden="true"></i></a></li>
 							</ul>
 							<hr>
-							<label>Website: </label> <a href="{{ event.get_website_link }}" class="text-primary text-decoration-none">{{ event.get_website }} <i class="fas fa-external-link-alt"></i></a>
+							<label>Website: </label> <a href="{{ event.get_website_link }}" class="text-primary text-decoration-none" style="word-break: break-word;">{{ event.get_website }} <i class="fas fa-external-link-alt"></i></a>
 						</div>
 
 						<!-- Amenities -->
@@ -237,7 +237,7 @@
 						<!-- Get a seat -->
 						<div class="side-widget w-100 reservation shadow rounded p-4 mt-5">
 							<h4 class="box-heading mb-5 position-relative mb-0">Register to event</h4>
-							<p class="text-primary"> <i class="fas fa-exclamation-triangle"></i> Only <span class="text-secondary">{{ event.seats }}</span> seats left</p>
+							<p class="text-primary"> <i class="fas fa-exclamation-triangle"></i> Only <span class="text-secondary">{{ event.seats }}</span> spots left</p>
 							<form autocomplete="off" method="POST">
 								{% csrf_token %}
 
@@ -252,7 +252,7 @@
 								</div>
 								<div class="text-center">
 									<div class="position-relative border-0 mt-md-0 mt-3 btn btn-primary submit-btn">
-										<i class="fas fa-credit-card btn-icon input-icon"></i> Pay now
+										<i class="fas fa-credit-card btn-icon input-icon"></i> Register your team
 										<input name='submit' type="submit" class="h-100 w-100 position-absolute" value="buy_ticket">
 									</div>
 								</div>
@@ -311,7 +311,7 @@
 						<img src="{{ i.featured_image.url }}" alt="img" class="img-fluid">
 					</div>
 					<div class="content p-4">
-						<h4 class="mb-3"><a href="{% url 'events:event-detail' event.uid %}" class="text-decoration-none text-reset">{{ i.title }}</a></h4>
+						<h4 class="mb-3"><a href="{% url 'events:event-detail' event.slug %}" class="text-decoration-none text-reset">{{ i.title }}</a></h4>
 						<p><i class="icon-clock align-middle text-primary"></i>&nbsp; {{ i.start_date|date:"d M" }} - {{ i.end_date|date:"d M" }}</p>
 						<div class="d-flex event-actions">
 							<span class="event-action pointer" data-toggle="tooltip" data-placement="bottom" title="{{ event.email }}"><i class="icon-contact"></i></span>

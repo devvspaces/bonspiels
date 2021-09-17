@@ -44,7 +44,7 @@ class Category(models.Model):
 
 class Amenity(models.Model):
     name = models.CharField(max_length=30)
-    icon = models.CharField(max_length=30, blank=True)
+    icon = models.CharField(max_length=30, default='smile')
 
     def __str__(self):
         return self.name
@@ -58,7 +58,7 @@ class Event(models.Model):
     email = models.EmailField()
 
     title = models.CharField(max_length=50)
-    slug = models.SlugField(max_length=255, blank=True)
+    slug = models.SlugField(max_length=255, unique=True)
     category = models.ForeignKey(Category, on_delete=models.DO_NOTHING)
     
     location = models.CharField(max_length=200)
@@ -120,6 +120,23 @@ class Event(models.Model):
 
         return []
 
+    def gen_line_up(self, form_name):
+        html = ''
+        names = ['first', 'second', 'third', 'fourth']
+        for name in names:
+            html += f'''
+                <div class="form-group">
+                    <div class="d-flex justify-content-between">
+                        <label>{name.capitalize()}</label>
+
+                        <span class="d-flex align-items-center">Captain
+                        <input type="checkbox" class="form-check ml-1 line_up_captain" name="{name}_line"></span>
+                    </div>
+                    <input type="text" class="form-control bg-light" name="{name}">
+                </div>
+            '''
+        return html
+
     def populate_information_fields(self):
         html = ''
         if self.inform_tools_conf:
@@ -139,12 +156,16 @@ class Event(models.Model):
                     form_name = field['form_name']
                     _type = field['type']
 
-                    html += f'''
-                        <div class="form-group">
-                            <label>{name}{required}</label>
-                            <input {required2} type="{_type}" class="form-control bg-light" placeholder="Enter your {name}" name="{form_name}">
-                        </div>
-                    '''
+                    if form_name == 'line_up':
+                        ml = self.gen_line_up(form_name)
+                    else:
+                        ml = f'''
+                            <div class="form-group">
+                                <label>{name}{required}</label>
+                                <input {required2} type="{_type}" class="form-control bg-light" placeholder="Enter your {name}" name="{form_name}">
+                            </div>
+                        '''
+                    html += ml
             except Exception as e:
                 print(e)
         
@@ -195,6 +216,7 @@ class Event(models.Model):
         for i in Amenity.objects.all():
             ne = {}
             ne['name'] = i.name
+            ne['icon'] = i.icon
             ne['avail'] = i.event_set.filter(id=self.id).exists()
             li.append(ne)
         return li
@@ -227,7 +249,7 @@ class Event(models.Model):
         return 'Prices are high' if self.ticket_price and (self.ticket_price > 0) else 'No fee'
     
     def price_val(self):
-        return f'{self.get_currency_symbol()}{self.get_price()}' if self.ticket_price else 'Free'
+        return f'{self.get_price()} {self.ticket_currency}' if self.ticket_price else 'Free'
 
     def save(self, *args, **kwargs):
         if not self.slug:

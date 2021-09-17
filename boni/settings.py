@@ -152,13 +152,33 @@ INFORMATION_TOOLS = [
         'type': 'text',
     },
     {
+        'name': 'Team email',
+        'form_name': 'team_email',
+        'type': 'email',
+    },
+    {
         'name': 'Team phone',
         'form_name': 'team_phone',
         'type': 'text',
     },
+    # {
+    #     'name': 'Team id card',
+    #     'form_name': 'team_id_card',
+    #     'type': 'file',
+    # },
     {
-        'name': 'Team id card',
-        'form_name': 'team_id_card',
-        'type': 'file',
+        'name': 'Region/Country',
+        'form_name': 'region_country',
+        'type': 'text',
+    },
+    {
+        'name': 'Curling club',
+        'form_name': 'curling_club',
+        'type': 'text',
+    },
+    {
+        'name': 'Line up',
+        'form_name': 'line_up',
+        'type': 'multiple_text_box',
     },
 ]
