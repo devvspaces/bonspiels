@@ -67,20 +67,35 @@
                                     <div><i class="icon-phone"></i>&nbsp; {{ i.phone }}</div>
                                 </div>
                                 <hr>
-                                <div class="time-left mt-4 d-inline-block pt-2 pt-md-0" end_date = "{{ i.end_date_js_format }}">
-                                    <div class="timer search">
-                                        <div class="days"></div>
-                                        <div class="hours text-primary-flat"></div>
-                                        <div class="minutes text-secondary-flat"></div>
-                                        <div class="seconds"></div>
+
+                                <div class="d-flex justify-content-between">
+                                    <div class="time-left mt-4 d-inline-block pt-2 pt-md-0" end_date = "{{ i.end_date_js_format }}">
+                                        <div class="timer search">
+                                            <div class="days"></div>
+                                            <div class="hours text-primary-flat"></div>
+                                            <div class="minutes text-secondary-flat"></div>
+                                            <div class="seconds"></div>
+                                        </div>
                                     </div>
-                                </div>
                                 {% if request.user == i.user %}
-                                <a href="{% url 'events:event-update' i.uid %}" class="position-relative float-right border-0 mt-3 btn btn-primary btn-small submit-btn">
-                                    <i class="icon-calendar btn-icon input-icon"></i> Edit
-                                    <input type="submit" class="h-100 w-100 position-absolute" value="Discover Now">
-                                </a>
+
+                                
+                                    <div class="d-flex">
+                                        <a href="{% url 'events:event-update' i.uid %}" class="position-relative float-right border-0 mt-3 btn btn-primary btn-small submit-btn">
+                                            <i class="icon-calendar btn-icon input-icon"></i> Edit
+                                            <input type="submit" class="h-100 w-100 position-absolute" value="Discover Now">
+                                        </a>
+
+                                        <a href="{% url 'events:event-duplicate' i.uid %}" class="position-relative float-right border-0 mt-3 btn btn-primary btn-small submit-btn">
+                                            <i class="icon-calendar btn-icon input-icon"></i> Duplicate
+                                            <input type="submit" class="h-100 w-100 position-absolute" value="Discover Now">
+                                        </a>
+                                    </div>
+                                
+
                                 {% endif %}
+
+                                </div>
                             </div>
                         </div>
                     </div>

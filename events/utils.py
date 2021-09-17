@@ -1,9 +1,34 @@
+import random, string
 import pytz
 from datetime import datetime
 import socket
 
 import inflect
 p = inflect.engine()
+
+
+from django.template.defaultfilters import slugify
+
+
+
+def random_text(p=5):
+    return ''.join(random.sample(string.ascii_uppercase + string.ascii_lowercase,p))
+
+def get_unique_slug(instance, slug=None, length=5):
+    if not slug:
+        slug = slugify(instance.title)
+    
+    exists = instance.__class__.objects.filter(slug = slug).exists()
+    
+    if exists:
+        code = random_text(length)
+        slug_title = slugify(instance.title)
+        slug = f'{slug_title}-{code}'
+        
+        return get_unique_slug(instance, slug=slug)
+    
+    return slug
+
 
 def strDate(val, att):
     if val > 1:

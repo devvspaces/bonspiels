@@ -1075,7 +1075,12 @@ button.owl-prev:hover:before, button.owl-next:hover:before{
   border-radius: 4px 4px 0 0;
   overflow: hidden;
 }
+.event-grid .image-wrap img{
+  object-fit: cover;
+  height: 200px;
+}
 .event-grid .content{
+  min-height: 170px;
   border-radius: 0 0 4px 4px;
 }
 #et-upcoming-events .event-grid .image-wrap .like{

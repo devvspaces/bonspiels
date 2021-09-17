@@ -9,7 +9,7 @@ from django.utils.safestring import mark_safe
 from account.models import User
 
 from .managers import EventManager
-from .utils import strDate, ordinal
+from .utils import strDate, ordinal, get_unique_slug
 
 CURRENCY = (
     ('NGN', 'Nigerian naira',),
@@ -58,6 +58,7 @@ class Event(models.Model):
     email = models.EmailField()
 
     title = models.CharField(max_length=50)
+    slug = models.SlugField(max_length=255, blank=True)
     category = models.ForeignKey(Category, on_delete=models.DO_NOTHING)
     
     location = models.CharField(max_length=200)
@@ -227,6 +228,13 @@ class Event(models.Model):
     
     def price_val(self):
         return f'{self.get_currency_symbol()}{self.get_price()}' if self.ticket_price else 'Free'
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            # Empty slug, so set slug
+            self.slug = get_unique_slug(self)
+
+        super().save(*args, **kwargs)
 
     class Meta:
         ordering = ['start_date']
