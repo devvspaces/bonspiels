@@ -1,6 +1,7 @@
 import random
 import json
 from typing import List
+import uuid
 
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
@@ -566,4 +567,23 @@ def report_event_now(request, uid):
     report = EventReport.objects.get_or_create(reporter=request.user, event=event)
     messages.success(request, f'Event has been reported')
     return redirect(reverse('events:event-detail', kwargs={'uid': str(event.uid)}))
+
+
+@login_required
+def duplicate_event(request, uid):
+    event = get_object_or_404(Event, uid=uid)
+
+    # copy the unclonable fields
+    old_amenities = event.amenities.all()
+
+    event.pk = None
+    event.uid = uuid.uuid4()
+    event.save()
+
+    # Set unclonable fields
+    event.amenities.set(old_amenities)
+    
+    messages.success(request, f'Event is successfully duplicated')
+    return redirect(reverse('events:event-detail', kwargs={'uid': str(event.uid)}))
+
 
