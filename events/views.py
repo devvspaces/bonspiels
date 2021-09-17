@@ -169,12 +169,13 @@ class EventDetail(DetailView):
     extra_context = {
         'title': 'Event Detail'
     }
-    slug_field = 'uid'
-    slug_url_kwarg = 'uid'
+    slug_field = 'slug'
+    slug_url_kwarg = 'slug'
     model = Event
 
     def get_object(self):
-        self.object = get_object_or_404(Event, uid=self.kwargs.get('uid'))
+        query = { self.slug_field : self.kwargs.get(self.slug_url_kwarg)}
+        self.object = get_object_or_404(Event, **query)
         return self.object
 
     def get_context_data(self, **kwargs):
@@ -231,24 +232,41 @@ class EventDetail(DetailView):
             event = self.get_object()
 
             info_tools = event.get_tools_dict()
+            post = request.POST
 
             for fobj in info_tools:
                 # Get the field
                 label = fobj['name']
                 name = fobj['form_name']
-                info = request.POST.get(name)
+                info = post.get(name)
 
-                if fobj['included_required'] == '11':
+                d_info = {label:info}
+
+                if name == 'line_up':
+                    names = ['first', 'second', 'third', 'fourth']
+
+                    d_info = {'line_up': []}
+
+                    for i in names:
+                        datax = post.get(i)
+                        dataxi = post.get(f'{i}_line')
+
+                        dataxi = 'Yes' if dataxi == 'on' else ''
+
+                        data_obj = {
+                            i.capitalize() : datax,
+                            'captain': dataxi
+                        }
+
+                        d_info['line_up'].append(data_obj)
+
+                elif fobj['included_required'] == '11':
                     if not info:
                         ticket_errors.append(f'{label} is required')
                         continue
 
                 # Add information to ticket information
-                ticket_infomation.append(
-                    {
-                        label:info
-                    }
-                )
+                ticket_infomation.append(d_info)
 
             if len(ticket_errors) == 0:
                 # Create ticket
@@ -278,7 +296,7 @@ class EventDetail(DetailView):
                         ReviewImage.objects.create(review=review, image=i)
                 
                 messages.success(request, f'Your review has been successfully submitted')
-                return redirect(reverse('events:event-detail', kwargs={'uid': str(self.get_object().uid)}))
+                return redirect(reverse('events:event-detail', kwargs={'slug': str(self.get_object().slug)}))
             context['review_form'] = review_form
 
         return render(request, self.template_name, context)
@@ -363,7 +381,7 @@ class CreateEvent(LoginRequiredMixin, TemplateView):
             event.save()
             
             messages.success(request, 'Event has been successfully created')
-            return redirect(reverse('events:event-detail', kwargs={'uid': str(event.uid)}))
+            return redirect(reverse('events:event-detail', kwargs={'slug': str(event.slug)}))
         
         context['form'] = form
         messages.warning(request, 'Please make sure you correct the errors on the form')
@@ -474,7 +492,7 @@ class UpdateEvent(LoginRequiredMixin, TemplateView):
             event.save()
             
             messages.success(request, 'Event has been successfully updated')
-            return redirect(reverse('events:event-detail', kwargs={'uid': str(event.uid)}))
+            return redirect(reverse('events:event-detail', kwargs={'slug': str(event.slug)}))
         
         context['form'] = form
         messages.warning(request, 'Please make sure you correct the errors on the form')
@@ -566,7 +584,7 @@ def report_event_now(request, uid):
     event = get_object_or_404(Event, uid=uid)
     report = EventReport.objects.get_or_create(reporter=request.user, event=event)
     messages.success(request, f'Event has been reported')
-    return redirect(reverse('events:event-detail', kwargs={'uid': str(event.uid)}))
+    return redirect(reverse('events:event-detail', kwargs={'slug': str(event.slug)}))
 
 
 @login_required
@@ -584,6 +602,6 @@ def duplicate_event(request, uid):
     event.amenities.set(old_amenities)
     
     messages.success(request, f'Event is successfully duplicated')
-    return redirect(reverse('events:event-detail', kwargs={'uid': str(event.uid)}))
+    return redirect(reverse('events:event-detail', kwargs={'slug': str(event.slug)}))
 
 

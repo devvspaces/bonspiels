@@ -56,7 +56,7 @@
 					</div>
 					<div class="content p-4">
 						<h4 class="mb-3"><a href="{% url 'events:event-detail' event.uid %}" class="text-decoration-none text-reset">{{ event.title }}</a></h4>
-						<p><i class="icon-clock align-middle text-primary"></i>&nbsp; {{ event.start_date|date:"d M" }} - {{ event.end_date|date:"d M" }}</p>
+						<p><i class="icon-clock align-middle text-primary"></i>&nbsp; {{ event.start_date|date:"d" }} - {{ event.end_date|date:"d M" }}</p>
 						<div class="d-flex event-actions">
 							<!-- <span class="event-action pointer" data-toggle="tooltip" data-placement="bottom" title="{{ event.email }}"><i class="icon-contact"></i></span> -->
 							<span class="event-action pointer" data-toggle="tooltip" data-placement="bottom" title="{{ event.phone }}"><i class="icon-phone"></i></span>
@@ -81,54 +81,73 @@
 
 			<!-- Events by Location -->
 			<div class="event-results pl-4 pr-md-4">
-				<div class="row grid-view">
-					{% for loc in locations %}
-					<div class="col-md-6 mt-3 mb-3">
-						<div class="blog-grid w-100 mt-4 rounded shadow">
-							{% with loc.get_events as l_events %}
-							<div class="image-wrap img-overlay position-relative">
-								<span class="badge badge-primary listings photocount position-absolute">{{ loc.count_listings }} Listings</span>
-								<img src="{{ loc.image.url }}" alt="img" class="img-fluid rounded-top">
-								<h3 class="mb-4 fixed-bottom pl-4 title text-white font-weight-bold position-absolute">{{ loc.name.capitalize }}</h3>
-							</div>
-							<div class="content-slides bg-white">
-								<div class="owl-carousel owl-theme">
-									{% for i in l_events %}
-									<div class="content w-100 item p-4">
-										<span class="text-muted"><i class="icon-clock text-primary"></i> &nbsp;Posted {{ i.days_since_created }}</span>
-										<span class="text-primary float-right" data-toggle="tooltip" data-placement="bottom" title="{{ i.price_text }}">{{ i.price_val }}</span>
-										<hr>
-										<h4 class="mb-3"><a href="{% url 'events:event-detail' i.uid %}" class="text-decoration-none text-reset">{{ i.title }}</h4></a>
-										<p class="description">
-											{{ i.description|truncatechars:30}}
-										</p>
-										<div class="info">
-											<div class="mb-2"><i class="icon-clock"></i>&nbsp; {{ i.end_date|date:"d M, Y" }}</div>
-											<div class="mb-2"><i class="icon-contact"></i>&nbsp; {{ i.email }}</div>
-											<div class="text-secondary"><i class="icon-phone"></i>&nbsp; {{ i.phone }}</div>
-										</div>
-										<hr>
-										<div class="time-left mt-4 d-inline-block pt-2 pt-md-0" end_date="{{ i.end_date_js_format }}">
-											<div class="timer search">
-												<div class="days"></div>
-												<div class="hours text-primary-flat"></div>
-												<div class="minutes text-secondary-flat"></div>
-												<div class="seconds"></div>
+
+				<div class="splide">
+					<div class="splide__track">
+						<ul class="splide__list">
+							{% for loc_list in location_page_list %}
+							<div class="row grid-view splide__slide">
+								{% for loc in loc_list %}
+								<div class="col-md-6 mt-3 mb-3">
+									<div class="blog-grid w-100 mt-4 rounded shadow">
+										{% with loc.get_events as l_events %}
+											<div class="image-wrap img-overlay position-relative" style="height: 350px;">
+												<span class="badge badge-primary listings photocount position-absolute">{{ loc.count_listings }} Listings</span>
+												<img src="{{ loc.image.url }}" alt="img" class="img-fluid rounded-top location_page_img">
+												<h3 class="mb-4 fixed-bottom pl-4 title text-white font-weight-bold position-absolute">{{ loc.name.capitalize }}</h3>
 											</div>
-										</div>
-										<a href="{% url 'events:add-calendar' i.uid %}" style="width: 150px;" class="position-relative float-right border-0 mt-3 btn btn-primary btn-small submit-btn">
-											<i class="icon-calendar btn-icon input-icon"></i> Schedule
-											<input class='mover' href="{% url 'events:event-detail' i.uid %}" type="submit" class="h-100 w-100 position-absolute" value="Discover Now">
-										</a>
+											<div style="min-height: 400px;" class="content-slides bg-white">
+												{% if l_events.count == 0 %}
+													<h2 class="no_listing_text">No listings here yet</h2>
+												{% else %}
+													<div class="owl-carousel owl-theme">
+														{% for i in l_events %}
+															<div class="content w-100 item p-4">
+																<span class="text-muted"><i class="icon-clock text-primary"></i> &nbsp;Posted {{ i.days_since_created }}</span>
+																<span class="text-primary float-right" data-toggle="tooltip" data-placement="bottom" title="{{ i.price_text }}">{{ i.price_val }}</span>
+																<hr>
+																<h4 class="mb-3"><a href="{% url 'events:event-detail' i.slug %}" class="text-decoration-none text-reset">{{ i.title }}</h4></a>
+																<p class="description">
+																	{{ i.description|truncatechars:30}}
+																</p>
+																<div class="info">
+																	<div class="mb-2"><i class="icon-clock"></i>&nbsp; {{ i.end_date|date:"d M, Y" }}</div>
+																	<div class="mb-2"><i class="icon-contact"></i>&nbsp; {{ i.email }}</div>
+																	<div class="text-secondary"><i class="icon-phone"></i>&nbsp; {{ i.phone }}</div>
+																</div>
+																<hr>
+																<div class="time-left mt-4 d-inline-block pt-2 pt-md-0" end_date="{{ i.end_date_js_format }}">
+																	<div class="timer search">
+																		<div class="days"></div>
+																		<div class="hours text-primary-flat"></div>
+																		<div class="minutes text-secondary-flat"></div>
+																		<div class="seconds"></div>
+																	</div>
+																</div>
+																<a href="{% url 'events:add-calendar' i.uid %}" style="width: 150px;" class="position-relative float-right border-0 mt-3 btn btn-primary btn-small submit-btn">
+																	<i class="icon-calendar btn-icon input-icon"></i> Schedule
+																	<input class='mover' href="{% url 'events:event-detail' i.slug %}" type="submit" class="h-100 w-100 position-absolute" value="Discover Now">
+																</a>
+															</div>
+														{% endfor %}
+													</div>
+												{% endif %}
+											</div>
+										{% endwith %}
 									</div>
-								{% endfor %}
 								</div>
+								{% endfor %}
 							</div>
-							{% endwith %}
-						</div>
+							{% endfor %}
+						</ul>
 					</div>
-					{% endfor %}
 				</div>
+
+				<div class="splide_btns">
+					<button id="splide_prev"><i class="fas fa-angle-left"></i></button>
+					<button id="splide_next"><i class="fas fa-angle-right"></i></button>
+				</div>
+
 			</div>
 		</div>
 	</section>
@@ -231,7 +250,7 @@
 				{% if category.get_first_event %}
 				<div class="grid">
 					<img src="{{ category.image.url }}" alt="Popular event">
-					<a href="{% url 'events:event-detail' category.get_first_event.uid %}" class="overlay transition text-decoration-none">
+					<a href="{% url 'events:event-detail' category.get_first_event.slug %}" class="overlay transition text-decoration-none">
 						<span class="badge-green category badge-secondary">{{ category.event_set.count }} Listings</span>
 						<div class="hidden-data transition">
 							<h3 class="title text-white">{{ category.get_first_event.title }}</h3>
@@ -255,6 +274,8 @@
 			<!-- Featured Events -->
 			<div class="featured-events col-lg-6">
 				<h4 class="box-heading mb-5 ml-3 position-relative mb-0">Featured Events</h4>
+
+				{% if featured_events.count != 0 %}
 				<div class="owl-carousel owl-theme">
 					<!-- Item -->
 					<div class="item p-3">
@@ -269,7 +290,7 @@
 								</div>
 								<div class="col-sm-8 pl-md-0">
 									<div class="content-box p-3">
-										<h5 class="d-inline-block"><a href="{% url 'events:event-detail' i.uid %}" class="text-decoration-none text-reset"> {{ i.title }}</a></h5>
+										<h5 class="d-inline-block"><a href="{% url 'events:event-detail' i.slug %}" class="text-decoration-none text-reset"> {{ i.title }}</a></h5>
 										<small class="float-right"><i class="icon-clock text-primary"></i>&nbsp; {{ i.end_date|date:"d M, Y" }}</small>
 										<p class="description">{{ i.description|truncatechars:30}}</p>
 										<small class="tm">Time left</small>
@@ -293,11 +314,16 @@
 						{% endfor %}
 					</div>
 				</div>
+				{% else %}
+					<h3 class="ml-3">No Featured events</h3>
+				{% endif %}
 			</div>
 
 			<!-- Upcoming Events -->
 			<div class="featured-events col-lg-6">
 				<h4 class="box-heading mb-5 ml-3 position-relative mb-0">Upcoming Events</h4>
+
+				{% if upcoming_events.count != 0 %}
 				<div class="owl-carousel owl-theme">
 					<!-- Item -->
 					<div class="item p-3">
@@ -312,7 +338,7 @@
 								</div>
 								<div class="col-sm-8 pl-md-0">
 									<div class="content-box p-3">
-										<h5 class="d-inline-block"><a href="{% url 'events:event-detail' i.uid %}" class="text-decoration-none text-reset"> {{ i.title }}</a></h5>
+										<h5 class="d-inline-block"><a href="{% url 'events:event-detail' i.slug %}" class="text-decoration-none text-reset"> {{ i.title }}</a></h5>
 										<small class="float-right"><i class="icon-clock text-primary"></i>&nbsp; {{ i.end_date|date:"d M, Y" }}</small>
 										<p class="description">{{ i.description|truncatechars:30}}</p>
 										<small class="tm">Time left</small>
@@ -336,6 +362,9 @@
 						{% endfor %}
 					</div>
 				</div>
+				{% else %}
+					<h3 class="ml-3">No Upcoming events</h3>
+				{% endif %}
 			</div>
 		</div>
 	</section>

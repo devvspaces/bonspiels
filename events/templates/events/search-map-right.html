@@ -154,7 +154,7 @@
 									<span class="text-muted"><i class="icon-clock text-primary"></i> &nbsp;Posted {{ i.days_since_created }}</span>
 									<span class="text-primary float-right">{{ i.price_val }}</span>
 									<hr>
-									<h4 class="mb-3"><a href="{% url 'events:event-detail' i.uid %}" class="text-decoration-none text-reset">{{ i.title }}</a></h4>
+									<h4 class="mb-3"><a href="{% url 'events:event-detail' i.slug %}" class="text-decoration-none text-reset">{{ i.title }}</a></h4>
 									<p class="description">
 										{{ i.description|truncatechars:30}}
 									</p>

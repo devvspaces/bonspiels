@@ -1,5 +1,25 @@
 $(document).ready(function(){
 
+	// Set the splides
+	try{
+		var splide = new Splide( '.splide', {
+			type   : 'loop',
+			drag: false,
+			pagination: false,
+			arrows: false,
+		} ).mount();
+
+		$('#splide_prev').on('click', function() {
+			splide.go( '<' );
+		})
+		$('#splide_next').on('click', function() {
+			splide.go( '>' );
+		})
+
+	} catch(e){
+		console.log(e)
+	}
+
 	// Helper functions
 	// This helps to set multiple attributes at once
 	function setAttributes(el, attrs) {
@@ -26,6 +46,20 @@ $(document).ready(function(){
 	      return typeof args[i] != 'undefined' ? args[i++] : '';
 	    });
 	  };
+
+
+	// Code to select only one captain in line up options
+	if ($('.line_up_captain').length){
+		$('.line_up_captain').on('click', function(e){
+			let line_up_captain = document.querySelectorAll('.line_up_captain')
+
+			line_up_captain.forEach(i=>{
+				if (i != this){
+					i.checked = false
+				}
+			})
+		})
+	}
 
 
 	// Code to generate time list

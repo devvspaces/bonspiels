@@ -8,7 +8,7 @@ urlpatterns = [
     path('add/', views.CreateEvent.as_view(), name='add-event'),
     path('edit/<str:uid>/', views.UpdateEvent.as_view(), name='event-update'),
     path('duplicate/<str:uid>/', views.duplicate_event, name='event-duplicate'),
-    path('detail/<str:uid>/', views.EventDetail.as_view(), name='event-detail'),
+    path('detail/<str:slug>/', views.EventDetail.as_view(), name='event-detail'),
     
     path('search/', views.EventSearch.as_view(), name='event-search'),
     path('calendar/', views.EventCalendarView.as_view(), name='event-calendar'),

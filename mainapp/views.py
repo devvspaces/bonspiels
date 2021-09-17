@@ -12,6 +12,7 @@ from django.utils.encoding import force_text,force_bytes
 from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_encode,urlsafe_base64_decode
 from django.http import JsonResponse
+from django.core.paginator import Paginator
 
 from account.models import User
 from account.forms import (UserRegisterForm, LoginForm, ChangePasswordForm,
@@ -81,15 +82,25 @@ class Home(TemplateView):
         # Get featured and upcoming events (4)
         context['featured_events'] = queryset.filter(featured=True)[:2]
         context['upcoming_events'] = queryset.get_upcoming()[:2]
-        
+
         # Get the gallery events
         valid_events_id_list = queryset.values_list('id', flat=True)
         random_event_id_list = random.sample(list(valid_events_id_list), min(len(valid_events_id_list), 6))
         context['gallery_events'] = queryset.filter(id__in=random_event_id_list)
 
         # Get the events by location
-        locations = FeaturedLocation.objects.all()[:4]
-        context['locations'] = locations
+        locations = FeaturedLocation.objects.all()
+
+        # Paginate the locations by four
+        location_page_obj = Paginator(locations, 4)
+
+        # Add the object list of all pages into a list
+        location_page_list = []
+
+        for i in location_page_obj.page_range:
+            location_page_list.append(location_page_obj.page(i).object_list)
+
+        context['location_page_list'] = location_page_list
 
         # Get the categories to context
         categories = categories_set[:4]
