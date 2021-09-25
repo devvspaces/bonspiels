@@ -113,7 +113,7 @@ def get_trip_advisor(address):
             print(e)
             # driver.find_element_by_css_selector('#_evidon_banner')
 
-            js = "var aa=document.getElementById('#_evidon_banner');aa.remove()"
+            js = "var aa=document.getElementById('_evidon_banner');aa.remove()"
             driver.execute_script(js)
 
             show.click()
