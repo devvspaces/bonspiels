@@ -107,8 +107,14 @@ def get_trip_advisor(address):
 
         # Find the show more button and click it
         show = driver.find_element_by_css_selector('.show-block.show-more')
-        show.click()
+        try:_evidon_banner
+            show.click()
+        except ElementClickInterceptedException as e:
+            print(e)
+            show.click()
+
         time.sleep(5)
+
 
         listings = driver.find_elements_by_css_selector('.ui_columns.result-content-columns')
 
