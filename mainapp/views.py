@@ -70,11 +70,6 @@ class Home(TemplateView):
 
         context['events'] = queryset[:5]
 
-        # Get the event titles
-        # titles = [i.title for i in queryset[:2]]
-        # titles += [i.name for i in categories_set[:2]]
-        # context['titles'] = titles
-
         # Send sets to context
         context['all_events'] = queryset
         context['all_categories'] = categories_set
@@ -84,9 +79,9 @@ class Home(TemplateView):
         context['upcoming_events'] = queryset.get_upcoming()[:2]
 
         # Get the gallery events
-        valid_events_id_list = queryset.values_list('id', flat=True)
-        random_event_id_list = random.sample(list(valid_events_id_list), min(len(valid_events_id_list), 6))
-        context['gallery_events'] = queryset.filter(id__in=random_event_id_list)
+        # valid_events_id_list = queryset.values_list('id', flat=True)
+        # random_event_id_list = random.sample(list(valid_events_id_list), min(len(valid_events_id_list), 6))
+        # context['gallery_events'] = queryset.filter(id__in=random_event_id_list)
 
         # Get the events by location
         locations = FeaturedLocation.objects.all()

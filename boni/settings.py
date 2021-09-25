@@ -165,11 +165,6 @@ INFORMATION_TOOLS = [
         'form_name': 'team_phone',
         'type': 'text',
     },
-    # {
-    #     'name': 'Team id card',
-    #     'form_name': 'team_id_card',
-    #     'type': 'file',
-    # },
     {
         'name': 'Region/Country',
         'form_name': 'region_country',

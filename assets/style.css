@@ -2412,6 +2412,7 @@ section#et-notfound{
   margin:  1rem auto;
   display: flex;
   align-items: center;
+  justify-content: center;
 }
 .splide_btns button{
   background: 0 0;
@@ -2459,4 +2460,26 @@ section#et-notfound{
   font-size: 3rem;
   color: #dadad6;
   text-shadow: 1px 1px #9e9898;
+}
+
+.registered-team-box{
+  border-radius: .2rem;
+  overflow: hidden;
+}
+
+.registered-team-box .head-x{
+  background: linear-gradient(
+    90deg, rgba(238,9,121,1) 0%,
+    rgba(255,106,0,1) 100%) !important;
+  color: #fff !important;
+}
+
+.registered-team-box .head-x h3 a{
+  color: #fff !important;
+}
+
+.registered-line-up{
+  background: rgb(234 234 234 / 52%);
+  padding: 2rem 1rem 2rem 1rem;
+  margin-top: 1rem;
 }

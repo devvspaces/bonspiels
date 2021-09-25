@@ -1,0 +1,30 @@
+{% autoescape off %}
+Hi {{ event.organizer }},
+
+This is a new enquiry from Bonspiels, it's about the event you created.
+<h5>Event: {{ event.title }}</h5>
+<h5>Duration: {{ event.start_date|date:"M d" }} - {{ event.end_date|date:"M d" }}</h5>
+
+Details of the enquirer and the enquiry is provided below;
+
+<h5>Name:</h5>
+<p>{{ name }}</p>
+
+<h5>Email:</h5>
+<p>{{ email }}</p>
+
+<h5>Phone:</h5>
+<p>{{ phone }}</p>
+
+<h5>Enquiry:</h5>
+<p>{{ message }}</p>
+
+
+This is an automatic message and can't be replied, you can reply to the
+person sending the inquiry by sending the message directly to their email.
+
+To the moon
+Team Bonspiels
+
+{{from}}
+{% endautoescape %}

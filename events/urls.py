@@ -21,4 +21,7 @@ urlpatterns = [
     path('save/<str:uid>/', views.add_event_to_saved, name='save-event'),
     path('saved/', views.SavedEvents.as_view(), name='saved-events'),
     # path('report/<str:uid>/', views.report_event_now, name='report-events'),
+
+    path('events/registered_teams/', views.RegisteredTeams.as_view(), name='registered-teams'),
+
 ]

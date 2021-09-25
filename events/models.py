@@ -56,6 +56,7 @@ class Event(models.Model):
     phone = models.CharField(max_length=25, blank=True)
     organizer = models.CharField(max_length=225)
     email = models.EmailField()
+    organizer_logo = models.ImageField(upload_to='event_logos', blank=True)
 
     title = models.CharField(max_length=50)
     slug = models.SlugField(max_length=255, unique=True)
@@ -93,6 +94,13 @@ class Event(models.Model):
     views = models.IntegerField(default=0, blank=True)
 
     objects = EventManager()
+
+    def get_organizer_logo(self):
+        if self.organizer_logo:
+            return self.organizer_logo.url
+        elif self.user.profile.image:
+            return self.user.profile.image.url
+        return False
 
     def get_currency_symbol(self):
         if self.ticket_currency:
@@ -259,7 +267,7 @@ class Event(models.Model):
         super().save(*args, **kwargs)
 
     class Meta:
-        ordering = ['start_date']
+        ordering = ['-created']
 
 
 
