@@ -99,7 +99,8 @@ def get_trip_advisor(address):
     trips = []
 
     try:
-        driver = webdriver.Chrome("C:/Users/User/bonspiels/events/chromedriver.exe", options=chrome_options)
+        driver = webdriver.Chrome(options=chrome_options)
+        # driver = webdriver.Chrome("C:/Users/User/bonspiels/events/chromedriver.exe", options=chrome_options)
 
         driver.get(link)
 
