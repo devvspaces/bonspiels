@@ -73,9 +73,6 @@ class User(AbstractBaseUser):
     def __str__(self):
         return self.email
 
-    # def get_absolute_url(self):
-    #     return reverse('profile', kwargs = [self.id])
-
     def email_user(self, subject, message, fail=True):
         print(message)
         val = send_mail(subject=subject, message=message, from_email=settings.DEFAULT_FROM_EMAIL, recipient_list=[self.email], fail_silently=fail)

@@ -111,6 +111,25 @@
 							</div>
 
 							<div class="form-group getcontent col-sm-12">
+								<label>Organizer Logo</label>
+								<div image_view='#organizer_logo' class="image_bringer fake-file-upload rounded-pill transition-1 d-flex align-items-center justify-content-center p-3 text-center text-muted position-relative">
+									<input type="file" name="organizer_logo" class="position-absolute pointer" multiple>
+									<i class="fas fa-cloud-upload-alt h3 m-0"></i>&nbsp; Choose images
+								</div>
+								{% for i in form.organizer_logo.errors %}
+								<small class="text-danger mt-1">{{ i }}</small>
+								{% endfor %}
+
+								<!-- Gallery -->
+								<div class="gallery-mason content-box mt-5">
+									<i class="icon-download prev pointer"></i>
+									<i class="icon-download next pointer"></i>
+									<div id="organizer_logo" class="mason-container create-gallery">
+									</div>
+								</div>
+							</div>
+
+							<div class="form-group getcontent col-sm-12">
 								<label>Phone</label>
 								<input value="{% if form.phone.value %}{{ form.phone.value }}{% endif %}" type="text" class="form-control bg-light" placeholder="Add contact number" title="Please enter your contact number" name="phone">
 								{% for i in form.phone.errors %}

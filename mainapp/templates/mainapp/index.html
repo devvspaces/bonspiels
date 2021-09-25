@@ -369,55 +369,6 @@
 		</div>
 	</section>
 
-
-	<!-- Gallery -->
-	<section id="et-big-gallery" class="container-fluid mt-5">
-		<div class="container">
-			<div class="section-heading text-white">
-				<p>Photos of the Events</p>
-				<br>
-				<h2 class="mb-0 text-white">Gallery</h2>
-			</div>
-			<div class="row">
-				<div class="col-md-7 pt-25">
-					<div class="big-gallery text-center">
-						{% for event in gallery_events %}
-						<div class="gallery-{{ forloop.counter }}">
-							<div class="owl-carousel owl-theme">
-								<!-- Item -->
-								{% for i in event.gallery_set.all %}
-								<div class="item">
-									<a data-fancybox="gallery" href="{{ i.image.url	}}">
-									<div class="img img-overlay position-relative">
-										<img src="{{ i.image.url }}" class="img-fluid" alt="img">
-										<div class="caption text-white p-4">
-											<h4 class="text-white">{{ event.description|truncatechars:20 }}</h4>
-											<small><i class="icon-photo"></i> {{ event.gallery_set.count }} Photos</small>
-										</div>
-									</div>
-									</a>
-								</div>
-								{% endfor %}
-							</div>
-						</div>
-						{% endfor %}
-					</div>
-				</div>
-				<div class="col-md-5 pt-25">
-					<div class="gallery-thumbnails row">
-						{% for event in gallery_events %}
-						<div class="col-sm-6">
-							<div class="img-box pointer p-2 bg-white shadow" id="gallery-{{ forloop.counter }}">
-								<img src="{{ event.get_first_image.image.url }}" class="img-fluid" alt="">
-							</div>
-						</div>
-						{% endfor %}
-					</div>
-				</div>
-			</div>
-		</div>
-	</section>
-
 	<!-- Latest News -->
 	<section id="et-latest-news" class="container-fluid mt-5">
 		<div class="section-heading">

@@ -2,6 +2,18 @@ import random, string
 import pytz
 from datetime import datetime
 import socket
+import urllib
+
+
+import re
+import time
+from selenium import webdriver
+from selenium.common.exceptions import NoSuchElementException, StaleElementReferenceException, ElementClickInterceptedException, WebDriverException, TimeoutException
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support import expected_conditions as EC
 
 import inflect
 p = inflect.engine()
@@ -55,3 +67,99 @@ def get_valid_ip(request):
 
 def ordinal(i):
     return p.ordinal(i)
+
+
+
+# Code to get results from trip advisor
+def get_trip_advisor(address):
+
+    if not address:
+        return []
+
+    # Uri encode the address for the search
+    uri_encoded_address = urllib.parse.quote(address, safe='')
+
+    # Create the search link
+    base_url = 'https://www.tripadvisor.com/'
+    link = f"{base_url}/Search?q={uri_encoded_address}"
+
+
+    # Creating the webdriver
+    chrome_options = webdriver.ChromeOptions()
+
+    # Other driver settings
+    prefs = {"profile.managed_default_content_settings.images": 2}
+    chrome_options.add_experimental_option("prefs", prefs)
+    # chrome_options.add_argument("--disable-infobars")
+    # chrome_options.add_argument("--disable-extensions")
+    # chrome_options.add_argument('--disable-gpu')
+
+    chrome_options.add_argument("--headless")
+
+    trips = []
+
+    try:
+        driver = webdriver.Chrome("C:/Users/User/bonspiels/events/chromedriver.exe", options=chrome_options)
+
+        driver.get(link)
+
+        # Find the show more button and click it
+        show = driver.find_element_by_css_selector('.show-block.show-more')
+        show.click()
+        time.sleep(5)
+
+        listings = driver.find_elements_by_css_selector('.ui_columns.result-content-columns')
+
+
+        for i in listings:
+            title = i.find_element_by_css_selector('.result-title').text
+
+            try:
+                review_el = i.find_element_by_css_selector('.review_count')
+            except NoSuchElementException:
+                continue
+
+            review_count = review_el.text.split(' ')[0]
+            review_link = review_el.get_attribute('href')
+            trip_link = review_link.split('#')[0]
+
+            rating_text = i.find_element_by_css_selector('.ui_bubble_rating').get_attribute('alt').split(' ')[0]
+
+            address = i.find_element_by_css_selector('.address-text').text
+
+            # Get the background image link
+            my_property = i.find_element_by_css_selector('.inner').value_of_css_property("background-image")
+            image = re.split('[()]',my_property)[1].replace('\"', '')
+
+            print(image)
+
+            try:
+                category = i.find_element_by_css_selector('.thumbnail-overlay-tag').text
+            except NoSuchElementException:
+                continue
+
+            trip =  {
+                        'title': title,
+                        'review_count': review_count,
+                        'trip_link': trip_link,
+                        'rating_text': rating_text,
+                        'address': address,
+                        'image': image,
+                        'category': category,
+                    }
+
+            trips.append(trip)
+
+            # print(trip)
+
+        # print(trips)
+
+        driver.quit()
+
+    except Exception as e:
+        print(e)
+        driver.quit()
+
+    return trips
+
+# get_trip_advisor('Surry Hills NSW, Australia')

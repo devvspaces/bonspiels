@@ -3,6 +3,7 @@ import json
 from typing import List
 import uuid
 
+from django.core.mail import send_mail
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.db.models.query_utils import Q
@@ -25,8 +26,21 @@ from mainapp.mixins import ajax_autocomplete
 from .models import (Amenity, Event, EventReview, EventSave,
     EventView, Gallery, Category, ReviewImage, EventCalendar,
     UserTicket, EventReport)
-from .forms import EventForm, ReviewForm, UserTicketForm
-from .utils import convert_str_date, get_valid_ip
+from .forms import EventForm, ReviewForm, UserTicketForm, ContactForm
+from .utils import convert_str_date, get_valid_ip, get_trip_advisor
+
+
+
+class RegisteredTeams(LoginRequiredMixin, ListView):
+    template_name = 'events/registered_teams.html'
+    extra_context = {
+        'title': 'Registered Teams'
+    }
+    model = UserTicket
+    context_object_name = 'tickets'
+    
+    def get_queryset(self):
+        return super().get_queryset().filter(user=self.request.user)
 
 
 class EventSearch(ListView):
@@ -118,7 +132,6 @@ class EventSearch(ListView):
         return render(request, self.template_name, context)
     
 
-
 class EventCalendarView(LoginRequiredMixin, ListView):
     template_name = 'events/event-calendar.html'
     extra_context = {
@@ -180,18 +193,22 @@ class EventDetail(DetailView):
 
     def get_context_data(self, **kwargs):
         self.get_object()
+
         context = super().get_context_data(**kwargs)
         context["title"] = self.object.title
 
         context['gallery'] = self.object.gallery_set.all()
         context['reviews'] = self.object.eventreview_set.all()
-        context['event_views'] = self.object.eventview_set.count()
 
         valid_events_id_list = Event.objects.filter(published=True, user__active=True).values_list('id', flat=True)
         random_event_id_list = random.sample(list(valid_events_id_list), min(len(valid_events_id_list), 10))
         context['related_events'] = Event.objects.filter(id__in=random_event_id_list)
 
         context['review_form'] = ReviewForm()
+
+        context['contact'] = ContactForm()
+
+        context['trips'] = get_trip_advisor(self.object.location)
 
         return context
     
@@ -201,17 +218,16 @@ class EventDetail(DetailView):
         if (obj.user.is_active == False) or (obj.published == False):
             return redirect('mainapp:home')
         
-        # Count unique ip views
-        ip = get_valid_ip(request)
-        if ip:
-            if obj.eventview_set.filter(ip__exact=ip).exists() == False:
-                EventView.objects.create(ip=ip, event=obj)
-                obj.views = obj.eventview_set.count()
-                obj.save()
-        self.get_object()
+        obj.views = obj.views + 1
+        obj.save()
+
         context = self.get_context_data()
 
         return render(request, self.template_name, context)
+
+    def redirect_to_self(self):
+        # Redirects the current view back to the save page
+        return redirect(reverse('events:event-detail', kwargs={'slug': str(self.get_object().slug)}))
     
     def post(self, request, *args, **kwargs):
         request = self.request
@@ -225,11 +241,12 @@ class EventDetail(DetailView):
         # Identify the form submitted
         submit = request.POST.get('submit')
 
+        event = self.get_object()
+
         if submit == 'buy_ticket':
             ticket_errors = []
             ticket_infomation = []
             # Validate submited form
-            event = self.get_object()
 
             info_tools = event.get_tools_dict()
             post = request.POST
@@ -281,13 +298,45 @@ class EventDetail(DetailView):
 
             context['ticket_errors'] = ticket_errors
 
+        elif submit == 'enquiry':
+            contact = ContactForm(request.POST)
+
+            if contact.is_valid():
+                # Send message to the event organizer
+                subject = 'General enquiry from Bonspiels Event'
+                message=render_to_string('events/inquiry.html',{
+                    "event": event,
+                    "name": contact.cleaned_data.get('name'),
+                    "email": contact.cleaned_data.get('email'),
+                    "phone": contact.cleaned_data.get('phone'),
+                    "message": contact.cleaned_data.get('message'),
+                    'from': settings.DEFAULT_FROM_EMAIL
+                })
+
+                print(message)
+
+                # Send email to organizer
+                organizer_email = event.email
+
+                send_mail(subject=subject, message=message, from_email=settings.DEFAULT_FROM_EMAIL, recipient_list=[organizer_email], fail_silently=True)
+
+                messages.success(request, 'Your enquiry has been delivered to the event organizer successfully')
+
+                return self.redirect_to_self()
+
+            messages.warning(request, 'Errors found in inquiry form')
+
+            print(contact.errors)
+
+            context['contact'] = contact
+
         else:
             review_form = ReviewForm(request.POST, request.FILES)
             if review_form.is_valid():
                 comment = review_form.cleaned_data.get('comment')
                 stars = review_form.cleaned_data.get('stars')
                 
-                review = EventReview.objects.create(user=request.user, comment=comment, event=self.get_object(), stars=stars)
+                review = EventReview.objects.create(user=request.user, comment=comment, event=event, stars=stars)
 
                 queryImages = dict(request.FILES.lists())
                 images = queryImages.get('images')
@@ -296,7 +345,9 @@ class EventDetail(DetailView):
                         ReviewImage.objects.create(review=review, image=i)
                 
                 messages.success(request, f'Your review has been successfully submitted')
-                return redirect(reverse('events:event-detail', kwargs={'slug': str(self.get_object().slug)}))
+                
+                return self.redirect_to_self()
+            
             context['review_form'] = review_form
 
         return render(request, self.template_name, context)
@@ -596,6 +647,7 @@ def duplicate_event(request, uid):
 
     event.pk = None
     event.uid = uuid.uuid4()
+    event.slug = None
     event.save()
 
     # Set unclonable fields

@@ -9,12 +9,16 @@ EventReview, UserTicket, EventSave, EventReport)
 def make_published(modeladmin, request, queryset):
     queryset.update(published=True)
 
+@admin.action(description='Mark selected events as draft (not published)')
+def make_draft(modeladmin, request, queryset):
+    queryset.update(published=False)
+
 class EventAdmin(admin.ModelAdmin):
-    list_display = ('organizer','title', 'start_date', 'end_date', 'location', 'featured', 'published',)
+    list_display = ('organizer', 'title', 'start_date', 'end_date', 'location', 'featured', 'published', 'created',)
     search_fields = ('title', 'location', 'email', 'website',)
     list_filter = ('featured', 'category', 'amenities', 'start_date', 'end_date',)
     list_editable = ('featured',)
-    actions = [make_published]
+    actions = [make_published, make_draft]
 
 admin.site.register(Amenity)
 admin.site.register(Category)
