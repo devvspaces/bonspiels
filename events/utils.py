@@ -93,6 +93,7 @@ def get_trip_advisor(address):
     # chrome_options.add_argument("--disable-infobars")
     # chrome_options.add_argument("--disable-extensions")
     # chrome_options.add_argument('--disable-gpu')
+    chrome_options.add_argument('--window-size=1920x1080')
 
     chrome_options.add_argument("--headless")
 
@@ -100,7 +101,7 @@ def get_trip_advisor(address):
 
     try:
         driver = webdriver.Chrome(options=chrome_options)
-        # driver = webdriver.Chrome("C:/Users/User/bonspiels/events/chromedriver.exe", options=chrome_options)
+        driver.set_window_size(1920, 1080)
 
         driver.get(link)
 
