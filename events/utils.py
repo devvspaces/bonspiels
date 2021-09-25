@@ -107,10 +107,15 @@ def get_trip_advisor(address):
 
         # Find the show more button and click it
         show = driver.find_element_by_css_selector('.show-block.show-more')
-        try:_evidon_banner
+        try:
             show.click()
         except ElementClickInterceptedException as e:
             print(e)
+            # driver.find_element_by_css_selector('#_evidon_banner')
+
+            js = "var aa=document.getElementById('#_evidon_banner');aa.remove()"
+            driver.execute_script(js)
+
             show.click()
 
         time.sleep(5)
