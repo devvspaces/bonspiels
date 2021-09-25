@@ -113,8 +113,13 @@ def get_trip_advisor(address):
             print(e)
             # driver.find_element_by_css_selector('#_evidon_banner')
 
-            js = "var aa=document.getElementById('_evidon-background');aa.remove()"
-            driver.execute_script(js)
+            try:
+                not_wanted = ['_evidon_banner', '_evidon-background']
+                for i in not_wanted:
+                    js = f"var aa=document.getElementById('{i}');aa.remove()"
+                    driver.execute_script(js)
+            except Exception as e:
+                print(e)
 
             show.click()
 
