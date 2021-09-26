@@ -149,8 +149,6 @@ def get_trip_advisor(address):
             my_property = i.find_element_by_css_selector('.inner').value_of_css_property("background-image")
             image = re.split('[()]',my_property)[1].replace('\"', '')
 
-            print(image)
-
             try:
                 category = i.find_element_by_css_selector('.thumbnail-overlay-tag').text
             except NoSuchElementException:
