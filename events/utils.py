@@ -4,8 +4,8 @@ from datetime import datetime
 import socket
 import urllib
 
-from bs4 import BeautifulSoup
-import requests
+# from bs4 import BeautifulSoup
+# import requests
 
 
 import re
@@ -196,6 +196,7 @@ def get_fb_posts():
     # val = True
 
     if val:
+        print('Got an account here')
         account = accounts.first()
 
         # link = 'https://m.facebook.com/codecell.com.bd'
@@ -271,6 +272,8 @@ def get_fb_posts():
                                 'image': image,
                                 'link': link
                             }
+
+                    print(posts)
 
                     posts.append(trip)
 
