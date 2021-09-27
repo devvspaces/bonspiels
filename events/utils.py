@@ -229,7 +229,7 @@ def get_fb_posts():
 
             driver.get(link)
 
-            print('Got the page', driver.title)
+            print('Got the page', driver.title, driver.current_url)
 
             found = False
 
