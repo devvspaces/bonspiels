@@ -217,6 +217,8 @@ def get_fb_posts():
         driver = webdriver.Chrome(options=chrome_options)
         driver.set_window_size(1920, 1080)
 
+        print('Created driver')
+
         try:
 
             driver.get(link)
@@ -228,9 +230,12 @@ def get_fb_posts():
                 if i.text.lower() == 'posts':
                     driver.get(i.get_attribute('href'))
                     found = True
+                    print('found the posts tab')
                     break
 
             if found:
+
+                print('wanted to get the posts')
                 posts_els = driver.find_elements_by_css_selector('.story_body_container')
 
                 while len(posts_els) < 15:
@@ -238,7 +243,11 @@ def get_fb_posts():
                     time.sleep(1)
                     posts_els = driver.find_elements_by_css_selector('.story_body_container')
 
+                print(f'Scraped {len(post_els)} posts')
+
                 for i in posts_els:
+
+                    print('Started loop')
 
                     text = ''
                     created = ''
@@ -273,13 +282,14 @@ def get_fb_posts():
                                 'link': link
                             }
 
-                    print(posts)
+                    print(trip)
 
                     posts.append(trip)
 
             driver.quit()
 
         except Exception as e:
+            print('Got exception')
             driver.quit()
             print(e)
             
