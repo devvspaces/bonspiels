@@ -216,7 +216,7 @@ def login_facebook(browser):
         except Exception as e:
             print(e)
 
-        submit.click()
+        browser.execute_script("arguments[0].click();", submit)
 
     time.sleep(1)
 
