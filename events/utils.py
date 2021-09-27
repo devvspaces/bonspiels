@@ -210,9 +210,11 @@ def get_fb_posts():
         # chrome_options.add_argument("--disable-infobars")
         # chrome_options.add_argument("--disable-extensions")
         # chrome_options.add_argument('--disable-gpu')
+        chrome_options.add_argument('--window-size=1920x1080')
         chrome_options.add_argument("--headless")
 
-        driver = webdriver.Chrome("C:/Users/User/bonspiels/events/chromedriver.exe", options=chrome_options)
+        driver = webdriver.Chrome(options=chrome_options)
+        driver.set_window_size(1920, 1080)
 
         try:
 
