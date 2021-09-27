@@ -99,6 +99,7 @@ def get_trip_advisor(address):
     # chrome_options.add_argument("--disable-extensions")
     # chrome_options.add_argument('--disable-gpu')
     chrome_options.add_argument('--window-size=1920x1080')
+    chrome_options.add_argument("--disable-popup-blocking")
 
     chrome_options.add_argument("--headless")
 
@@ -222,6 +223,8 @@ def get_fb_posts():
         try:
 
             driver.get(link)
+
+            print('Created driver')
 
             found = False
 
