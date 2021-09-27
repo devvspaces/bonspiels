@@ -203,7 +203,20 @@ def login_facebook(browser):
     username.send_keys(settings.FB_USER)
     password.send_keys(settings.FB_PASS)
 
-    submit.click()
+    try:
+        submit.click()
+    except ElementClickInterceptedException as e:
+        print(e)
+
+        try:
+            not_wanted = ['._9xl2']
+            for i in not_wanted:
+                js = f"var aa=document.querySelector('{i}');aa.remove()"
+                driver.execute_script(js)
+        except Exception as e:
+            print(e)
+
+        submit.click()
 
     time.sleep(1)
 
