@@ -227,6 +227,7 @@ def get_fb_posts():
 
             # Find the posts button and click it
             for i in driver.find_elements_by_css_selector('._484w'):
+                print('found tabs', i.text)
                 if i.text.lower() == 'posts':
                     driver.get(i.get_attribute('href'))
                     found = True
