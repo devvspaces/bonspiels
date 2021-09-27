@@ -234,6 +234,9 @@ $(document).ready(function(){
 	        success: function (data){
 	            let results = data['results']
 
+
+	            // console.log(results)
+
 	            // load results in dom
 	            html = ''
 

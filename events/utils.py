@@ -23,6 +23,7 @@ p = inflect.engine()
 
 
 from django.template.defaultfilters import slugify
+from django.conf import settings
 
 from account.models import FacebookUser
 
@@ -136,8 +137,6 @@ def get_trip_advisor(address):
             my_property = i.find_element_by_css_selector('.inner').value_of_css_property("background-image")
             image = re.split('[()]',my_property)[1].replace('\"', '')
 
-            print(image)
-
             try:
                 category = i.find_element_by_css_selector('.thumbnail-overlay-tag').text
             except NoSuchElementException:
@@ -170,6 +169,22 @@ def get_trip_advisor(address):
 # get_trip_advisor('Surry Hills NSW, Australia')
 
 
+def login_facebook(browser):
+    browser.get("https://www.facebook.com")
+
+    username = browser.find_element_by_id("email")
+    password = browser.find_element_by_id("pass")
+    submit   = browser.find_element_by_name("login")
+
+    username.send_keys(settings.FB_USER)
+    password.send_keys(settings.FB_PASS)
+
+    submit.click()
+
+    time.sleep(1)
+
+LOGIN = True
+
 # Code to get results from trip advisor
 def get_fb_posts():
     posts = []
@@ -199,6 +214,10 @@ def get_fb_posts():
         driver = webdriver.Chrome("C:/Users/User/bonspiels/events/chromedriver.exe", options=chrome_options)
 
         try:
+
+            if LOGIN:
+                # Login to facebook first
+                login_facebook(driver)
 
             driver.get(link)
 
@@ -243,14 +262,19 @@ def get_fb_posts():
 
                     # image
                     try:
-                        image = i.find_element_by_css_selector('._5sgi').get_attribute('src')
+                        if not LOGIN:
+                            link = i.find_element_by_css_selector('._5msj').get_attribute('href')
+                        else:
+                            image = i.find_element_by_css_selector('._5sgi')
+                            my_property = image.value_of_css_property("background-image")
+                            image = re.split('[()]',my_property)[1].replace('\"', '')
                     except NoSuchElementException:
                         pass
 
                     trip =  {
                                 'text': text,
                                 'created': created,
-                                'image': image,
+                                'image': image if image else 'https://blogmedia.evbstatic.com/wp-content/uploads/wpmulti/sites/8/2019/08/Event-Business-Plan-Tips.png',
                                 'link': link
                             }
 
