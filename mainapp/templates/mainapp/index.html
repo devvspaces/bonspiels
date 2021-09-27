@@ -376,161 +376,35 @@
 			<br>
 			<h2 class="mb-0">Latest News</h2>
 		</div>
-		<div class="owl-carousel owl-theme">
-			<!-- Item -->
-			<div class="item">
-				<div class="blog-grid boxhover transition w-100 mt-4 rounded shadow">
-					<div class="image-wrap img-overlay position-relative">
-						<span class="badge badge-primary photocount pointer position-absolute"><i class="icon-eye"></i> 25</span>
-						<span class="author-avatar overflow-hidden position-absolute shadow"><img src="{% static 'img/author-1.jpg' %}" alt="Author"></span>
-						<img src="{% static 'img/event-grid-1.jpg' %}" alt="img" class="img-fluid rounded-top">
-					</div>
-					<div class="content p-4">
-						<p class="text-muted">Posted 2 days ago</p>
-						<h4 class="mb-3"><a href="#" class="text-decoration-none text-reset">Whats in Meeting ?</a></h4>
-						<p class="description">
-							Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt...
-						</p>
-						<hr>
-						<div class="d-flex align-items-center">
-							<a href="#" class="text-decoration-none text-primary">Tips and Lifestyle</a>
-							<a href="#" class="bg-primary text-white readmore rounded text-decoration-none d-inline-flex align-items-center justify-content-center border-0 ml-auto"><i class="icon-download"></i></a>
+		<div id="news_carousel" class="owl-carousel owl-theme" news="{% url 'mainapp:facebook_url' %}" author_img = "{% static 'img/event-grid-1.jpg' %}">
+
+			<h3 class="text-center my-4">Loading Bonspiels News</h3>
+
+			{% for i in news %}
+				<!-- Item -->
+				<!-- <div class="item">
+					<div class="blog-grid boxhover transition w-100 mt-4 rounded shadow">
+						<div class="image-wrap img-overlay position-relative">
+							<span class="badge badge-primary photocount pointer position-absolute"><i class="icon-eye"></i> 25</span>
+							<span class="author-avatar overflow-hidden position-absolute shadow"><img src="{% static 'img/event-grid-1.jpg' %}" alt="Author"></span>
+							<img src="{{ i.image }}" alt="img" class="img-fluid rounded-top">
+						</div>
+						<div class="content p-4">
+							<p class="text-muted">Posted 2 days ago</p>
+							<h4 class="mb-3"><a href="#" class="text-decoration-none text-reset">Facebook News</a></h4>
+							<p class="description">
+								{{ i.text }}
+							</p>
+							<hr>
+							<div class="d-flex align-items-center">
+								<a href="#" class="text-decoration-none text-primary">Tips and Lifestyle</a>
+								<a href="{{ i.link }}" class="bg-primary text-white readmore rounded text-decoration-none d-inline-flex align-items-center justify-content-center border-0 ml-auto"><i class="icon-download"></i></a>
+							</div>
 						</div>
 					</div>
-				</div>
-			</div>
-			<!-- Item -->
-			<div class="item">
-				<div class="blog-grid boxhover transition w-100 mt-4 rounded shadow">
-					<div class="image-wrap img-overlay position-relative">
-						<span class="badge badge-primary photocount pointer position-absolute"><i class="icon-eye"></i> 25</span>
-						<span class="author-avatar overflow-hidden position-absolute shadow"><img src="{% static 'img/author-2.jpg' %}" alt="Author"></span>
-						<img src="{% static 'img/event-grid-2.jpg' %}" alt="img" class="img-fluid rounded-top">
-					</div>
-					<div class="content p-4">
-						<p class="text-muted">Posted 2 days ago</p>
-						<h4 class="mb-3"><a href="#" class="text-decoration-none text-reset">Love the Ride</a></h4>
-						<p class="description">
-							Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt...
-						</p>
-						<hr>
-						<div class="d-flex align-items-center">
-							<a href="#" class="text-decoration-none text-primary">Tips and Lifestyle</a>
-							<a href="#" class="bg-primary text-white readmore rounded text-decoration-none d-inline-flex align-items-center justify-content-center border-0 ml-auto"><i class="icon-download"></i></a>
-						</div>
-					</div>
-				</div>
-			</div>
-			<!-- Item -->
-			<div class="item">
-				<div class="blog-grid boxhover transition w-100 mt-4 rounded shadow">
-					<div class="image-wrap img-overlay position-relative">
-						<span class="badge badge-primary photocount pointer position-absolute"><i class="icon-eye"></i> 25</span>
-						<span class="author-avatar overflow-hidden position-absolute shadow"><img src="{% static 'img/author-3.jpg' %}" alt="Author"></span>
-						<img src="{% static 'img/event-grid-3.jpg' %}" alt="img" class="img-fluid rounded-top">
-					</div>
-					<div class="content p-4">
-						<p class="text-muted">Posted 2 days ago</p>
-						<h4 class="mb-3"><a href="#" class="text-decoration-none text-reset">Help African</a></h4>
-						<p class="description">
-							Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt...
-						</p>
-						<hr>
-						<div class="d-flex align-items-center">
-							<a href="#" class="text-decoration-none text-primary">Tips and Lifestyle</a>
-							<a href="#" class="bg-primary text-white readmore rounded text-decoration-none d-inline-flex align-items-center justify-content-center border-0 ml-auto"><i class="icon-download"></i></a>
-						</div>
-					</div>
-				</div>
-			</div>
-			<!-- Item -->
-			<div class="item">
-				<div class="blog-grid boxhover transition w-100 mt-4 rounded shadow">
-					<div class="image-wrap img-overlay position-relative">
-						<span class="badge badge-primary photocount pointer position-absolute"><i class="icon-eye"></i> 25</span>
-						<span class="author-avatar overflow-hidden position-absolute shadow"><img src="{% static 'img/author-1.jpg' %}" alt="Author"></span>
-						<img src="{% static 'img/event-grid-4.jpg' %}" alt="img" class="img-fluid rounded-top">
-					</div>
-					<div class="content p-4">
-						<p class="text-muted">Posted 2 days ago</p>
-						<h4 class="mb-3"><a href="#" class="text-decoration-none text-reset">New Resturant</a></h4>
-						<p class="description">
-							Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt...
-						</p>
-						<hr>
-						<div class="d-flex align-items-center">
-							<a href="#" class="text-decoration-none text-primary">Tips and Lifestyle</a>
-							<a href="#" class="bg-primary text-white readmore rounded text-decoration-none d-inline-flex align-items-center justify-content-center border-0 ml-auto"><i class="icon-download"></i></a>
-						</div>
-					</div>
-				</div>
-			</div>
-			<!-- Item -->
-			<div class="item">
-				<div class="blog-grid boxhover transition w-100 mt-4 rounded shadow">
-					<div class="image-wrap img-overlay position-relative">
-						<span class="badge badge-primary photocount pointer position-absolute"><i class="icon-eye"></i> 25</span>
-						<span class="author-avatar overflow-hidden position-absolute shadow"><img src="{% static 'img/author-2.jpg' %}" alt="Author"></span>
-						<img src="{% static 'img/event-grid-5.jpg' %}" alt="img" class="img-fluid rounded-top">
-					</div>
-					<div class="content p-4">
-						<p class="text-muted">Posted 2 days ago</p>
-						<h4 class="mb-3"><a href="#" class="text-decoration-none text-reset">News Plans 2020</a></h4>
-						<p class="description">
-							Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt...
-						</p>
-						<hr>
-						<div class="d-flex align-items-center">
-							<a href="#" class="text-decoration-none text-primary">Tips and Lifestyle</a>
-							<a href="#" class="bg-primary text-white readmore rounded text-decoration-none d-inline-flex align-items-center justify-content-center border-0 ml-auto"><i class="icon-download"></i></a>
-						</div>
-					</div>
-				</div>
-			</div>
-			<!-- Item -->
-			<div class="item">
-				<div class="blog-grid boxhover transition w-100 mt-4 rounded shadow">
-					<div class="image-wrap img-overlay position-relative">
-						<span class="badge badge-primary photocount pointer position-absolute"><i class="icon-eye"></i> 25</span>
-						<span class="author-avatar overflow-hidden position-absolute shadow"><img src="{% static 'img/author-3.jpg' %}" alt="Author"></span>
-						<img src="{% static 'img/event-grid-3.jpg' %}" alt="img" class="img-fluid rounded-top">
-					</div>
-					<div class="content p-4">
-						<p class="text-muted">Posted 2 days ago</p>
-						<h4 class="mb-3"><a href="#" class="text-decoration-none text-reset">Lorem ipsum dolor</a></h4>
-						<p class="description">
-							Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt...
-						</p>
-						<hr>
-						<div class="d-flex align-items-center">
-							<a href="#" class="text-decoration-none text-primary">Tips and Lifestyle</a>
-							<a href="#" class="bg-primary text-white readmore rounded text-decoration-none d-inline-flex align-items-center justify-content-center border-0 ml-auto"><i class="icon-download"></i></a>
-						</div>
-					</div>
-				</div>
-			</div>
-			<!-- Item -->
-			<div class="item">
-				<div class="blog-grid boxhover transition w-100 mt-4 rounded shadow">
-					<div class="image-wrap img-overlay position-relative">
-						<span class="badge badge-primary photocount pointer position-absolute"><i class="icon-eye"></i> 25</span>
-						<span class="author-avatar overflow-hidden position-absolute shadow"><img src="{% static 'img/author-1.jpg' %}" alt="Author"></span>
-						<img src="{% static 'img/event-grid-1.jpg' %}" alt="img" class="img-fluid rounded-top">
-					</div>
-					<div class="content p-4">
-						<p class="text-muted">Posted 2 days ago</p>
-						<h4 class="mb-3"><a href="#" class="text-decoration-none text-reset">Lorem ipsum dolor</a></h4>
-						<p class="description">
-							Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt...
-						</p>
-						<hr>
-						<div class="d-flex align-items-center">
-							<a href="#" class="text-decoration-none text-primary">Tips and Lifestyle</a>
-							<a href="#" class="bg-primary text-white readmore rounded text-decoration-none d-inline-flex align-items-center justify-content-center border-0 ml-auto"><i class="icon-download"></i></a>
-						</div>
-					</div>
-				</div>
-			</div>
+				</div> -->
+			{% endfor %}
+
 		</div>
 	</section>
 

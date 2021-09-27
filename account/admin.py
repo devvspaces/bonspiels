@@ -1,8 +1,8 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
-from .models import User, Profile, NewsletterSubscriber
-from .forms import UserRegisterForm
+from .models import User, Profile, NewsletterSubscriber, FacebookUser
+from .forms import UserRegisterForm, FacebookUserForm
 
 
 class UserAdmin(BaseUserAdmin):
@@ -33,6 +33,10 @@ class UserAdmin(BaseUserAdmin):
 	filter_horizontal = ()
 
 
+class FacebookUserAdmin(admin.ModelAdmin):
+	form = FacebookUserForm
+
+
 admin.site.register(User, UserAdmin)
-admin.site.register(Profile)
-admin.site.register(NewsletterSubscriber)
+admin.site.register(FacebookUser, FacebookUserAdmin)
+admin.site.register([Profile, NewsletterSubscriber])

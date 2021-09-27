@@ -191,6 +191,95 @@ $(document).ready(function(){
 		console.log(e)
 	}
 
+	function load_news_carousel(){
+		if($('#et-latest-news .owl-carousel').length){
+			$('#et-latest-news .owl-carousel').owlCarousel({
+				loop:true,
+				nav:true,
+				dots:false,
+				margin:20,
+				center: true,
+				autoplay: false,
+				autoplaySpeed: 1000,
+				navSpeed: 1000,
+				items:5,
+				responsive:{
+					0 : {
+						items:1
+					},
+					// breakpoint from 480 up
+					575 : {
+						items:2
+					},
+					// breakpoint from 768 up
+					768 : {
+						items:3
+					},
+					// breakpoint from 1200 up
+					1200 : {
+						items:4
+					}
+				}
+			})
+		}
+	}
+
+	// Get facebook news
+	if ($('#news_carousel').length){
+	    let thisURL = $('#news_carousel').attr('news')
+
+	    $.ajax({
+	        method: "GET",
+	        url: thisURL,
+	        success: function (data){
+	            let results = data['results']
+
+	            // load results in dom
+	            html = ''
+
+	            author_img = $('#news_carousel').attr('author_img')
+	            results.forEach(obj=>{
+	            	// Posted 2 days ago
+
+	            	var $owl = $('#news_carousel');
+	            	$owl.trigger('destroy.owl.carousel');
+	            	
+	            	text = obj['text'].substring(0, 30) + '...'
+	            	html += `
+						<div class="item">
+							<div class="blog-grid boxhover transition w-100 mt-4 rounded shadow">
+								<div class="image-wrap img-overlay position-relative">
+									<span class="badge badge-primary photocount pointer position-absolute"><i class="icon-eye"></i> 25</span>
+									<span class="author-avatar overflow-hidden position-absolute shadow"><img src="{}" alt="Author"></span>
+									<img src="{}" alt="img" class="img-fluid rounded-top" style="height: 300px;object-fit: cover;">
+								</div>
+								<div class="content p-4">
+
+									<p class="text-muted">{}</p>
+									<h4 class="mb-3"><a href="{}" class="text-decoration-none text-reset">Facebook News</a></h4>
+									<p class="description">
+										{}
+									</p>
+									<hr>
+									<div class="d-flex align-items-center">
+										<a href="#" class="text-decoration-none text-primary">Bonspiels Updates</a>
+										<a target="_blank" href="{}" class="bg-primary text-white readmore rounded text-decoration-none d-inline-flex align-items-center justify-content-center border-0 ml-auto"><i class="icon-download"></i></a>
+									</div>
+								</div>
+							</div>
+						</div>
+	            	`.format(author_img, obj['image'], obj['created'], obj['link'], text, obj['link'])
+
+	            	$('#news_carousel').html(html)
+	            	load_news_carousel()
+	            })
+	        },
+	        error: function (jqXHR) {
+	            console.log(jqxHR)
+	        },
+	    })
+	}
+
 	// Autocomplete for title suggestions
 	$('#search-tcd').on('keyup', function(event){
 		// Get the value for the input
@@ -616,36 +705,7 @@ $(document).ready(function(){
 	//-------------------------------
 	// Latest News
 	//-------------------------------
-	if($('#et-latest-news .owl-carousel').length){
-		$('#et-latest-news .owl-carousel').owlCarousel({
-			loop:true,
-			nav:true,
-			dots:false,
-			margin:20,
-			center: true,
-			autoplay: false,
-			autoplaySpeed: 1000,
-			navSpeed: 1000,
-			items:5,
-			responsive:{
-				0 : {
-					items:1
-				},
-				// breakpoint from 480 up
-				575 : {
-					items:2
-				},
-				// breakpoint from 768 up
-				768 : {
-					items:3
-				},
-				// breakpoint from 1200 up
-				1200 : {
-					items:4
-				}
-			}
-		})
-	}
+	load_news_carousel()
 
 	//-------------------------------
 	// Testimonial (About)
