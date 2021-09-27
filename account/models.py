@@ -7,6 +7,7 @@ from django.db import models
 from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
 from django.urls import reverse
+from django.core.exceptions import ValidationError
 
 
 class UserManager(BaseUserManager):
@@ -111,6 +112,14 @@ class Profile(models.Model):
     #     return reverse('profile', args=[self.first_name])
 
 
+class FacebookUser(models.Model):
+    link = models.URLField()
+    active = models.BooleanField(default=False)
+    label = models.CharField(max_length=40, blank=True, default='Facebook_label')
+    
+    def __str__(self):
+        return self.label if self.label else 'Not provided'
+
 class NewsletterSubscriber(models.Model):
     email = models.EmailField()
     created = models.DateTimeField(auto_now_add=True)
@@ -122,3 +131,8 @@ class NewsletterSubscriber(models.Model):
 @receiver(post_save, sender=User)
 def create_profile(sender, instance, created, **kwargs):
     profile = Profile.objects.get_or_create(user=instance)
+
+
+# @receiver(post_save, sender=FacebookUser)
+# def create_facebook(sender, instance, created, **kwargs):
+#     profile = Profile.objects.get_or_create(user=instance)

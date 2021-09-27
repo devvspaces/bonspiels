@@ -5,12 +5,27 @@ from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.contrib.auth.hashers import check_password
 from django.shortcuts import get_object_or_404
 
-from .models import User, Profile
+from .models import User, Profile, FacebookUser
 
 
 
 class NewsletterForm(forms.Form):
     email=forms.EmailField(help_text="Enter your email")
+
+
+class FacebookUserForm(forms.ModelForm):
+    class Meta:
+        model = FacebookUser
+        fields = '__all__'
+
+    def clean(self):
+        cleaned_data = self.cleaned_data
+
+        if self.instance and self.instance.active:
+            if FacebookUser.objects.filter(active=True).exclude(id=self.instance.id).exists():
+                raise forms.ValidationError('You can\'t have two active facebook accounts for the news section')
+
+        return cleaned_data
 
 class ResetPasswordValidateEmailForm(forms.Form):
     email=forms.CharField(help_text="Enter your account email")

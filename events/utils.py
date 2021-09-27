@@ -4,6 +4,9 @@ from datetime import datetime
 import socket
 import urllib
 
+from bs4 import BeautifulSoup
+import requests
+
 
 import re
 import time
@@ -20,6 +23,8 @@ p = inflect.engine()
 
 
 from django.template.defaultfilters import slugify
+
+from account.models import FacebookUser
 
 
 
@@ -163,3 +168,101 @@ def get_trip_advisor(address):
     return trips
 
 # get_trip_advisor('Surry Hills NSW, Australia')
+
+
+# Code to get results from trip advisor
+def get_fb_posts():
+    posts = []
+
+    # Get active fb account
+    accounts = FacebookUser.objects.filter(active=True)
+    val  = accounts.exists()
+    # val = True
+
+    if val:
+        account = accounts.first()
+
+        # link = 'https://m.facebook.com/codecell.com.bd'
+        link = account.link
+
+        # Creating the webdriver
+        chrome_options = webdriver.ChromeOptions()
+
+        # Other driver settings
+        prefs = {"profile.managed_default_content_settings.images": 2}
+        chrome_options.add_experimental_option("prefs", prefs)
+        # chrome_options.add_argument("--disable-infobars")
+        # chrome_options.add_argument("--disable-extensions")
+        # chrome_options.add_argument('--disable-gpu')
+        chrome_options.add_argument("--headless")
+
+        driver = webdriver.Chrome("C:/Users/User/bonspiels/events/chromedriver.exe", options=chrome_options)
+
+        try:
+
+            driver.get(link)
+
+            found = False
+
+            # Find the posts button and click it
+            for i in driver.find_elements_by_css_selector('._484w'):
+                if i.text.lower() == 'posts':
+                    driver.get(i.get_attribute('href'))
+                    found = True
+                    break
+
+            if found:
+                posts_els = driver.find_elements_by_css_selector('.story_body_container')
+
+                while len(posts_els) < 15:
+                    driver.execute_script("window.scrollTo(0,document.body.scrollHeight)")
+                    time.sleep(1)
+                    posts_els = driver.find_elements_by_css_selector('.story_body_container')
+
+                for i in posts_els:
+
+                    text = ''
+                    created = ''
+                    image = ''
+                    link = ''
+                    
+                    try:
+                        text = i.find_element_by_css_selector('._5rgt').text
+                    except NoSuchElementException:
+                        pass
+
+                    try:
+                        created = i.find_element_by_css_selector('._52jc').text
+                    except NoSuchElementException:
+                        pass
+
+                    try:
+                        link = i.find_element_by_css_selector('._5msj').get_attribute('href')
+                    except NoSuchElementException:
+                        pass
+
+                    # image
+                    try:
+                        image = i.find_element_by_css_selector('._5sgi').get_attribute('src')
+                    except NoSuchElementException:
+                        pass
+
+                    trip =  {
+                                'text': text,
+                                'created': created,
+                                'image': image,
+                                'link': link
+                            }
+
+                    posts.append(trip)
+
+            driver.quit()
+
+        except Exception as e:
+            driver.quit()
+            print(e)
+            
+    else:
+        pass
+
+    return posts

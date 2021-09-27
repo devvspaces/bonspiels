@@ -20,6 +20,7 @@ from account.forms import (UserRegisterForm, LoginForm, ChangePasswordForm,
 from account.tokens import acount_confirm_token
 
 from events.models import Category, Event, FeaturedLocation, Gallery
+from events.utils import get_fb_posts
 
 from .mixins import ajax_autocomplete
 
@@ -47,6 +48,14 @@ def send_verification(user, request):
 
     return user.email_user(subject,message)
 
+def get_news_view(request):
+    if request.is_ajax():
+        # Get the news
+        news = get_fb_posts()
+
+        return JsonResponse(data={'results': news}, status=200)
+
+    return redirect('mainapp:home')
 
 class Home(TemplateView):
     template_name = 'mainapp/index.html'
@@ -103,6 +112,8 @@ class Home(TemplateView):
 
         # Add the suggestions
         # context['suggestions'] = [i.name for i in categories]
+
+        # context['news'] = get_fb_posts()
 
         return context
     
