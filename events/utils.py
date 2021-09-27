@@ -109,8 +109,13 @@ def get_trip_advisor(address):
         driver = webdriver.Chrome(options=chrome_options)
         driver.set_window_size(1920, 1080)
 
-        driver.get(link)
-
+        try:
+            driver.get(link)
+            alert = driver.switch_to_alert()
+            alert.accept()
+        except:
+            print("No Alert")
+        
         # Find the show more button and click it
         show = driver.find_element_by_css_selector('.show-block.show-more')
         try:
