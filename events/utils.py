@@ -207,7 +207,7 @@ def login_facebook(browser):
 
     time.sleep(1)
 
-LOGIN = True
+LOGIN = False
 
 # Code to get results from trip advisor
 def get_fb_posts():
