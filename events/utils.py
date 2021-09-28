@@ -196,8 +196,8 @@ def get_trip_advisor(address):
 def login_facebook(browser):
     browser.get("https://www.facebook.com")
 
-    username = browser.find_element_by_id("email")
-    password = browser.find_element_by_id("pass")
+    username = browser.find_element_by_name("email")
+    password = browser.find_element_by_name("pass")
     submit   = browser.find_element_by_name("login")
 
     username.send_keys(settings.FB_USER)
@@ -218,7 +218,7 @@ def login_facebook(browser):
 
         browser.execute_script("arguments[0].click();", submit)
 
-    time.sleep(1)
+    time.sleep(5)
 
 LOGIN = True
 
