@@ -204,13 +204,14 @@ def login_facebook(browser):
     password.send_keys(settings.FB_PASS)
 
     try:
+        browser.execute_script("arguments[0].click();", submit)
         submit.click()
     except ElementClickInterceptedException as e:
         print(e)
 
         try:
             not_wanted = ['._9xl2']
-            not_wanted = not_wanted * 10
+            # not_wanted = not_wanted * 10
             for i in not_wanted:
                 js = f"var aa=document.querySelector('{i}');aa.remove()"
                 browser.execute_script(js)
@@ -218,6 +219,7 @@ def login_facebook(browser):
         except Exception as e:
             print(e)
 
+        print('Trying to click element')
         browser.execute_script("arguments[0].click();", submit)
 
     time.sleep(5)
