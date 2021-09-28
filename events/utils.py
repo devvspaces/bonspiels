@@ -210,9 +210,11 @@ def login_facebook(browser):
 
         try:
             not_wanted = ['._9xl2']
+            not_wanted = not_wanted * 10
             for i in not_wanted:
                 js = f"var aa=document.querySelector('{i}');aa.remove()"
                 browser.execute_script(js)
+                print('deleted an element ')
         except Exception as e:
             print(e)
 
