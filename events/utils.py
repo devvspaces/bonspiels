@@ -30,6 +30,10 @@ from account.models import FacebookUser
 
 
 
+def print_err(err):
+    traceback.print_tb(err.__traceback__)
+
+
 def random_text(p=5):
     return ''.join(random.sample(string.ascii_uppercase + string.ascii_lowercase,p))
 
@@ -123,7 +127,7 @@ def get_trip_advisor(address):
         try:
             show.click()
         except ElementClickInterceptedException as e:
-            print(e)
+            print_err(e)
             # driver.find_element_by_css_selector('#_evidon_banner')
 
             try:
@@ -132,7 +136,7 @@ def get_trip_advisor(address):
                     js = f"var aa=document.getElementById('{i}');aa.remove()"
                     driver.execute_script(js)
             except Exception as e:
-                print(e)
+                print_err(e)
 
             show.click()
 
@@ -186,7 +190,7 @@ def get_trip_advisor(address):
         driver.quit()
 
     except Exception as e:
-        print(e)
+        print_err(e)
         driver.quit()
 
     return trips
@@ -210,7 +214,7 @@ def login_facebook(browser):
         print('Trying to click element 2')
         submit.click()
     except ElementClickInterceptedException as e:
-        print(e)
+        print_err(e)
 
         try:
             not_wanted = ['._9xl2']
@@ -220,7 +224,7 @@ def login_facebook(browser):
                 browser.execute_script(js)
                 print('deleted an element ')
         except Exception as e:
-            print(e)
+            print_err(e)
 
         print('Trying to click element')
         browser.execute_script("arguments[0].click();", submit)
@@ -346,7 +350,7 @@ def get_fb_posts():
         except Exception as e:
             print('Got exception')
             driver.quit()
-            traceback.print_tb(err.__traceback__)
+            print_err(e)
             
     else:
         pass
