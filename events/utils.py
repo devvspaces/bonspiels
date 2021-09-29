@@ -353,7 +353,7 @@ def get_fb_posts():
             driver.quit()
 
         except Exception as e:
-            print('Got exception')
+            print('Got exception', e)
             driver.quit()
             print_err(e)
             
