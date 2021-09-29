@@ -270,9 +270,9 @@ def get_fb_posts():
 
         try:
 
-            if LOGIN:
-                # Login to facebook first
-                login_facebook(driver)
+            # if LOGIN:
+            #     # Login to facebook first
+            #     login_facebook(driver)
 
             driver.get(link)
 
