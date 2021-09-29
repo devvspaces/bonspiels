@@ -3,6 +3,7 @@ import pytz
 from datetime import datetime
 import socket
 import urllib
+import traceback
 
 # from bs4 import BeautifulSoup
 # import requests
@@ -204,7 +205,9 @@ def login_facebook(browser):
     password.send_keys(settings.FB_PASS)
 
     try:
+        print('Trying to click element 1')
         browser.execute_script("arguments[0].click();", submit)
+        print('Trying to click element 2')
         submit.click()
     except ElementClickInterceptedException as e:
         print(e)
@@ -343,7 +346,7 @@ def get_fb_posts():
         except Exception as e:
             print('Got exception')
             driver.quit()
-            print(e)
+            traceback.print_tb(err.__traceback__)
             
     else:
         pass
