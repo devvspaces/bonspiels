@@ -198,8 +198,8 @@ def get_trip_advisor(address):
 # get_trip_advisor('Surry Hills NSW, Australia')
 
 
-def login_facebook(browser):
-    browser.get("https://www.facebook.com")
+def login_facebook(browser, url):
+    browser.get(url)
 
     username = browser.find_element_by_name("email")
     password = browser.find_element_by_name("pass")
@@ -277,6 +277,9 @@ def get_fb_posts():
             driver.get(link)
 
             print('Got the page', driver.title, driver.current_url)
+
+            if driver.title.lower().find('Log in to Facebook'.lower()):
+                login_facebook(driver, url=driver.current_url)
 
             found = False
 
