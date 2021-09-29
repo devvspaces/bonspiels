@@ -211,8 +211,8 @@ def login_facebook(browser):
     try:
         print('Trying to click element 1')
         browser.execute_script("arguments[0].click();", submit)
-        print('Trying to click element 2')
-        submit.click()
+        # print('Trying to click element 2')
+        # submit.click()
     except ElementClickInterceptedException as e:
         print_err(e)
 
@@ -230,6 +230,8 @@ def login_facebook(browser):
         browser.execute_script("arguments[0].click();", submit)
 
     time.sleep(5)
+
+    print('After login', browser.title, browser.current_url)
 
 LOGIN = True
 
