@@ -113,7 +113,7 @@ class Profile(models.Model):
 
 
 class FacebookUser(models.Model):
-    link = models.URLField()
+    page_id = models.CharField(help_text='Provide the id of the facebook page', max_length=255)
     active = models.BooleanField(default=False)
     label = models.CharField(max_length=40, blank=True, default='Facebook_label')
     

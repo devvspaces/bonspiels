@@ -79,7 +79,7 @@
 									<div class="col-md-4">
 										<div class="form-group">
 											<select class="bg-light form-control wide w-100 pb-0 pt-0 pl-4 mb-3 mb-md-0" name="category">
-												<option value="">Select Category</option>
+												<option value="">Select Region</option>
 												{% for i in category %}
 												<option value="{{ i.id }}" {% if searchCategory %}{% if searchCategory == i.id %}selected{% endif %}{% endif %}>{{ i.name }}</option>
 												{% endfor %}
@@ -147,8 +147,9 @@
 						<div class="col-md-6 mt-3 mb-3">
 							<div class="blog-grid w-100 mt-4 rounded shadow" style="min-width: 400px;">
 								<div class="image-wrap position-relative">
-									<!-- <span class="badge badge-primary listings photocount position-absolute">110 Listings</span> -->
 									<img src="{{ i.featured_image.url }}" alt="img" class="img-fluid rounded-top event-featured-image">
+
+									<span class="badge badge-primary region_loc position-absolute">{{ i.category.name }}</a>
 								</div>
 								<div class="content p-4">
 									<span class="text-muted"><i class="icon-clock text-primary"></i> &nbsp;Posted {{ i.days_since_created }}</span>
@@ -173,7 +174,7 @@
 										</div>
 									</div>
 									<a href="{% url 'events:add-calendar' i.uid %}" class="position-relative float-right border-0 mt-3 btn btn-primary btn-small submit-btn">
-										<i class="icon-calendar btn-icon input-icon"></i> Schedule
+										<i class="icon-calendar btn-icon input-icon"></i> Register
 										<input type="submit" class="h-100 w-100 position-absolute" value="Discover Now">
 									</a>
 								</div>
@@ -181,35 +182,6 @@
 						</div>
 						{% endfor %}
 					</div>
-
-					<!-- List view -->
-					<!-- <div class="row list-view scroll-content">
-						<div class="d-flex mt-3 align-items-center">
-							<a href="#" class="position-relative thumb d-block text-decoration-none">
-								<img src="{% static 'img/event-grid-1.jpg' %}" class="img-fluid" alt="event">
-							</a>
-							<a href="#" class="event p-3 d-block text-decoration-none text-reset">
-								<h4 class="d-inline-block">Food Festival</h4>
-								<span class="pl-3"><i class="icon-clock text-primary"></i> 29 Feb, 2020</span>
-								<span class="badge badge-primary pointer float-right"><i class="icon-heart"></i></span>
-								<p class="mt-2 mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor...</p>
-								<small class="tm">Time left</small>
-								<hr>
-								<div class="time-left mt-2 d-inline-block pt-2 pt-md-0">
-									<div class="timer search">
-										<div class="days">124<span>Days</span></div>
-										<div class="hours text-primary-flat">15<span>Hr</span></div>
-										<div class="minutes text-secondary-flat">53<span>Min</span></div>
-										<div class="seconds">58<span>Sec</span></div>
-									</div>
-								</div>
-								<div class="position-relative border-0 btn btn-primary btn-small transform-origin-right float-right submit-btn">
-									<i class="icon-calendar btn-icon input-icon"></i> Schedule
-									<input type="submit" class="h-100 w-100 position-absolute" value="Discover Now">
-								</div>
-							</a>
-						</div>
-					</div> -->
 				</div>
 			</form>
 			<!-- Map Division -->

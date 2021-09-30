@@ -283,6 +283,101 @@ $(document).ready(function(){
 	    })
 	}
 
+
+	function load_events_carousel(){
+		if($('#et-related-events .owl-carousel').length){
+			$('#et-related-events .owl-carousel').owlCarousel({
+				loop:true,
+				// nav:true,
+				dots:false,
+				autoplay: true,
+				autoplaySpeed: 1000,
+				navSpeed: 1000,
+				items:5,
+				margin: 20,
+				center: true,
+				responsive:{
+					0 : {
+						items:1
+					},
+					// breakpoint from 480 up
+					575 : {
+						items:2
+					},
+					// breakpoint from 768 up
+					768 : {
+						items:3
+					},
+					// breakpoint from 1200 up
+					1200 : {
+						items:5
+					}
+				}
+			})
+		}
+	}
+
+
+	// Get places from trip advisor
+	if ($('.trip-addy').length){
+	    let thisURL = $('.trip-addy').attr('trips')
+
+	    $.ajax({
+	        method: "GET",
+	        url: thisURL,
+	        data: 'id={}' + $('.trip-addy').attr('event_uid'),
+	        success: function (data){
+	            let results = data['results']
+
+	            console.log(results)
+
+	            // load results in dom
+	            html = ''
+
+	            var $owl = $('.trip-addy .owl-carousel');
+	            $owl.trigger('destroy.owl.carousel');
+
+	            results.forEach(obj=>{
+	            	title = obj['title']
+	            	review_count = obj['review_count']
+	            	trip_link = obj['trip_link']
+	            	rating_text = obj['rating_text']
+	            	address = obj['address']
+	            	image = obj['image']
+	            	category = obj['category']
+	            	
+	            	html += `
+					<div class="item pt-25 pb-25">
+						<div class="event-grid shadow">
+							<div class="image-wrap img-overlay">
+
+								<span class="badge badge-dark photocount position-absolute"><i class="fas fa-star text-warning"></i> {}</span>
+
+								<img src="{}" alt="img" class="img-fluid">
+
+								<span class="badge badge-primary region_loc position-absolute">{}</a>
+
+							</div>
+							<div class="content px-4 py-3" style="min-height: auto;">
+								<h4 class="mb-3"><a href="{}" class="text-decoration-none text-reset">{}</a></h4>
+
+								<p class="mb-1"><span class="font-weight-bold">{}</span> Reviews</p>
+								<p>{}</p>
+							</div>
+						</div>
+					</div>
+	            	`.format(rating_text, image, category, trip_link, title, review_count, address)
+	            })
+
+	            $('.trip-addy .owl-carousel').html(html)
+	            load_events_carousel()
+	        },
+	        error: function (jqXHR) {
+	            console.log(jqxHR)
+	        },
+	    })
+	}
+
 	// Autocomplete for title suggestions
 	$('#search-tcd').on('keyup', function(event){
 		// Get the value for the input
@@ -334,8 +429,10 @@ $(document).ready(function(){
 	// Lightbox
 	//-------------------------------
 	if($("a.lightbox").length) {
-	$("a.lightbox").fancybox();
-}
+		$("a.lightbox").fancybox();
+	}
+
+	
 	//-------------------------------
 	// jQuery Nice Select
 	//-------------------------------
@@ -778,36 +875,7 @@ $(document).ready(function(){
 	//-------------------------------
 	// Related Events
 	//-------------------------------
-	if($('#et-related-events .owl-carousel').length){
-		$('#et-related-events .owl-carousel').owlCarousel({
-			loop:true,
-			// nav:true,
-			dots:false,
-			autoplay: true,
-			autoplaySpeed: 1000,
-			navSpeed: 1000,
-			items:5,
-			margin: 20,
-			center: true,
-			responsive:{
-				0 : {
-					items:1
-				},
-				// breakpoint from 480 up
-				575 : {
-					items:2
-				},
-				// breakpoint from 768 up
-				768 : {
-					items:3
-				},
-				// breakpoint from 1200 up
-				1200 : {
-					items:5
-				}
-			}
-		})
-	}
+	load_events_carousel()
 
 	//-------------------------------
 	// Content Slides

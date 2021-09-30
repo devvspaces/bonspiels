@@ -70,26 +70,27 @@ class ProfileView(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["form"] = ProfileForm(instance=self.request.user.profile)
-        context["uform"] = UserForm(instance=self.request.user)
+        # context["form"] = ProfileForm(instance=self.request.user.profile)
+        # context["uform"] = UserForm(instance=self.request.user)
         return context
 
-    def post(self, request, *args, **kwargs):
-        context = super().get_context_data(**kwargs)
+    # def post(self, request, *args, **kwargs):
+    #     context = super().get_context_data(**kwargs)
         
-        uform = UserForm(instance=self.request.user, data=request.POST)
-        form = ProfileForm(instance=self.request.user.profile, data=request.POST, files=request.FILES)
+    #     uform = UserForm(instance=self.request.user, data=request.POST)
+    #     form = ProfileForm(instance=self.request.user.profile, data=request.POST, files=request.FILES)
 
-        if uform.is_valid() and form.is_valid():
-            uform.save()
-            form.save()
-            messages.success(request, f'Your profile is successfully updated')
-            return redirect('account:profile')
+    #     if uform.is_valid() and form.is_valid():
+    #         uform.save()
+    #         form.save()
+    #         messages.success(request, f'Your profile is successfully updated')
+    #         return redirect('account:profile')
 
-        context['form'] = form
-        context['uform'] = uform
+    #     context['form'] = form
+    #     context['uform'] = uform
 
-        return render(request, self.template_name, context)
+    #     return render(request, self.template_name, context)
+    
 class ResetPasswordVerify(FormView):
     template_name = 'account/reset_password_page.html'
     extra_context = {

@@ -17,15 +17,15 @@
 	<section id="et-profile" class="container-fluid">
 		<div class="container">
 			<div class="row justify-content-center profile-bar">
-				<div class="col-sm-6">
+				<!-- <div class="col-sm-6">
 					{% if request.user.profile.image %}
 					<img src="{{ request.user.profile.image.url }}" alt="Bonspiels user profile image">
 					{% else %}
 					<img src="{% static 'img/general_profile.jpg' %}" alt="Bonspiels user profile image">
 					{% endif %}
-				</div>
-				<div class="col-sm-6">
-					<p class="key-det">Name</p>
+				</div> -->
+				<div class="col-sm-12 justify-content-center">
+					<!-- <p class="key-det">Name</p>
 					<p class="details">{{ request.user.profile.full_name }}</p>
 					<p class="key-det">Email</p>
 					<p class="details">{{ request.user.email }}</p>
@@ -34,12 +34,11 @@
 					<p class="key-det">Events in calendar</p>
 					<p class="details">23</p>
 					<p class="key-det">Events created</p>
-					<p class="details">45</p>
+					<p class="details">45</p> -->
 					<div class="profile-menu-btns">
 						<a href="{% url 'events:saved-events' %}" class="btn btn-primary">Saved Events</a>
 						<a href="{% url 'events:event-calendar' %}" class="btn btn-primary">Events Calendar</a>
 						<a href="{% url 'events:my-event' %}" class="btn btn-primary">My Events</a>
-						<a href="{% url 'events:my-tickets' %}" class="btn btn-primary">Tickets</a>
 						<a href="{% url 'events:registered-teams' %}" class="btn btn-primary">Registered Teams</a>
 					</div>
 				</div>

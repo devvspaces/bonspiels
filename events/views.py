@@ -19,6 +19,7 @@ from django.urls import reverse
 from django.utils.encoding import force_text,force_bytes
 from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_encode,urlsafe_base64_decode
+from django.http import JsonResponse
 
 from account.models import Profile, User
 from mainapp.mixins import ajax_autocomplete
@@ -36,11 +37,34 @@ class RegisteredTeams(LoginRequiredMixin, ListView):
     extra_context = {
         'title': 'Registered Teams'
     }
-    model = UserTicket
-    context_object_name = 'tickets'
+    model = Event
+    context_object_name = 'events'
     
     def get_queryset(self):
         return super().get_queryset().filter(user=self.request.user)
+
+
+def get_trips_view(request):
+    if request.is_ajax():
+        trips = []
+
+        # Get the event id
+        uid = request.GET.get('id')
+
+        try:
+            event = Event.objects.get(uid=uid)
+
+            # Get the trips
+            trips = get_trip_advisor(event.location)
+
+            
+        except Exception as e:
+            print(e)
+            pass
+
+        return JsonResponse(data={'results': trips}, status=200)
+
+    return redirect('mainapp:home')
 
 
 class EventSearch(ListView):
@@ -208,7 +232,7 @@ class EventDetail(DetailView):
 
         context['contact'] = ContactForm()
 
-        context['trips'] = get_trip_advisor(self.object.location)
+        context['trips'] = []
 
         return context
     
@@ -291,7 +315,7 @@ class EventDetail(DetailView):
                 ticket.save()
                 
                 messages.success(request, 'Ticket is created succesfully')
-                return redirect('events:my-tickets')
+                return self.redirect_to_self()
 
 
             messages.warning(request, 'Please fill your ticket form correctly')

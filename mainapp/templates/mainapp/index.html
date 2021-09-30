@@ -18,7 +18,7 @@
 				</div>
 				<form action="{% url 'events:event-search' %}" autocomplete="off" class="d-md-flex align-items-center justify-content-center mt-4">
 					<div class="form-group m-1 position-relative">
-						<input id="search-tcd" list='title_list' name='search-tcd' type="text" class="form-control" placeholder="Title / Category / Description">
+						<input id="search-tcd" list='title_list' name='search-tcd' type="text" class="form-control" placeholder="Title / Region / Description">
 
 						<datalist id='title_list'>
 						</datalist>
@@ -53,6 +53,8 @@
 						<a href="{% url 'events:save-event' event.uid %}" class="badge badge-primary like pointer position-absolute"><i class="icon-heart"></i></a>
 						<span class="badge badge-secondary photocount position-absolute"><i class="icon-photo"></i> {{ event.gallery_set.count }}</span>
 						<img src="{{ event.featured_image.url }}" alt="img" class="img-fluid">
+
+						<span class="badge badge-primary region_loc position-absolute">{{ event.category.name }}</a>
 					</div>
 					<div class="content p-4">
 						<h4 class="mb-3"><a href="{% url 'events:event-detail' event.slug %}" class="text-decoration-none text-reset">{{ event.title }}</a></h4>
@@ -125,7 +127,7 @@
 																	</div>
 																</div>
 																<a href="{% url 'events:add-calendar' i.uid %}" style="width: 150px;" class="position-relative float-right border-0 mt-3 btn btn-primary btn-small submit-btn">
-																	<i class="icon-calendar btn-icon input-icon"></i> Schedule
+																	<i class="icon-calendar btn-icon input-icon"></i> Register
 																	<input class='mover' href="{% url 'events:event-detail' i.slug %}" type="submit" class="h-100 w-100 position-absolute" value="Discover Now">
 																</a>
 															</div>
@@ -237,36 +239,6 @@
 		</div>
 	</section>
 
-	<!-- Categories Of Events -->
-	<section id="et-popular-events" class="container-fluid">
-		<div class="container">
-			<div class="section-heading">
-				<p>Discover best Events around the world by categories.</p>
-				<br>
-				<h2 class="mb-0">Categories Events</h2>
-			</div>
-			<div class="row">
-				{% for category in categories %}
-				{% if category.get_first_event %}
-				<div class="grid">
-					<img src="{{ category.image.url }}" alt="Popular event">
-					<a href="{% url 'events:event-detail' category.get_first_event.slug %}" class="overlay transition text-decoration-none">
-						<span class="badge-green category badge-secondary">{{ category.event_set.count }} Listings</span>
-						<div class="hidden-data transition">
-							<h3 class="title text-white">{{ category.get_first_event.title }}</h3>
-							<p class="transition mb-2">{{ category.get_first_event.description|truncatechars:30 }}</p>
-							<p class="transition"><i class="fas fa-map-marker-alt"></i> {{ category.get_first_event.location }}</p>
-						</div>
-						<!--  Starts 12AM | Feb, 20 - Ends 06PM | Feb, 24 -->
-						<div class="timing bg-primary position-absolute w-100 transition"><i class="icon-clock"></i> Starts {{ category.get_first_event.start_date|date:"h:ma | M, d"}} - Ends {{ category.get_first_event.end_date|date:"h:ma | M, d"}}</div>
-					</a>
-				</div>
-				{% endif %}
-				{% endfor %}
-			</div>
-		</div>
-	</section>
-
 	<!-- Featured and Upcoming Events -->
 
 	<section class="container-fluid bg-light">
@@ -304,7 +276,7 @@
 											</div>
 										</div>
 										<a href="{% url 'events:add-calendar' i.uid %}" class="position-relative border-0 btn btn-primary btn-small transform-origin-right float-right submit-btn">
-											<i class="icon-calendar btn-icon input-icon"></i> Schedule
+											<i class="icon-calendar btn-icon input-icon"></i> Register
 											<input type="submit" class="h-100 w-100 position-absolute" value="Discover Now">
 										</a>
 									</div>
@@ -352,7 +324,7 @@
 											</div>
 										</div>
 										<a href="{% url 'events:add-calendar' i.uid %}" class="position-relative border-0 btn btn-primary btn-small transform-origin-right float-right submit-btn">
-											<i class="icon-calendar btn-icon input-icon"></i> Schedule
+											<i class="icon-calendar btn-icon input-icon"></i> Register
 											<input type="submit" class="h-100 w-100 position-absolute" value="Discover Now">
 										</a>
 									</div>

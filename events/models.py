@@ -371,6 +371,9 @@ class UserTicket(models.Model):
             pass
 
         return []
+
+    def is_paid(self):
+        return 'True' if self.created == '2' else 'False'
     
     def get_status(self):
         if self.get_amount() <= 0:

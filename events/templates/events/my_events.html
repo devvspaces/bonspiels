@@ -12,9 +12,9 @@
             {% endif %}
 		</div>
 		<div class="breadcrumb position-absolute text-center m-0 justify-content-center bg-transparent text-white">
-			<a href="#" class="text-white d-inline-block p-2">Home</a>
-			<a href="#" class="text-white d-inline-block p-2">Events</a>
-			<a href="#" class="text-white d-inline-block p-2">{{ title }}</a>
+			<a href="/" class="text-white d-inline-block p-2">Home</a>
+			<a href="{% url 'events:event-search' %}" class="text-white d-inline-block p-2">Events</a>
+			<a href="" class="text-white d-inline-block p-2">{{ title }}</a>
 		</div>
 	</section>
 
@@ -25,14 +25,14 @@
 				<div class="d-flex mb-3 mb-sm-0 align-items-center">
 					<p class="small m-0 text-white">Events ({{events.count}} results)</p>
 				</div>
-				<div class="ml-auto d-flex align-items-center">
+				<!-- <div class="ml-auto d-flex align-items-center">
 					<label class="pr-3 mb-0">Sort: </label>
 					<select class="bg-white form-control pb-0 pt-0 pl-4 mb-0" name="sort">
 						<option value="most_viewed">Most Viewed</option>
 						<option value="most_recent">Most Recent</option>
 						<option value="most_liked">Most Liked</option>
 					</select>
-				</div>
+				</div> -->
 			</div>
 		</div>
 	</div>
