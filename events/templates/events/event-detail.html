@@ -288,7 +288,7 @@
 									{% endfor %}
 								</div>
 								<div class="form-group">
-									<textarea name="message" class="form-control bg-light" placeholder="Your message" rows="6" cols="80">{% if contact.message.value %}{{ contact.message.value }}{% endif %}</textarea>
+									<textarea required name="message" class="form-control bg-light" placeholder="Your message" rows="6" cols="80">{% if contact.message.value %}{{ contact.message.value }}{% endif %}</textarea>
 
 									{% for i in contact.message.errors %}
 										<small class="text-danger">{{ i }}</small>
@@ -314,7 +314,7 @@
 
 
 	<!-- Trip advisor -->
-	<section id="et-related-events" class="container-fluid pt-0 position-relative">
+	<section id="et-related-events" class="container-fluid pt-0 position-relative trip-addy" trips="{% url 'events:trip-advisor' %}" event_uid="{{ event.uid }}">
 		<div class="section-heading">
 			<p>Places near to Event Location.</p>
 			<br>
@@ -326,11 +326,11 @@
 				<div class="event-grid shadow">
 					<div class="image-wrap img-overlay">
 
-						<span class="badge badge-primary like pointer position-absolute">{{ i.category }}</span>
-
 						<span class="badge badge-dark photocount position-absolute"><i class="fas fa-star text-warning"></i> {{ i.rating_text }}</span>
 
 						<img src="{{ i.image }}" alt="img" class="img-fluid">
+
+						<span class="badge badge-primary region_loc position-absolute">{{ i.category }}</a>
 
 					</div>
 					<div class="content px-4 py-3" style="min-height: auto;">
@@ -344,7 +344,7 @@
 			{% endfor %}
 		</div>
 		{% if not trips %}
-		<h3 class="text-center">No Places Nearby</h3>
+		<h3 class="text-center">Loading Places Nearby</h3>
 		{% endif %}
 	</section>
 	
@@ -361,9 +361,12 @@
 			<div class="item pt-25 pb-25">
 				<div class="event-grid shadow">
 					<div class="image-wrap img-overlay">
-						<span class="badge badge-primary like pointer position-absolute"><i class="icon-heart"></i></span>
+						<a href="{% url 'events:save-event' i.uid %}" class="badge badge-primary like pointer position-absolute"><i class="icon-heart"></i></a>
+
 						<span class="badge badge-secondary photocount position-absolute"><i class="icon-photo"></i> {{ i.gallery_set.count }}</span>
 						<img src="{{ i.featured_image.url }}" alt="img" class="img-fluid">
+
+						<span class="badge badge-primary region_loc position-absolute">{{ i.category.name }}</a>
 					</div>
 					<div class="content p-4">
 						<h4 class="mb-3"><a href="{% url 'events:event-detail' event.slug %}" class="text-decoration-none text-reset">{{ i.title }}</a></h4>

@@ -9,9 +9,9 @@
 			<h1 class="box-heading mb-5 position-relative mb-0 text-white">Registered Teams</h1>
 		</div>
 		<div class="breadcrumb position-absolute text-center m-0 justify-content-center bg-transparent text-white">
-			<a href="#" class="text-white d-inline-block p-2">Home</a>
-			<a href="#" class="text-white d-inline-block p-2">Profile</a>
-			<a href="#" class="text-white d-inline-block p-2">Registered Teams</a>
+			<a href="/" class="text-white d-inline-block p-2">Home</a>
+			<a href="{% url 'account:profile'%}" class="text-white d-inline-block p-2">Profile</a>
+			<a href="" class="text-white d-inline-block p-2">Registered Teams</a>
 		</div>
 	</section>
 
@@ -29,31 +29,48 @@
 	<!-- Content section -->
 	<section id="et-calendar-area" class="container-fluid pt-4">
 		<div class="container">
-			<div class="row">
+			<div class="row justify-content-center">
 
 				<!-- Listing Result -->
-                {% for i in tickets %}
+                {% for event in events %}
 
-	                {% if i.information %}
-						<div class="col-md-5 my-5 mt-md-0">
+	                
+						<div class="col-md-7 my-5 mt-md-0">
 							<div class=" scrollbar-inner bg-white shadow overflow-auto">
 								
 								<div class="event ticket-box d-block text-decoration-none text-reset registered-team-box">
 									
 									<div class="d-flex p-3 head-x">
-										<h3 class="mr-auto"><a href="{% url 'events:event-detail' i.event.slug %}" class="text-dark">{{ i.event.title.capitalize }}</a></h3>
-										<span class="pl-3"><i class="icon-clock text-white"></i> {{ i.event.start_date|date:"d M"}} - {{ i.event.end_date|date:"d M"}}</span>
+										<h3 class="mr-auto"><a href="{% url 'events:event-detail' event.slug %}" class="text-dark">{{ event.title.capitalize }}</a></h3>
+										<span class="pl-3"><i class="icon-clock text-white"></i> {{ event.start_date|date:"d M"}} - {{ event.end_date|date:"d M"}}</span>
 									</div>
 									
-									<div class="pt-3">
-										{% return_html i.get_info_dict %}
-									</div>
+									{% for i in event.userticket_set.all %}
+										{% if i.information %}
+											<div class="pt-3 reg_list_item" paid="{{ i.is_paid }}">
+												{% return_html i.get_info_dict %}
+											</div>
+										{% endif %}
+									{% endfor %}
 
+									{% if not event.userticket_set.all %}
+										<div class="p-3">
+											<h3>No Registered Teams</h3>
+										</div>
+									{% else %}
+										<div class="p-3">
+											<select class="reg_filter form-control">
+												<option value="">All</option>
+												<option value="paid">Paid</option>
+												<option value="pending">Pending</option>
+											</select>
+										</div>
+									{% endif %}
 								</div>
 								
 							</div>
 						</div>
-					{% endif %}
+					
 
                 {% endfor %}
 			</div>

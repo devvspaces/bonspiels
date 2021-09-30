@@ -29,28 +29,16 @@ def check_required_tool(value):
 	return 'checked' if value.endswith('1') else ''
 
 
-# 
-
-
 # Code to return html text for registered teams
 @register.simple_tag()
 def return_html(obj_list):
 
 	html = ''
 
-	# for i in settings.INFORMATION_TOOLS:
-	# 	name = i['name']
-
-	# 	if name != 'Line up':
-	# 		value = obj.get(name, None)
-
-	# 		if not value:
-	# 			obj[name] = ''
-
 	for i in settings.INFORMATION_TOOLS:
 		key = i['name']
 
-		key = 'line_up' if key == 'Line up' else key
+		key = 'line_up' if key == 'Lineup' else key
 
 		# Find if the key is available in the list
 		found = False
@@ -90,7 +78,7 @@ def return_html(obj_list):
 							html += f"""
 							<p class="mt-2 mb-0 d-flex align-items-center justify-content-between">
 								<span><strong class="mr-3">{name}:</strong> {named}</span>
-								<span class="badge badge-primary">Captain</span>
+								<span class="badge badge-primary">Skip</span>
 							</p>"""
 
 						else:
@@ -101,7 +89,7 @@ def return_html(obj_list):
 
 			html += "</div>"
 
-		else:
+		elif key == 'Team name':
 
 			# print(key, value)
 
@@ -112,41 +100,3 @@ def return_html(obj_list):
 			</strong> {value}</p>"""
 
 	return mark_safe(html)
-
-
-
-# for key, value in obj.items():
-
-# 		if key == 'line_up':
-
-# 			for team in value:
-
-# 				for name, named in team.items():
-
-# 					if name != 'captain':
-
-# 						named = 'Not provided' if not named else named
-
-# 						if team['captain'].lower() == 'yes':
-							
-# 							html += f"""
-# 							<p class="mt-2 mb-0 d-flex align-items-center justify-content-between">
-# 								<span><strong class="mr-3">{name}:</strong> {named}</span>
-# 								<span class="badge badge-primary">Captain</span>
-# 							</p>"""
-
-# 						else:
-							
-# 							html += f"""<p class="mt-2 mb-0">
-# 							<strong class="mr-3">{name}:
-# 							</strong> {named}</p>"""
-
-# 		else:
-
-# 			print(key, value)
-
-# 			value = 'Not provided' if not value else value
-
-# 			html += f"""<p class="mt-2 mb-0">
-# 			<strong class="mr-3">{key.capitalize()}:
-# 			</strong> {value}</p>"""

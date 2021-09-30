@@ -35,5 +35,5 @@ phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number mus
 class ContactForm(forms.Form):
     name = forms.CharField(max_length=25, required=False)
     phone = forms.CharField(max_length=17, required=False, validators=[phone_regex])
-    message = forms.CharField(widget=forms.Textarea, required=False)
+    message = forms.CharField(widget=forms.Textarea)
     email = forms.EmailField()

@@ -106,15 +106,6 @@ class Home(TemplateView):
 
         context['location_page_list'] = location_page_list
 
-        # Get the categories to context
-        categories = categories_set[:4]
-        context['categories'] = categories
-
-        # Add the suggestions
-        # context['suggestions'] = [i.name for i in categories]
-
-        # context['news'] = get_fb_posts()
-
         return context
     
 

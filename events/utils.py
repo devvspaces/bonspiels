@@ -4,9 +4,7 @@ from datetime import datetime
 import socket
 import urllib
 
-from bs4 import BeautifulSoup
-import requests
-
+from facebook_scraper import get_posts
 
 import re
 import time
@@ -104,8 +102,9 @@ def get_trip_advisor(address):
 
     trips = []
 
+    driver = webdriver.Chrome("C:/Users/User/bonspiels/events/chromedriver.exe", options=chrome_options)
+    
     try:
-        driver = webdriver.Chrome("C:/Users/User/bonspiels/events/chromedriver.exe", options=chrome_options)
 
         driver.get(link)
 
@@ -169,124 +168,29 @@ def get_trip_advisor(address):
 # get_trip_advisor('Surry Hills NSW, Australia')
 
 
-def login_facebook(browser):
-    browser.get("https://www.facebook.com")
-
-    username = browser.find_element_by_id("email")
-    password = browser.find_element_by_id("pass")
-    submit   = browser.find_element_by_name("login")
-
-    username.send_keys(settings.FB_USER)
-    password.send_keys(settings.FB_PASS)
-
-    submit.click()
-
-    time.sleep(1)
-
-LOGIN = False
-
-# Code to get results from trip advisor
 def get_fb_posts():
+
     posts = []
 
     # Get active fb account
     accounts = FacebookUser.objects.filter(active=True)
     val  = accounts.exists()
-    # val = True
 
     if val:
-        account = accounts.first()
+        postings = get_posts(accounts.first().page_id, pages=10)
 
-        # link = 'https://m.facebook.com/codecell.com.bd'
-        link = account.link
+        for i in postings:
+            # image
+            image = i['image']
 
-        # Creating the webdriver
-        chrome_options = webdriver.ChromeOptions()
+            trip =  {
+                'text': i['text'],
+                'created': i['time'],
+                'image': image if image else 'https://blogmedia.evbstatic.com/wp-content/uploads/wpmulti/sites/8/2019/08/Event-Business-Plan-Tips.png',
+                'link': i['post_url']
+            }
 
-        # Other driver settings
-        prefs = {"profile.managed_default_content_settings.images": 2}
-        chrome_options.add_experimental_option("prefs", prefs)
-        # chrome_options.add_argument("--disable-infobars")
-        # chrome_options.add_argument("--disable-extensions")
-        # chrome_options.add_argument('--disable-gpu')
-        chrome_options.add_argument("--headless")
+            posts.append(trip)
 
-        driver = webdriver.Chrome("C:/Users/User/bonspiels/events/chromedriver.exe", options=chrome_options)
-
-        try:
-
-            if LOGIN:
-                # Login to facebook first
-                login_facebook(driver)
-
-            driver.get(link)
-
-            found = False
-
-            # Find the posts button and click it
-            for i in driver.find_elements_by_css_selector('._484w'):
-                if i.text.lower() == 'posts':
-                    driver.get(i.get_attribute('href'))
-                    found = True
-                    break
-
-            if found:
-                posts_els = driver.find_elements_by_css_selector('.story_body_container')
-
-                while len(posts_els) < 15:
-                    driver.execute_script("window.scrollTo(0,document.body.scrollHeight)")
-                    time.sleep(1)
-                    posts_els = driver.find_elements_by_css_selector('.story_body_container')
-
-                for i in posts_els:
-
-                    text = ''
-                    created = ''
-                    image = ''
-                    link = ''
-                    
-                    try:
-                        text = i.find_element_by_css_selector('._5rgt').text
-                    except NoSuchElementException:
-                        pass
-
-                    try:
-                        created = i.find_element_by_css_selector('._52jc').text
-                    except NoSuchElementException:
-                        pass
-
-                    try:
-                        link = i.find_element_by_css_selector('._5msj').get_attribute('href')
-                    except NoSuchElementException:
-                        pass
-
-                    # image
-                    try:
-                        if not LOGIN:
-                            link = i.find_element_by_css_selector('._5msj').get_attribute('href')
-                        else:
-                            image = i.find_element_by_css_selector('._5sgi')
-                            my_property = image.value_of_css_property("background-image")
-                            image = re.split('[()]',my_property)[1].replace('\"', '')
-                    except NoSuchElementException:
-                        pass
-
-                    trip =  {
-                                'text': text,
-                                'created': created,
-                                'image': image if image else 'https://blogmedia.evbstatic.com/wp-content/uploads/wpmulti/sites/8/2019/08/Event-Business-Plan-Tips.png',
-                                'link': link
-                            }
-
-                    posts.append(trip)
-
-            driver.quit()
-
-        except Exception as e:
-            driver.quit()
-            print(e)
-            
-    else:
-        pass
 
     return posts
