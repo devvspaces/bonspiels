@@ -325,7 +325,7 @@ $(document).ready(function(){
 	    $.ajax({
 	        method: "GET",
 	        url: thisURL,
-	        data: 'id={}' + $('.trip-addy').attr('event_uid'),
+	        data: 'id=' + $('.trip-addy').attr('event_uid'),
 	        success: function (data){
 	            let results = data['results']
 
