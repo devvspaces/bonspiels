@@ -148,7 +148,7 @@ class Event(models.Model):
                     <div class="d-flex justify-content-between">
                         <label>{name.capitalize()}</label>
 
-                        <span class="d-flex align-items-center">Captain
+                        <span class="d-flex align-items-center">Skip
                         <input type="checkbox" class="form-check ml-1 line_up_captain" name="{name}_line"></span>
                     </div>
                     <input type="text" class="form-control bg-light" name="{name}">
