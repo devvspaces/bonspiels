@@ -45,26 +45,26 @@
 										<span class="pl-3"><i class="icon-clock text-white"></i> {{ event.start_date|date:"d M"}} - {{ event.end_date|date:"d M"}}</span>
 									</div>
 									
-									{% for i in event.userticket_set.all %}
-										{% if i.information %}
-											<div class="pt-3 reg_list_item" paid="{{ i.is_paid }}">
-												{% return_html i.get_info_dict %}
-											</div>
-										{% endif %}
-									{% endfor %}
+									<div class="tickets-cont">
+										{% for i in event.userticket_set.all %}
+											{% if i.information %}
+												<div class="pt-3 reg_list_item" paid="{{ i.is_paid }}">
+													{% return_html i.get_info_dict %}
+												</div>
+											{% endif %}
+										{% endfor %}
+									</div>
 
 									{% if not event.userticket_set.all %}
 										<div class="p-3">
 											<h3>No Registered Teams</h3>
 										</div>
 									{% else %}
-										<div class="p-3">
-											<select class="reg_filter form-control">
-												<option value="">All</option>
-												<option value="paid">Paid</option>
-												<option value="pending">Pending</option>
-											</select>
-										</div>
+										<!-- <div class="p-3 d-flex align-items-center">
+											<p>Filter by: </p>
+											<p>Paid <input type="radio" name="radx-{{ event.id }}" class="payment_radio" value="paid"></p>
+											<p>Not Paid <input type="radio" name="radx-{{ event.id }}" class="payment_radio" value="not_paid"></p>
+										</div> -->
 									{% endif %}
 								</div>
 								

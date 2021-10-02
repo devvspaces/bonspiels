@@ -59,7 +59,7 @@
                                 <hr>
                                 <h4 class="mb-3"><a href="{% url 'events:event-detail' i.slug %}" class="text-decoration-none text-reset">{{ i.title }}</a></h4>
                                 <p class="description">
-                                    {{ i.description|truncatechars:30}}
+                                    {{ i.description | safe | truncatechars:30 }}
                                 </p>
                                 <div class="info">
                                     <div class="mb-2"><i class="icon-clock"></i>&nbsp; {{ i.start_date|date:"d M Y" }} - {{ i.end_date|date:"d M Y" }}</div>

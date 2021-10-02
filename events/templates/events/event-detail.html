@@ -47,7 +47,7 @@
 							<a href="{% url 'events:save-event' event.uid %}" class="badge badge-green pointer" data-toggle="tooltip" data-placement="top" title="Save event"><i class="icon-heart"></i></a>
 						</div>
 					</div>
-					<div class="mt-5 w-100 d-none d-md-block">
+					<div class="mt-5 w-100 d-none d-md-block align-items-center justify-content-between" style="display: flex !important;">
 						<p class="event-location d-inline-block m-0 bg-white p-2"><i class="icon-compass h3 align-middle"></i>&nbsp; {{ event.location|truncatechars:30 }}</p>
 						<a target="_blank" href="https://www.google.com/maps/place/{{ event.location }}/" class="float-right text-decoration-none text-primary">Get Directions <i class="fas fa-external-link-alt"></i></a>
 					</div>
@@ -75,7 +75,7 @@
 					<!-- Description -->
 					<div id="data-description" class="event-description shadow rounded p-5 content-box mt-5">
 						<h4 class="mb-4 font-weight-bold">Description</h4>
-						<p class="description mb-0">{{ event.description }}</p>
+						<p class="description mb-0">{{ event.description | safe }}</p>
 					</div>
 
 					<div id="data-organizer" class="side-widget w-100 map shadow rounded p-5 mt-5">
@@ -84,7 +84,7 @@
 						<div class="mb-3">
 							<img style="width: 70px; height: 70px; object-fit: cover;" src="{% if event.get_organizer_logo %}{{ event.get_organizer_logo }}{% else %}{% static 'img/author-1.jpg' %}{% endif %}" class="rounded-pill shadow d-inline-block" alt="author">
 							<div class="d-inline-block position-relative align-middle pl-2">
-								<a href="{% url 'events:organizer-events' event.user.profile.uid %}"><span>{{ event.organizer }}</span></a>
+								<a href="{% url 'events:organizer-events' event.user.profile.uid %}"><span class="text-primary">{{ event.organizer }}</span></a>
 								<p>{{ event.phone }}</p>
 
 							</div>
@@ -309,7 +309,7 @@
 	</section>
 
 	<section class="container-fluid pt-0 position-relative">
-		<iframe src="https://www.stay22.com/embed/gm?aid=bonspielsnet&lat={{ event.lat }}&lng={{ event.lon }}" id="stay22-widget" width="100%" height="460" frameborder="0"></iframe>
+		<iframe src="https://www.stay22.com/embed/gm?aid=bonspielsnet&lat={{ event.lat }}&lng={{ event.lon }}&maincolor=FF0000" id="stay22-widget" width="100%" height="460" frameborder="0"></iframe>
 	</section>
 
 
@@ -321,31 +321,8 @@
 			<h2 class="mb-0">Places from TripAdvisor</h2>
 		</div>
 		<div class="owl-carousel owl-theme">
-			{% for i in trips %}
-			<div class="item pt-25 pb-25">
-				<div class="event-grid shadow">
-					<div class="image-wrap img-overlay">
-
-						<span class="badge badge-dark photocount position-absolute"><i class="fas fa-star text-warning"></i> {{ i.rating_text }}</span>
-
-						<img src="{{ i.image }}" alt="img" class="img-fluid">
-
-						<span class="badge badge-primary region_loc position-absolute">{{ i.category }}</a>
-
-					</div>
-					<div class="content px-4 py-3" style="min-height: auto;">
-						<h4 class="mb-3"><a href="{{ i.trip_link }}" class="text-decoration-none text-reset">{{ i.title }}</a></h4>
-
-						<p class="mb-1"><span class="font-weight-bold">{{ i.review_count }}</span> Reviews</p>
-						<p>{{ i.address }}</p>
-					</div>
-				</div>
-			</div>
-			{% endfor %}
+			<h3 class="text-center">Loading Places Nearby</h3>
 		</div>
-		{% if not trips %}
-		<h3 class="text-center">Loading Places Nearby</h3>
-		{% endif %}
 	</section>
 	
 
@@ -372,8 +349,7 @@
 						<h4 class="mb-3"><a href="{% url 'events:event-detail' event.slug %}" class="text-decoration-none text-reset">{{ i.title }}</a></h4>
 						<p><i class="icon-clock align-middle text-primary"></i>&nbsp; {{ i.start_date|date:"d M" }} - {{ i.end_date|date:"d M" }}</p>
 						<div class="d-flex event-actions">
-							<span class="event-action pointer" data-toggle="tooltip" data-placement="bottom" title="{{ event.phone }}"><i class="icon-phone"></i></span>
-							<span class="event-action pointer" data-toggle="tooltip" data-placement="bottom" title="{{ event.location }}"><i class="icon-compass"></i></span>
+							<span style="font-size: .8rem;" class="event-action pointer" data-toggle="tooltip" data-placement="bottom" title="{{ event.location }}">{{ event.location }}</span>
 							<span class="event-action pointer" data-toggle="tooltip" data-placement="bottom" title="{{ event.price_text }}">{{ i.price_val }}</span>
 						</div>
 					</div>

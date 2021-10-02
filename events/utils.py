@@ -209,7 +209,7 @@ def get_fb_posts():
     val  = accounts.exists()
 
     if val:
-        postings = get_posts(accounts.first().page_id, pages=10)
+        postings = get_posts(accounts.first().page_id, pages=10, credentials=('09033295156', 'anyrahat',))
 
         for i in postings:
             # image

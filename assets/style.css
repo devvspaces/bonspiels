@@ -760,7 +760,7 @@ body.home .hc-nav-trigger span::after{
   background-image: url(img/home-masthead-3.jpg);
   background-size: cover;
   background-position: center;
-  height: 100vh;
+  height: fit-content;
   position: relative;
 }
 #et-masthead-3 form input.form-control,
@@ -783,10 +783,10 @@ body.home .hc-nav-trigger span::after{
 #et-masthead-3 .masthead-caption,
 #et-masthead-2 .masthead-caption,
 #et-masthead .masthead-caption{
-  position: absolute;
-  left: 0;
-  top: calc(50% + 32px);
-  transform: translateY(-50%);
+  /*position: absolute;*/
+  /*left: 0;*/
+  /*top: calc(50% + 32px);*/
+  /*transform: translateY(-50%);*/
   width: 100%;
   color: #fff;
 }
@@ -2489,4 +2489,65 @@ section#et-notfound{
 .region_loc{
   bottom: .5rem;
   right: .5rem;
+}
+
+.grid-categories a {
+  margin: 0rem 1rem !important;
+}
+
+.iconx-title-b{
+  position: absolute;
+  left: 50%;
+  color: #fff;
+  font-size: .8rem;
+  transform: translateX(-50%);
+  bottom: -2rem;
+  white-space: pre;
+}
+
+#xx-usb-d{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  background-color: rgba(0, 0, 0, .7);
+}
+
+.slider-outer{
+  height: 100% !important;
+   
+  overflow:hidden;
+
+  position: absolute;
+    width: 100%;
+    top: 0;
+}
+.slider{
+ 
+    width: 100%;
+    height: 100%;
+    
+}
+.slide-image{
+  width: 100%;
+    height: 100%;
+   display:block;
+    color: transparent;
+    background-size: cover;
+    -moz-background-size: cover;
+    -ms-background-size: cover;
+    -o-background-size: cover;
+    -webkit-background-size: cover;
+    background-position: 50% 50%;
+    background-repeat: none;
+}
+.slider .slide-item{
+  float:left;
+    padding: 0;
+    margin: 0;
+}
+.clear{
+  clear:both;
 }

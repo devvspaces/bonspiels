@@ -21,6 +21,7 @@
 				<div class="col-lg-9">
 					<form id="addEventForm" autocomplete="off" method='POST' enctype="multipart/form-data" message='Updating Event ...'>
 						{% csrf_token %}
+						{{ form.media }}
 						<div class="row">
 							<div class="form-group getcontent col-sm-12">
 								<label>Event title*</label>
@@ -94,7 +95,7 @@
 							</div>
 							<div class="form-group getcontent col-sm-12">
 								<label>Event description*</label>
-								<textarea rows="6" required class="form-control resize-none bg-light" placeholder="Add description about this event" title="Please enter full description about this event" name="description">{% if form.description.value %}{{ form.description.value }}{% endif %}</textarea>
+								{{ form.description }}
 								{% for i in form.description.errors %}
 								<small class="text-danger mt-1">{{ i }}</small>
 								{% endfor %}
@@ -155,7 +156,7 @@
 							<div class="form-group addsocial getcontent col-sm-12">
 								<label>Social Media</label>
 								<div class="row">
-									<div class="col-sm-6">
+									<div class="col-sm-7 my-2">
 										<div class="input-group form-group">
 											<input value="{% if form.facebookvalue %}{{ form.facebook.value }}{% endif %}"  name='facebook' placeholder="Enter URL" class="form-control bg-light" type="text">
 											<div class="input-group-append">
@@ -170,7 +171,7 @@
 											{% endfor %}
 										</div>
 									</div>
-									<div class="col-sm-6">
+									<div class="col-sm-7 my-2">
 										<div class="input-group form-group">
 											<input value="{% if form.twitter.value %}{{ form.twitter.value }}{% endif %}"  name='twitter' placeholder="Enter URL" class="form-control bg-light" type="text">
 											<div class="input-group-append">
@@ -185,7 +186,7 @@
 											{% endfor %}
 										</div>
 									</div>
-									<div class="col-sm-6">
+									<div class="col-sm-7 my-2">
 										<div class="input-group form-group">
 											<input value="{% if form.instagram.value %}{{ form.instagram.value }}{% endif %}"  name='instagram' placeholder="Enter URL" class="form-control bg-light" type="text">
 											<div class="input-group-append">

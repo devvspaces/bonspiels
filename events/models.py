@@ -111,8 +111,19 @@ class Event(models.Model):
 
         return '$'
 
+    def convert_price(self):
+        price = self.ticket_price
+
+        if price:
+            if int(price) == price:
+                return int(price)
+
+            return price
+
+        return 0
+
     def get_price(self):
-        return self.ticket_price if self.ticket_price else 0
+        return self.convert_price()
 
     def get_website(self):
         return self.website if self.website else 'No website provided'
@@ -341,7 +352,7 @@ class FeaturedLocation(models.Model):
     image = models.ImageField(upload_to='events/locations')
 
     def get_events(self):
-        return Event.objects.filter(location__icontains=self.name, user__active=True, published=True)[:2]
+        return Event.objects.filter(location__icontains=self.name, user__active=True, published=True).get_current_events()[:2]
     
     def count_listings(self):
         return Event.objects.filter(location__icontains=self.name).count()
