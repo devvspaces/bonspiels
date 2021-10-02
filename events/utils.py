@@ -119,7 +119,7 @@ def get_trip_advisor(address):
             alert = driver.switch_to_alert()
             alert.accept()
         except:
-            logger.log("No Alert")
+            logger.debug("No Alert")
         
         # Find the show more button and click it
         show = driver.find_element_by_css_selector('.show-block.show-more')
@@ -144,7 +144,7 @@ def get_trip_advisor(address):
 
         listings = driver.find_elements_by_css_selector('.ui_columns.result-content-columns')
 
-        logger.log(f'Found {len(listings)} listings')
+        logger.debug(f'Found {len(listings)} listings')
 
 
         for i in listings:
@@ -184,7 +184,7 @@ def get_trip_advisor(address):
 
             trips.append(trip)
 
-            logger.log(f'Found another trip {trip['title']}')
+            logger.debug(f"Found another trip {trip['title']}")
 
 
         driver.quit()
