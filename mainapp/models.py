@@ -17,4 +17,4 @@ class HomeBackground(models.Model):
 	image = models.ImageField(upload_to='home_background/')
 
 	def __str__(self):
-		return self.image.name\
+		return self.image.name
