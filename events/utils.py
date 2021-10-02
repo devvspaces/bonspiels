@@ -1,9 +1,13 @@
+import logging
+# Create the logger and set the logging level
+logger = logging.getLogger('basic')
+err_logger = logging.getLogger('basic.error')
+
 import random, string
 import pytz
 from datetime import datetime
 import socket
 import urllib
-import traceback
 
 from facebook_scraper import get_posts
 
@@ -26,10 +30,6 @@ from django.conf import settings
 
 from account.models import FacebookUser
 
-
-
-def print_err(err):
-    traceback.print_tb(err.__traceback__)
 
 
 def random_text(p=5):
@@ -113,21 +113,20 @@ def get_trip_advisor(address):
     driver.set_window_size(1920, 1080)
 
     try:
-        driver.get(link)
 
         try:
             driver.get(link)
             alert = driver.switch_to_alert()
             alert.accept()
         except:
-            print("No Alert")
+            logger.log("No Alert")
         
         # Find the show more button and click it
         show = driver.find_element_by_css_selector('.show-block.show-more')
         try:
             show.click()
         except ElementClickInterceptedException as e:
-            print_err(e)
+            err_logger.exception(e)
             # driver.find_element_by_css_selector('#_evidon_banner')
 
             try:
@@ -136,7 +135,7 @@ def get_trip_advisor(address):
                     js = f"var aa=document.getElementById('{i}');aa.remove()"
                     driver.execute_script(js)
             except Exception as e:
-                print_err(e)
+                err_logger.exception(e)
 
             show.click()
 
@@ -144,6 +143,8 @@ def get_trip_advisor(address):
 
 
         listings = driver.find_elements_by_css_selector('.ui_columns.result-content-columns')
+
+        logger.log(f'Found {len(listings)} listings')
 
 
         for i in listings:
@@ -183,14 +184,13 @@ def get_trip_advisor(address):
 
             trips.append(trip)
 
-            # print(trip)
+            logger.log(f'Found another trip {trip['title']}')
 
-        # print(trips)
 
         driver.quit()
 
     except Exception as e:
-        print_err(e)
+        err_logger.exception(e)
         driver.quit()
 
     return trips
