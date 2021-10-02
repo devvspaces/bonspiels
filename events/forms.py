@@ -1,3 +1,5 @@
+from ckeditor.widgets import CKEditorWidget
+
 from django import forms
 from django.utils import timezone
 from django.core.validators import validate_email, RegexValidator
@@ -24,6 +26,7 @@ class ReviewForm(forms.Form):
     comment = forms.CharField(max_length=800)
 
 class EventForm(forms.ModelForm):
+    description = forms.CharField(widget=CKEditorWidget())
     class Meta:
         model = Event
         fields = '__all__'

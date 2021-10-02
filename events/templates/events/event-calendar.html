@@ -578,7 +578,7 @@
 							<h4 class="d-inline-block">{{ i.event.title }}</h4>
 							<span class="pl-3"><i class="icon-clock text-primary"></i> {{ i.event.start_date|date:"d M, Y"}}</span>
 							<span class="badge badge-primary pointer float-right"><i class="icon-heart"></i></span>
-							<p class="mt-2 mb-0">{{ i.event.description|truncatechars:30}}</p>
+							<p class="mt-2 mb-0">{{ i.event.description | safe | truncatechars:30}}</p>
 						</a>
 						<hr>
 						{% endfor %}

@@ -23,6 +23,7 @@ from events.models import Category, Event, FeaturedLocation, Gallery
 from events.utils import get_fb_posts
 
 from .mixins import ajax_autocomplete
+from .models import HomeLocation, HomeBackground
 
 
 def verification_message(request, user, template):
@@ -68,7 +69,7 @@ class Home(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        queryset = Event.objects.filter(user__active=True, published=True)
+        queryset = Event.objects.filter(user__active=True, published=True).get_current_events()
         categories_set = Category.objects.all()
         
 
@@ -87,10 +88,13 @@ class Home(TemplateView):
         context['featured_events'] = queryset.filter(featured=True)[:2]
         context['upcoming_events'] = queryset.get_upcoming()[:2]
 
-        # Get the gallery events
-        # valid_events_id_list = queryset.values_list('id', flat=True)
-        # random_event_id_list = random.sample(list(valid_events_id_list), min(len(valid_events_id_list), 6))
-        # context['gallery_events'] = queryset.filter(id__in=random_event_id_list)
+        print(context['upcoming_events'], len(context['upcoming_events']))
+
+        # Get the icon locations
+        context['loc_icons'] = HomeLocation.objects.all()
+
+        # Get background images for home
+        context['bgs_hero'] = HomeBackground.objects.all()
 
         # Get the events by location
         locations = FeaturedLocation.objects.all()
