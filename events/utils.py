@@ -209,9 +209,12 @@ def get_fb_posts():
     val  = accounts.exists()
 
     if val:
-        postings = get_posts(accounts.first().page_id, pages=10, credentials=('09033295156', 'anyrahat',))
+        print('Tried to get posts')
+        postings = get_posts(accounts.first().page_id, pages=10, credentials=('a_mamun57@yahoo.com', 'mamun123',))
 
+        print('Postings: ',  postings)
         for i in postings:
+            print('Got a post')
             # image
             image = i['image']
 
@@ -223,5 +226,7 @@ def get_fb_posts():
             }
 
             posts.append(trip)
+
+            print(trip)
 
     return posts
