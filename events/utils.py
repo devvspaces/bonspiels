@@ -198,9 +198,12 @@ def get_trip_advisor(address):
 # get_trip_advisor('Surry Hills NSW, Australia')
 
 
+FB_USER = 'a_mamun57@yahoo.com'
+FB_PASS = 'mamun123'
+
 
 # Code to get results from trip advisor
-def get_fb_posts():
+def get_fb_posts2():
 
     posts = []
 
@@ -209,12 +212,12 @@ def get_fb_posts():
     val  = accounts.exists()
 
     if val:
-        print('Tried to get posts')
-        postings = get_posts(accounts.first().page_id, pages=10, credentials=('a_mamun57@yahoo.com', 'mamun123',))
+        logger.debug('Tried to get posts')
+        postings = get_posts(accounts.first().page_id, pages=10, credentials=(FB_USER, FB_PASS,))
 
-        print('Postings: ',  postings)
+        logger.debug('Postings: ',  postings)
         for i in postings:
-            print('Got a post')
+            logger.debug('Got a post')
             # image
             image = i['image']
 
@@ -227,6 +230,173 @@ def get_fb_posts():
 
             posts.append(trip)
 
-            print(trip)
+            logger.debug(trip)
 
     return posts
+
+
+
+def login_facebook(browser, url):
+    browser.get(url)
+
+    username = browser.find_element_by_name("email")
+    password = browser.find_element_by_name("pass")
+    submit   = browser.find_element_by_name("login")
+
+    username.send_keys(settings.FB_USER)
+    password.send_keys(settings.FB_PASS)
+
+    try:
+        logger.debug('Trying to click element 1')
+        browser.execute_script("arguments[0].click();", submit)
+        # logger.debug('Trying to click element 2')
+        # submit.click()
+    except ElementClickInterceptedException as e:
+        logger.debug_err(e)
+
+        try:
+            not_wanted = ['._9xl2']
+            # not_wanted = not_wanted * 10
+            for i in not_wanted:
+                js = f"var aa=document.querySelector('{i}');aa.remove()"
+                browser.execute_script(js)
+                logger.debug('deleted an element ')
+        except Exception as e:
+            logger.debug_err(e)
+
+        logger.debug('Trying to click element')
+        browser.execute_script("arguments[0].click();", submit)
+
+    time.sleep(5)
+
+    logger.debug('After login', browser.title, browser.current_url)
+
+
+LOGIN = False
+
+# Code to get results from trip advisor
+def get_fb_posts():
+
+    posts = []
+
+    # Get active fb account
+    accounts = FacebookUser.objects.filter(active=True)
+    val  = accounts.exists()
+    # val = True
+
+    if val:
+        account = accounts.first()
+
+        # link = 'https://m.facebook.com/codecell.com.bd'
+        link = account.link
+
+        # Creating the webdriver
+        chrome_options = webdriver.ChromeOptions()
+
+        # Other driver settings
+        prefs = {"profile.managed_default_content_settings.images": 2}
+        chrome_options.add_experimental_option("prefs", prefs)
+        # chrome_options.add_argument("--disable-infobars")
+        # chrome_options.add_argument("--disable-extensions")
+        # chrome_options.add_argument('--disable-gpu')
+        chrome_options.add_argument("--headless")
+
+        driver = webdriver.Chrome(options=chrome_options)
+
+        try:
+
+            if LOGIN:
+                # Login to facebook first
+                login_facebook(driver)
+
+            driver.get(link)
+
+            logger.debug('Got the page', driver.title, driver.current_url)
+
+            if driver.title.lower().find('Log in to Facebook'.lower()):
+                login_facebook(driver, url=driver.current_url)
+
+            found = False
+
+            # Find the posts button and click it
+            for i in driver.find_elements_by_css_selector('._484w'):
+                if i.text.lower() == 'posts':
+                    driver.get(i.get_attribute('href'))
+                    found = True
+                    break
+
+            if found:
+                posts_els = driver.find_elements_by_css_selector('.story_body_container')
+
+                while len(posts_els) < 15:
+                    driver.execute_script("window.scrollTo(0,document.body.scrollHeight)")
+                    time.sleep(1)
+                    posts_els = driver.find_elements_by_css_selector('.story_body_container')
+
+                for i in posts_els:
+
+                    text = ''
+                    created = ''
+                    image = ''
+                    link = ''
+
+                    try:
+                        text = i.find_element_by_css_selector('._5rgt').text
+                    except NoSuchElementException:
+                        pass
+
+                    try:
+                        created = i.find_element_by_css_selector('._52jc').text
+                    except NoSuchElementException:
+                        pass
+
+                    try:
+                        link = i.find_element_by_css_selector('._5msj').get_attribute('href')
+                    except NoSuchElementException:
+                        pass
+
+                    # image
+                    try:
+                        if not LOGIN:
+                            link = i.find_element_by_css_selector('._5msj').get_attribute('href')
+                        else:
+                            image = i.find_element_by_css_selector('._5sgi')
+                            my_property = image.value_of_css_property("background-image")
+                            image = re.split('[()]',my_property)[1].replace('\"', '')
+                    except NoSuchElementException:
+                        pass
+
+                    trip =  {
+                                'text': text,
+                                'created': created,
+                                'image': image if image else 'https://blogmedia.evbstatic.com/wp-content/uploads/wpmulti/sites/8/2019/08/Event-Business-Plan-Tips.png',
+                                'link': link
+                            }
+
+                    posts.append(trip)
+
+            driver.quit()
+
+        except Exception as e:
+            driver.quit()
+            logger.debug(e)
+
+    else:
+        pass
+        postings = get_posts(accounts.first().page_id, pages=10)
+
+        for i in postings:
+            # image
+            image = i['image']
+
+            trip =  {
+                'text': i['text'],
+                'created': i['time'],
+                'image': image if image else 'https://blogmedia.evbstatic.com/wp-content/uploads/wpmulti/sites/8/2019/08/Event-Business-Plan-Tips.png',
+                'link': i['post_url']
+            }
+
+            posts.append(trip)
+
+
+    return posts 
