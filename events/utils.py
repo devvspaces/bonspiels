@@ -288,7 +288,7 @@ def get_fb_posts():
         account = accounts.first()
 
         # link = 'https://m.facebook.com/codecell.com.bd'
-        link = account.link
+        link = 'https://m.facebook.com/'+account.page_id
 
         # Creating the webdriver
         chrome_options = webdriver.ChromeOptions()
