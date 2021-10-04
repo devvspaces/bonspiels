@@ -327,6 +327,7 @@ def get_fb_posts():
                 if i.text.lower() == 'posts':
                     driver.get(i.get_attribute('href'))
                     found = True
+                    logger.debug('Found a post tab')
                     break
 
             if found:
@@ -338,6 +339,8 @@ def get_fb_posts():
                     posts_els = driver.find_elements_by_css_selector('.story_body_container')
 
                 for i in posts_els:
+
+                    logger.debug('got a post from the post tab')
 
                     text = ''
                     created = ''
@@ -378,6 +381,8 @@ def get_fb_posts():
                             }
 
                     posts.append(trip)
+
+                    logger.log(trip)
 
             driver.quit()
 
