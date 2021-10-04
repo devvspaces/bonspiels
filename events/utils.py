@@ -331,13 +331,15 @@ def get_fb_posts():
                     break
 
             if found:
+                logger.debug(f'Post page: {driver.title} {driver.current_url}')
+
                 posts_els = driver.find_elements_by_css_selector('.story_body_container')
 
                 logger.debug(f'Got some posts of length {len(posts_els)}')
 
                 while len(posts_els) < 15:
                     logger.debug('Scrolled to bottom')
-                    driver.execute_script("window.scrollTo(0,document.body.scrollHeight)")
+                    driver.execute_script("window.scrollTo(0,document.body.scrollHeight);")
                     time.sleep(1)
                     posts_els = driver.find_elements_by_css_selector('.story_body_container')
 
