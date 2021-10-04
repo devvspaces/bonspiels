@@ -215,7 +215,7 @@ def get_fb_posts2():
         logger.debug('Tried to get posts')
         postings = get_posts(accounts.first().page_id, pages=10, credentials=(FB_USER, FB_PASS,))
 
-        logger.debug('Postings: ',  postings)
+        logger.debug('Postings:  {len(postings)}')
         for i in postings:
             logger.debug('Got a post')
             # image
@@ -252,7 +252,7 @@ def login_facebook(browser, url):
         # logger.debug('Trying to click element 2')
         # submit.click()
     except ElementClickInterceptedException as e:
-        logger.debug_err(e)
+        err_logger.exception(e)
 
         try:
             not_wanted = ['._9xl2']
@@ -262,14 +262,14 @@ def login_facebook(browser, url):
                 browser.execute_script(js)
                 logger.debug('deleted an element ')
         except Exception as e:
-            logger.debug_err(e)
+            err_logger.exception(e)
 
         logger.debug('Trying to click element')
         browser.execute_script("arguments[0].click();", submit)
 
     time.sleep(5)
 
-    logger.debug('After login', browser.title, browser.current_url)
+    logger.debug(f'After login {browser.title} {browser.current_url}')
 
 
 LOGIN = False
@@ -311,7 +311,7 @@ def get_fb_posts():
 
             driver.get(link)
 
-            logger.debug('Got the page', driver.title, driver.current_url)
+            logger.debug(f'Got the page {driver.title} {driver.current_url}')
 
             if driver.title.lower().find('Log in to Facebook'.lower()):
                 login_facebook(driver, url=driver.current_url)
@@ -379,7 +379,7 @@ def get_fb_posts():
 
         except Exception as e:
             driver.quit()
-            logger.debug(e)
+            err_logger.exception(e)
 
     else:
         pass
