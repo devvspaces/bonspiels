@@ -340,16 +340,16 @@ def get_fb_posts():
                 logger.debug(f'First: Got some posts of length {current_post_count}')
 
                 while len(posts_els) < 15:
-                    if len(posts_els) <= current_post_count:
-                        # Means there is no more new posts on the fb page
-                        break
-
                     logger.debug('Scrolled to bottom')
                     driver.execute_script("window.scrollTo(0,document.body.scrollHeight);")
                     time.sleep(1)
                     posts_els = driver.find_elements_by_css_selector('.story_body_container')
 
                     logger.debug(f'Got some posts of length {current_post_count}')
+
+                    if len(posts_els) <= current_post_count:
+                        # Means there is no more new posts on the fb page
+                        break
 
                 for i in posts_els:
 
