@@ -340,7 +340,7 @@ def get_fb_posts():
                 logger.debug(f'First: Got some posts of length {current_post_count}')
 
                 # while len(posts_els) < 15:
-                for i in range(5):
+                for i in range(15):
                     logger.debug('Scrolled to bottom')
                     driver.execute_script("window.scrollTo(0,document.body.scrollHeight);")
                     time.sleep(1)
@@ -363,6 +363,7 @@ def get_fb_posts():
 
                     try:
                         text = i.find_element_by_css_selector('._5rgt').text
+                        logger.debug(f'Post title: {text[:10]}')
                     except NoSuchElementException:
                         pass
 
