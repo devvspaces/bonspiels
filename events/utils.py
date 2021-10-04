@@ -313,7 +313,11 @@ def get_fb_posts():
 
             logger.debug(f'Got the page {driver.title} {driver.current_url}')
 
-            if driver.title.lower().find('Log in'.lower()):
+            find_login = driver.title.lower().find('Log in'.lower())
+
+            logger.debug(f'Find login {find_login} Value')
+
+            if find_login != -1:
                 login_facebook(driver, url=driver.current_url)
 
             found = False
