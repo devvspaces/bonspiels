@@ -318,13 +318,16 @@ def get_fb_posts():
 
             found = False
 
+            logger.debug('Starting to find tabs')
             # Find the posts button and click it
             for i in driver.find_elements_by_css_selector('._484w'):
+                logger.debug(f'Found tab name: {i.text.lower()} count {len(i.text.lower())}')
                 if i.text.lower() == 'posts':
                     driver.get(i.get_attribute('href'))
                     found = True
                     logger.debug('Found a post tab')
                     break
+            logger.debug('End finding tabs')
 
             if found:
                 logger.debug(f'Post page: {driver.title} {driver.current_url}')
