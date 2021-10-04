@@ -272,7 +272,7 @@ def login_facebook(browser, url):
     logger.debug(f'After login {browser.title} {browser.current_url}')
 
 
-LOGIN = False
+LOGIN = True
 
 # Code to get results from trip advisor
 def get_fb_posts():
@@ -344,6 +344,7 @@ def get_fb_posts():
                     logger.debug('Scrolled to bottom')
                     driver.execute_script("window.scrollTo(0,document.body.scrollHeight)")
                     time.sleep(1)
+                    
                     posts_els = driver.find_elements_by_css_selector('.story_body_container')
 
                     current_post_count = len(posts_els)
