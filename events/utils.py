@@ -305,10 +305,6 @@ def get_fb_posts():
 
         try:
 
-            if LOGIN:
-                # Login to facebook first
-                login_facebook(driver)
-
             driver.get(link)
 
             logger.debug(f'Got the page {driver.title} {driver.current_url}')
