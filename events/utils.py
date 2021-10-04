@@ -243,8 +243,8 @@ def login_facebook(browser, url):
     password = browser.find_element_by_name("pass")
     submit   = browser.find_element_by_name("login")
 
-    username.send_keys(settings.FB_USER)
-    password.send_keys(settings.FB_PASS)
+    username.send_keys(FB_USER)
+    password.send_keys(FB_PASS)
 
     try:
         logger.debug('Trying to click element 1')
