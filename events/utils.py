@@ -344,7 +344,7 @@ def get_fb_posts():
                     logger.debug('Scrolled to bottom')
                     driver.execute_script("window.scrollTo(0,document.body.scrollHeight)")
                     time.sleep(1)
-                    
+
                     posts_els = driver.find_elements_by_css_selector('.story_body_container')
 
                     current_post_count = len(posts_els)
@@ -400,7 +400,7 @@ def get_fb_posts():
 
                     posts.append(trip)
 
-                    logger.log(trip)
+                    logger.debug(trip)
 
             logger.debug('Driver is closed program ends')
             driver.quit()
